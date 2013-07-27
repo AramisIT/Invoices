@@ -31,7 +31,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             this.mainView.KeyDown += mainView_KeyDown;
             this.mainView.FocusedColumnChanged += mainView_FocusedColumnChanged;
             this.mainView.FocusedRowChanged += mainView_FocusedRowChanged;
-            this.mainView.MouseDown += mainView_MouseDown;           
+            this.mainView.MouseDown += mainView_MouseDown;
             }
 
         void mainView_MouseDown(object sender, MouseEventArgs e)

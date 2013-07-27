@@ -40,7 +40,7 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
             base.AddCustomMapping("InternationalDigitCode", loadInternationalCountryCode);
             }
         /// <summary>
-        /// Получаем цыфрое значение медународного кода.
+        /// Получаем цифрое значение международного кода.
         /// </summary>
         private object loadInternationalCountryCode(Row row)
             {

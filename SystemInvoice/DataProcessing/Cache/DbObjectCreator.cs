@@ -10,39 +10,39 @@ namespace SystemInvoice.DataProcessing.Cache
     /// <summary>
     /// Базовый клас, создающий новые екземпляры документов/справочников в системе и записующий их в БД
     /// </summary>
-    /// <typeparam name="T">Тип создаваемого объекта</typeparam>
-    /// <typeparam name="U">Тип объекта - кеша, данные которого используются для создания документа/справочника</typeparam>
-    public abstract class DbObjectCreator<T, U>
-        where T : DatabaseObject
-        where U : CacheObject<U>
+    /// <typeparam name="D">Тип создаваемого объекта</typeparam>
+    /// <typeparam name="C">Тип объекта - кеша, данные которого используются для создания документа/справочника</typeparam>
+    public abstract class DbObjectCreator<D, C>
+        where D : DatabaseObject
+        where C : CacheObject<C>
         {
         /// <summary>
         /// Кеш используемый для определения того, существует ли уже такой документ/справочник в системе. (При этом проверка осуществляется согласно алгоритму в кеше а не согласно ограничениям БД)
         /// </summary>
-        private CacheObjectsStore<U> cacheStore = null;
+        private CacheObjectsStore<C> cacheStore = null;
 
-        public DbObjectCreator( CacheObjectsStore<U> cacheStore )
+        public DbObjectCreator( CacheObjectsStore<C> cacheStore )
             {
             this.cacheStore = cacheStore;
             }
         /// <summary>
         /// Список объектов которые удлось создать
         /// </summary>
-        private List<T> createdObjects = new List<T>();
+        private List<D> createdObjects = new List<D>();
         /// <summary>
         /// Список объектов кеша на основании которых создаются документы/справочники
         /// </summary>
-        private HashSet<U> cachedObjectsToCreate = new HashSet<U>();
+        private HashSet<C> cachedObjectsToCreate = new HashSet<C>();
 
         /// <summary>
         /// Создает екземпляр объекта документа/справочника, который необходимо записать в БД
         /// </summary>
         /// <param name="cacheObject">Кешированный объект данные которого используются для создания объекта документа/справочника</param>
-        protected abstract T createDBObject( U cacheObject );
+        protected abstract D createDBObject( C cacheObject );
         /// <summary>
         /// Осуществляет удаление объекта и связанных с ним объектов из БД
         /// </summary>
-        protected abstract void deleteObject( T objectToDelete );
+        protected abstract void deleteObject( D objectToDelete );
         /// <summary>
         /// Сообщение об ошибке создания объектов при неудасной попытке записать все объеты в БД
         /// </summary>
@@ -56,13 +56,13 @@ namespace SystemInvoice.DataProcessing.Cache
                 throw new NotImplementedException( "Обнаружены созданные ранее объекты" );
                 }
             int createdSuccess = 0;
-            foreach (U item in cachedObjectsToCreate)
+            foreach (C item in cachedObjectsToCreate)
                 {
                 if (item == null)
                     {
                     continue;
                     }
-                T dataBaseObjectItem = createDBObject( item );
+                D dataBaseObjectItem = createDBObject( item );
                 if (dataBaseObjectItem == null)
                     {
                     continue;
@@ -174,7 +174,7 @@ namespace SystemInvoice.DataProcessing.Cache
 
         public void DeleteCreated()
             {
-            foreach (T dbObject in createdObjects)
+            foreach (D dbObject in createdObjects)
                 {
                 deleteObject( dbObject );
                 }
@@ -190,7 +190,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// <summary>
         /// Добавляет объект кеша на основании которого создается записываемый в БД объект документа/справочника
         /// </summary>
-        public bool TryAddToCreationList( U newItem )
+        public bool TryAddToCreationList( C newItem )
             {
             if (CheckCanAddItem( newItem ) && !cachedObjectsToCreate.Contains( newItem ))
                 {
@@ -203,7 +203,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// <summary>
         /// Проверяет можно ли записывать елемент документа/справочника в БД
         /// </summary>
-        protected virtual bool CheckCanAddItem( U newItem )
+        protected virtual bool CheckCanAddItem( C newItem )
             {
             return cacheStore.GetCachedObjectId( newItem ) == 0;
             }

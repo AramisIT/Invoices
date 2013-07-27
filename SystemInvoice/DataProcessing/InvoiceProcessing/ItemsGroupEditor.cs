@@ -152,6 +152,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                     int currentRowPlacesQuantity = (int)placesQuntityRounded;
                     row[placesQuantityColumn] = currentRowPlacesQuantity < 0 ? 0 : currentRowPlacesQuantity;
                     currentPlacesQuantity += currentRowPlacesQuantity;
+                    
+                    if (currentPlacesQuantity == placesQuantity)
+                        {
+                        break;
+                        }
                     }
                 double totalAcc = double.NaN;
                 //foreach (DataRow row in source.Rows)
