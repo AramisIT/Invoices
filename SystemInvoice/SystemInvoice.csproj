@@ -1,0 +1,612 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{572D8BC8-7E1A-48A7-A70D-C8E9D6F15F1A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SystemInvoice</RootNamespace>
+    <AssemblyName>SystemInvoice</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aramis system, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\Aramis system.dll</HintPath>
+    </Reference>
+    <Reference Include="AramisWpfComponents, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AramisWpfComponents\AramisWpfComponents\bin\Release\AramisWpfComponents.dll</HintPath>
+    </Reference>
+    <Reference Include="Attributes">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="ConnectionCreatorInterface">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\ConnectionCreatorInterface.exe</HintPath>
+    </Reference>
+    <Reference Include="DBInteraction">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\DBInteraction.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.BonusSkins.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=95fc6c5621878f0a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v12.1.Core, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraBars.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="ErrorsHandling">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\ErrorsHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Extensions">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReportView">
+      <HintPath>..\..\Aramis.NET\Aramis\bin\Release\ReportView.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Catalogs\ApprovalsLoadFormat.cs" />
+    <Compile Include="Catalogs\Forms\ApprovalsLoadFormatItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogs\Forms\ApprovalsLoadFormatItemForm.Designer.cs">
+      <DependentUpon>ApprovalsLoadFormatItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogs\Forms\UsersItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogs\Forms\UsersItemForm.Designer.cs">
+      <DependentUpon>UsersItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogs\GroupOfGoods.cs" />
+    <Compile Include="Catalogs\MaterialType.cs" />
+    <Compile Include="DataProcessing\Cache\MaterialsMappingCache\MaterialsMappingCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\MaterialsMappingCache\MaterialsMappingCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\FullCorrespondanceIndex.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\IPropertyTypeFullSearch.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\CacheTradeMarkContractorSource.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CatalogsLoader.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zepter\ZepterDeclarationHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\NetWeightsInfo.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\NetWeightWithBoundaryCheckingCalculator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\SummDistribution\ArticleAndPriceRowComparer.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\SummDistribution\ArticlePriceGroupInfo.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\SummDistribution\ArticleWithSomePriceCollection.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\SummDistribution\CountComparer.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\SummDistribution\WithMarginArticlePriceInfo.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\CustomDataProcessing\NamesTranslationHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\CustomDataProcessing\SizeTranslationHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\CustomDataProcessing\UnitOfMeasureCodeRetreiveHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\RowsGrouping\GroupedRowsDataChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Syncronizers\ISyncronizer.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Syncronizers\WeightSyncronizer.cs" />
+    <Compile Include="Documents\MaterialTypeMapping.cs" />
+    <Compile Include="Documents\NomenclatureApprovalsRemovingHistory.cs" />
+    <Compile Include="Constants\ConstsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Constants\ConstsForm.designer.cs">
+      <DependentUpon>ConstsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants\SystemInvoiceConstants.cs" />
+    <Compile Include="DataProcessing\ApprovalsProcessing\ApprovalsFilesLoader.cs" />
+    <Compile Include="DataProcessing\ApprovalsProcessing\ApprovalsByNomenclatureUpdater.cs" />
+    <Compile Include="DataProcessing\ApprovalsProcessing\ByNomenclatureUpdating\ApprovalsUpdatedHandler.cs" />
+    <Compile Include="DataProcessing\ApprovalsProcessing\ByNomenclatureUpdating\ApprovalsUpdateKind.cs" />
+    <Compile Include="DataProcessing\ApprovalsProcessing\ByNomenclatureUpdating\ApprovalsUpdateResult.cs" />
+    <Compile Include="DataProcessing\Cache\ApprovalsCache\ApprovalsCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\ApprovalsCache\ApprovalsCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\ApprovalsCache\ApprovalsObjectCreator.cs" />
+    <Compile Include="DataProcessing\Cache\ApprovalsCache\ApprovalsSearchIndex.cs" />
+    <Compile Include="DataProcessing\Cache\ApprovalsCache\ApprovalsWithoutNomenclatureIndex.cs" />
+    <Compile Include="DataProcessing\Cache\CacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\CacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\ContractorsCache\ContractorCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\ContractorsCache\ContractorCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\CountryCache\CountryCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\CountryCache\CountryCahceObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\CountryCache\CountryNameRuIndex.cs" />
+    <Compile Include="DataProcessing\Cache\CountryCache\ICountrySearch.cs" />
+    <Compile Include="DataProcessing\Cache\CustomCodesCache\CustomsCodesCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\CustomCodesCache\CustomsCodesCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\CustomCodesCache\ICustomsCodeSearch.cs" />
+    <Compile Include="DataProcessing\Cache\DbObjectCreator.cs" />
+    <Compile Include="DataProcessing\Cache\DocumentTypesCache\DocumentTypeCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\DocumentTypesCache\DocumentTypesCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\GroupOfGoodsCache\GroupOfGoodsCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\GroupOfGoodsCache\GroupOfGoodsCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\GroupOfGoodsCache\GroupOfGoodsObjectsCreator.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclatureRemovingFromApprovalsHistoryCache\RequiredApprovalIndex.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclatureRemovingFromApprovalsHistoryCache\NomenclatureRemovingHistoryCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclatureRemovingFromApprovalsHistoryCache\NomenclatureRemovingHistoryCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclaturesCache\ByCustomsCodeSearchIndex.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\CorrespondanceIndex.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\CorrespondantExistedUkrValueIndex.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\TranslationIndex.cs" />
+    <Compile Include="DataProcessing\Cache\SubGroupOfGoodsCache\SubGroupOfGoodsCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\SubGroupOfGoodsCache\SubGroupOfGoodsObjectsCreator.cs" />
+    <Compile Include="DataProcessing\Cache\SubGroupOfGoodsCache\SubGroupOfGoodsCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\IPredefinedPropertyOfGoods.cs" />
+    <Compile Include="DataProcessing\Cache\ManufacturersCache\IManufacturerSearch.cs" />
+    <Compile Include="DataProcessing\Cache\ManufacturersCache\ManufacturerCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\ManufacturersCache\ManufacturerCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\ManufacturersCache\ManufacturersObjectsCreator.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclaturesCache\INomenclatureSearch.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclaturesCache\NomenclatureCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclaturesCache\NomenclatureCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclaturesCache\NomenclatureFastSearchSet.cs" />
+    <Compile Include="DataProcessing\Cache\NomenclaturesCache\NomenclatureObjectsCreator.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyOfGoodsCache\PropertyOfGoodsCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyOfGoodsCache\PropertyOfGoodsCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\GenderPropertyTypeCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\IGenderSearch.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\ISizeSearch.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\PropertyTypesCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\PropertyTypesCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\PropertyTypesCache\SizePropertyTypeCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\SystemInvoiceDBCache.cs" />
+    <Compile Include="DataProcessing\Cache\TradeMarksCache\ITradeMarkSearch.cs" />
+    <Compile Include="DataProcessing\Cache\TradeMarksCache\TradeMarkCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\TradeMarksCache\TradeMarkCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\Cache\TradeMarksCache\TradeMarkObjectsCreator.cs" />
+    <Compile Include="DataProcessing\Cache\UnitOfMeasureCache\UnitOfMeasureCacheObject.cs" />
+    <Compile Include="DataProcessing\Cache\UnitOfMeasureCache\UnitOfMeasureCacheObjectsStore.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\CountryLoader.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\CustomsCodeLoader.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\DocumentTypesLoader.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\NomenclatureLoader.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\NotificationWindow\NotificationViewModel.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\NotificationWindow\UploadNotificationWindow.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\NotificationWindow\UploadingNotificationControl.xaml.cs">
+      <DependentUpon>UploadingNotificationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\PropertyTypeLoader.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\ApprovalsModification\ApprovalsFromInvoiceCreator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\ApprovalsModification\ApprovalsSearcher.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\Graf31Calculation\CatalogsInTableSearch\CatalogsSearchHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\RowsGrouping\ForHeaderGraf31ConstructComparer.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\RowsGrouping\GoodsRowsComparer.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\Graf31Calculation\GrafCalcHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\RowsGrouping\GroupingHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\GroupOfGoodsCreation\GroupsOfGoodsCreationHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\CustomDataProcessing\InvoiceNumberBNSHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\SpecificCachesManagement\NomenclatureRemovingHistoryUpdater.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\CustomsCodeUpdater.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\BNSUnitOfMeasureCodeHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\GenderTranslatehandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\BNSSubGroupOfGoodsHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\CountryCodeFromRuNameHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\MarginFromPercentageAndPrice.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\NameFromGroupHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\PriceWithMargin.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\SummCalculationHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\TranslationHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GridViewManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\FilesManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Files\EditedDocumentLoader.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\BottomTotalsCalculator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\CustomsCodeExternFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\NWeightFromCountAndUnitNWHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\SizeTranslateExpressionHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\UnitNWFromCountAndNWHandler.cs" />
+    <Compile Include="DataProcessing\Cache\InvoiceTrademarkContractorSource.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\FilteredRowsSource.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterDialogForm.Designer.cs">
+      <DependentUpon>FilterDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterDialogWindow.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterDialog.xaml.cs">
+      <DependentUpon>FilterDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterInfoModel.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterInfoViewModel.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterInfoViewModelItem.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Filtering\FilterManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\GridViewColumnsVisualStateManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\ReplaceEditor.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\SummCalculator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Helpers\InvoiceDataRetrieveHelper.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Helpers\InvoiceProcessingHelper.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\ApprovalsModification\InvoiceAfterAprovalsUpdater.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Article\ArticleChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Article\ArticleError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CannotWriteToDBException.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CellError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CellErrorPosition.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CellErrorsCollection.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CompareWithDBCellError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Country\CountryChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Country\CountryCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CustomsCodeInternal\CustomsCodeInternCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\CustomsCodeInternal\CustomsCodeInternDocumentChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\GroupOfGoods\GroupOfGoodsChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\InvoiceChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Manufacturer\ManufacturerCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Manufacturer\ManufacturerDocumentChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\MarksAndSpenser\MarksAndSpenserContentError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NetWeight\NetWeightChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NetWeight\NetWeightError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureDeclarationName\NomenclatureDeclarationNameChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureDeclarationName\NomenclatureDeclartionError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureInvoiceName\NomenclatureInvoiceError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureInvoiceName\NomenclatureInvoiceNameChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureOriginalName\NomenclatureOriginalError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureOriginalName\NomenclatureOriginalNameChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NomenclatureCheck\NomenclatureChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\NotificationError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Price\PriceChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\Price\PriceCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\RDChecking\RDChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\RDChecking\RDCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\RowColumnsErrors.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\RowErrors.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\RowCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\RowIsLoaded\RowIsLoadedCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\SubGroupOfGoods\SubGroupOfGoodsChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\SubGroupOfGoods\SubGroupOfGoodsError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\TradeMark\TradeMarkCheckError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\TradeMark\TradeMarkDocumentChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\ZaraContent\ZaraContentError.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\GrossWeightsCalculator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\NetWeightCalculator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\NomenclatureBasedCalulator.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\GridViewEventManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceTableModification\NetWeightUpdating\NetWeightUpdater.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\ResolveErrorsContextMenuManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\SyncronizationManager.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Syncronizers\SummSyncronizer.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\TotalsManager.cs" />
+    <Compile Include="DataProcessing\TransactionManager.cs" />
+    <Compile Include="Excel\DataFormatting\ICustomExpressionHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\MarksAndSpencerTranslateContentHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\MarksAndSpenserGenderHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Files\DocumentToEditUnloader.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Files\DocumentUnloaderBase.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\LoadedDocumentCheckerBase.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\LoadedDocumentCheckerGlobal.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\MarksAndSpenser\MarksAndSpenserDocumentCheker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\LoadedDocumentChecking\ZaraContent\ZaraContentDocumentChecker.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\ProcessingConsts.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Files\UnloadItemsInfo.cs" />
+    <Compile Include="Documents\Forms\AprrovalsReplaceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Documents\Forms\AprrovalsReplaceDialog.Designer.cs">
+      <DependentUpon>AprrovalsReplaceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Excel\AggregatingTableUnloader.cs" />
+    <Compile Include="Excel\ExcelStylesStore.cs" />
+    <Compile Include="Excel\InitializedCellData.cs" />
+    <Compile Include="MVVM\RelayCommand.cs" />
+    <Compile Include="MVVM\ViewModelBase.cs" />
+    <Compile Include="PropsSyncronization\AllFieldsSyncronizer.cs" />
+    <Compile Include="PropsSyncronization\TradeMarkContractorAprovalsLoadFormatSyncronizer.cs" />
+    <Compile Include="PropsSyncronization\IAllFieldsSource.cs" />
+    <Compile Include="PropsSyncronization\ITradeMarkContractorApprovalsLoadFormatSource.cs" />
+    <Compile Include="PropsSyncronization\ITradeMarkContractorExcelLoadFormatSource.cs" />
+    <Compile Include="PropsSyncronization\ITradeMarkContractorGroupOfGoodsSource.cs" />
+    <Compile Include="PropsSyncronization\ITradeMarkContractorManufacturerSource.cs" />
+    <Compile Include="PropsSyncronization\ITradeMarkContractorSource.cs" />
+    <Compile Include="PropsSyncronization\TradeMarkContractorExcelLoadingFormatSyncronizer.cs" />
+    <Compile Include="PropsSyncronization\TrademarkContractorGroupOfGoodsSyncronizer.cs" />
+    <Compile Include="PropsSyncronization\TradeMarkContractorManufacturerSyncronizer.cs" />
+    <Compile Include="PropsSyncronization\TradeMarkContractorSyncronizer.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\CatalogsFromExcelConverter.cs" />
+    <Compile Include="Catalogs\Contractor.cs" />
+    <Compile Include="Catalogs\Country.cs" />
+    <Compile Include="Catalogs\Currency.cs" />
+    <Compile Include="Catalogs\CustomsCode.cs" />
+    <Compile Include="Catalogs\DocumentType.cs" />
+    <Compile Include="Catalogs\ExcelLoadingFormat.cs" />
+    <Compile Include="Catalogs\Manufacturer.cs" />
+    <Compile Include="Catalogs\Forms\ExcelLoadingFormatItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogs\Forms\ExcelLoadingFormatItemForm.Designer.cs">
+      <DependentUpon>ExcelLoadingFormatItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogs\Forms\NomenclatureItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogs\Forms\NomenclatureItemForm.Designer.cs">
+      <DependentUpon>NomenclatureItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogs\PropertyOfGoods.cs" />
+    <Compile Include="Catalogs\SubGroupOfGoods.cs" />
+    <Compile Include="Catalogs\Nomenclature.cs" />
+    <Compile Include="Catalogs\PropertyType.cs" />
+    <Compile Include="Catalogs\RelationWithCustomersType.cs" />
+    <Compile Include="Catalogs\TradeMark.cs" />
+    <Compile Include="Catalogs\UnitOfMeasure.cs" />
+    <Compile Include="Catalogs\Users.cs" />
+    <Compile Include="ComponentTests.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\OriginalNameFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\BarCodeHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\InsoleLengthHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\InvoiceLoadedDocumentHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\ItemsGroupEditor.cs" />
+    <Compile Include="Documents\Approvals.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\ContractorNameFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\CustomExpressionHandlerBase.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\CustomsCodeFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\DeclarationNameFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\FromArticleHandlerBase.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\GetUnitOfMeasureCodeFromNameHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\InvoiceNameFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\ItemWeightFromNetWeightHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\ManufacturerFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\MultiplyExpressionHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zara\ArticleZaraExpressionHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zara\ContentZaraDressHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zara\ExternCustomsCodeZaraHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zara\GenderZaraHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zara\InvoiceDateZaraHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Files\ProcessedDocumentUnloader.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\Files\NewDocumentLoader.cs" />
+    <Compile Include="Excel\AbstractUnloader.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\AuxiliaryExpressionsCollection.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\ConstantExpression.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\DateIndexExprssion.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\ExpressionBuilder.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\IExpression.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\IndexExpression.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\AuxiliaryExpressions\ReferenceExpression.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\CustomExcelRowProcessingFormatter.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\CustomExcelRowProcessingFormatterConstructor.cs" />
+    <Compile Include="Excel\ExcelHelper.cs" />
+    <Compile Include="Documents\Forms\ApprovalsItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Documents\Forms\ApprovalsItemForm.Designer.cs">
+      <DependentUpon>ApprovalsItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Documents\Forms\InvoiceItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Documents\Forms\InvoiceItemForm.Designer.cs">
+      <DependentUpon>InvoiceItemForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Documents\Invoice.cs" />
+    <Compile Include="DataProcessing\CatalogsProcessing\Loaders\FromExcelToDataBaseObjectsLoaderBase.cs" />
+    <Compile Include="Excel\AbstractLoader.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\CustomDelegateExpressionFormatter.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\CustomDelegateExpressionFormatterConstructor.cs" />
+    <Compile Include="Excel\DataFormatting\FormattersGenerator.cs" />
+    <Compile Include="Excel\DataFormatting\IDataFormatter.cs" />
+    <Compile Include="Excel\DataFormatting\IFormatterConstructor.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\SimpleIndexFormatter.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\SimpleIndexFormatterConstructor.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\SumExpressionDataFormatter.cs" />
+    <Compile Include="Excel\DataFormatting\Formatters\SumExpressionDataFormatterConstructor.cs" />
+    <Compile Include="Excel\ExcelMapper.cs" />
+    <Compile Include="Excel\Expression.cs" />
+    <Compile Include="Excel\ObjectLoader.cs" />
+    <Compile Include="Excel\TableLoader.cs" />
+    <Compile Include="Excel\TableUnloader.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Catalogs\Forms\ApprovalsLoadFormatItemForm.resx">
+      <DependentUpon>ApprovalsLoadFormatItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogs\Forms\ExcelLoadingFormatItemForm.resx">
+      <DependentUpon>ExcelLoadingFormatItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogs\Forms\NomenclatureItemForm.resx">
+      <DependentUpon>NomenclatureItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogs\Forms\UsersItemForm.resx">
+      <DependentUpon>UsersItemForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Constants\ConstsForm.resx">
+      <DependentUpon>ConstsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterDialogForm.resx">
+      <DependentUpon>FilterDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Documents\Forms\ApprovalsItemForm.resx">
+      <DependentUpon>ApprovalsItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Documents\Forms\AprrovalsReplaceDialog.resx">
+      <DependentUpon>AprrovalsReplaceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Documents\Forms\InvoiceItemForm.resx">
+      <DependentUpon>InvoiceItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\My catalogs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\My documents.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FilterWError.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadExcel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NextErrorCell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NextPage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenExcel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PreviousPage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ProcessExcel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1362436075_page_white_excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Documents.png" />
+    <None Include="Resources\1364997793_invoice.png" />
+    <None Include="Resources\1333525747_guarantee.png" />
+    <None Include="Resources\UnknowIcon.png" />
+    <None Include="Resources\1306484724_gnome-help.png" />
+    <None Include="Resources\1365092411_applixware.png" />
+    <None Include="Resources\Letter-A-icon копия.png" />
+    <None Include="Resources\1317912674_roboto.png" />
+    <None Include="Resources\1365181885_circle.png" />
+    <None Include="Resources\1365778316_stock_insert-rows.png" />
+    <None Include="Resources\1365778325_stock_insert-columns.png" />
+    <None Include="Resources\5778316_stock_insert-rows.png" />
+    <None Include="Resources\5778325_stock_insert-columns.png" />
+    <None Include="Resources\1365626_filter.png" />
+    <None Include="Resources\5778316ock_insert-rows.png" />
+    <None Include="Resources\5778325_nsert-columns.png" />
+    <None Include="Resources\5778325_olumns.png" />
+    <None Include="Resources\6_filter.png" />
+    <None Include="Resources\57insert-rows.png" />
+    <None Include="Resources\13657825_Search.png" />
+    <None Include="Resources\FilterSetup.png" />
+    <None Include="Resources\refresh.png" />
+    <None Include="Resources\filter clear.png" />
+    <None Include="Resources\1365792903_folder-open_16.png" />
+    <None Include="Resources\1365792852_tick.png" />
+    <None Include="Resources\1325753463_delete.png" />
+    <Content Include="TraceAramis.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DataProcessing\CatalogsProcessing\NotificationWindow\UploadingNotificationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataProcessing\InvoiceProcessing\Filtering\Dialog\FilterDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
