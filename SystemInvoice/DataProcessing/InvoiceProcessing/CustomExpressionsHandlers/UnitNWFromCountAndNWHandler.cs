@@ -16,7 +16,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
             {
             }
 
-        public override object ProcessRow(params object[] parameters)//•	ВесЕдТовара[Вес нетто,Колличество]
+        public override object ProcessRow(params object[] parameters)//•	ВесЕдТовара[Вес нетто,Количество]
             {
             if (parameters.Length < 2)
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemInvoice.DataProcessing.InvoiceProcessing.Helpers;
 using SystemInvoice.Documents;
 using System.Data;
 using SystemInvoice.DataProcessing.Cache;
@@ -47,20 +48,24 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
         /// <returns></returns>
         private Dictionary<long, NetWeightsInfo> getNetWeightsInfo()
             {
-            double realTotalSumm = 0;
+            //double realTotalSumm = 0;
             Dictionary<long, NetWeightsInfo> netWeights = new Dictionary<long, NetWeightsInfo>();
             foreach (DataRow row in EditableRowsSource.DisplayingRows)
                 {
-                long id = Helpers.InvoiceDataRetrieveHelper.GetRowLineNumber(row);
-                long nomenclatureId = Helpers.InvoiceDataRetrieveHelper.GetRowNomenclatureId(row);
+                long id = InvoiceDataRetrieveHelper.GetRowLineNumber(row);
+                long nomenclatureId = InvoiceDataRetrieveHelper.GetRowNomenclatureId(row);
                 if (nomenclatureId == 0 && ProcessLoadedOnly)
                     {
                     continue;
                     }
-                double netWeight = Helpers.InvoiceDataRetrieveHelper.GetRowNetWeight(row);
-                double netWeightFrom = Helpers.InvoiceDataRetrieveHelper.GetNomenclatureNetWeightFrom(dbCache, row);
-                double netWeightTo = Helpers.InvoiceDataRetrieveHelper.GetNomenclatureNetWeightTo(dbCache, row);
-                int count = Helpers.InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
+                double netWeight = InvoiceDataRetrieveHelper.GetRowNetWeight(row);
+                if (double.IsNaN(netWeight))
+                    {
+                    netWeight = 0.0;
+                    }
+                double netWeightFrom = InvoiceDataRetrieveHelper.GetNomenclatureNetWeightFrom(dbCache, row);
+                double netWeightTo = InvoiceDataRetrieveHelper.GetNomenclatureNetWeightTo(dbCache, row);
+                int count = InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
                 NetWeightsInfo nwInfo = new NetWeightsInfo(netWeightFrom * count, netWeightTo * count, netWeight, count);
                 if (netWeights.ContainsKey(id))
                     {
@@ -70,26 +75,27 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
                     {
                     netWeights.Add(id, nwInfo);
                     }
-                realTotalSumm += netWeight;
+                //realTotalSumm += netWeight;
                 }
             return netWeights;
             }
 
         /// <summary>
-        /// Возвращает данные о колличестве номенклатурных единиц для каждой строки
+        /// Возвращает данные о колличестве номенклатурных единиц для каждой строки.
+        /// 
         /// </summary>
         private Dictionary<long, int> getNetWeightsCount()
             {
             Dictionary<long, int> nomenclaturesCount = new Dictionary<long, int>();
             foreach (DataRow row in EditableRowsSource.DisplayingRows)
                 {
-                long id = Helpers.InvoiceDataRetrieveHelper.GetRowLineNumber(row);
-                long nomenclatureId = Helpers.InvoiceDataRetrieveHelper.GetRowNomenclatureId(row);
+                long id = InvoiceDataRetrieveHelper.GetRowLineNumber(row);
+                long nomenclatureId = InvoiceDataRetrieveHelper.GetRowNomenclatureId(row);
                 if (nomenclatureId == 0 && ProcessLoadedOnly)
                     {
                     continue;
                     }
-                int currentCount = Helpers.InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
+                int currentCount = InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
                 if (nomenclaturesCount.ContainsKey(id))
                     {
                     nomenclaturesCount[id] += currentCount;
@@ -117,12 +123,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
         private Dictionary<long, double> getArrangedValues(double totalAmount, Dictionary<long, NetWeightsInfo> netWeights)
             {
             NetWeightsInfo totalRange = this.getNetWeightsTotalInfo(netWeights);
-            if (totalRange == null || totalRange.CurrentWeight == 0)
+            if (totalRange == null)// || totalRange.CurrentWeight == 0)
                 {
                 return null;
                 }
-            Dictionary<long, double> arrangedNomenclatures = Arrange(totalAmount, netWeights, totalRange);
-            return arrangedNomenclatures;
+            return Arrange(totalAmount, netWeights, totalRange);
             }
 
         /// <summary>
@@ -138,7 +143,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
             double residual = 0;//остаток оторый дополнительно нужно распределять по весу нетто, возникает при округлении или при попытке установить значение выходящее за диапазон
             foreach (KeyValuePair<long, NetWeightsInfo> pair in netWeights)
                 {
-                long nomenclatureId = pair.Key;
+                long lineNumber = pair.Key;
                 NetWeightsInfo netWeightsInfo = pair.Value;
                 double proportionalUpdateValue = netWeightsInfo.CurrentWeight * ratio;
                 totalProportional += proportionalUpdateValue;
@@ -159,8 +164,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
                     }
                 double diffRes = netWeightsInfo.CalcResidual(setForNomenclatureIdValue);
                 setForNomenclatureIdValue -= diffRes;
-                residual = proportionalUpdateValue + residual - setForNomenclatureIdValue;//добавляем остаток который возникает при делении с точностью до трех знаков для веса и затем умножении на колличество
-                arranged.Add(nomenclatureId, setForNomenclatureIdValue);
+                residual = proportionalUpdateValue + residual - setForNomenclatureIdValue;//добавляем остаток который возникает при делении с точностью до трех знаков для веса и затем умножении на количество
+                arranged.Add(lineNumber, setForNomenclatureIdValue);
                 }
             return arranged;
             }
@@ -184,12 +189,13 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
             List<Tuple<DataRow, double>> valuesToSet = new List<Tuple<DataRow, double>>();
             foreach (DataRow row in EditableRowsSource.DisplayingRows)
                 {
-                long nomenclatureId = Helpers.InvoiceDataRetrieveHelper.GetRowLineNumber(row);
-                int currentCount = Helpers.InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
+                long lineNumber = InvoiceDataRetrieveHelper.GetRowLineNumber(row);
+                int currentCount = InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
                 int totalNomenclatureCount;
-                if (nomenclatureId > 0 && arranged.ContainsKey(nomenclatureId) && netWeights.TryGetValue(nomenclatureId, out totalNomenclatureCount) && totalNomenclatureCount > 0)
+                if (lineNumber > 0 && arranged.ContainsKey(lineNumber) 
+                    && netWeights.TryGetValue(lineNumber, out totalNomenclatureCount) && totalNomenclatureCount > 0)
                     {
-                    double weight = currentCount * arranged[nomenclatureId] / totalNomenclatureCount;
+                    double weight = currentCount * arranged[lineNumber] / totalNomenclatureCount;
                     valuesToSet.Add(new Tuple<DataRow, double>(row, weight));
                     }
                 }

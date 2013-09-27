@@ -72,7 +72,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
             }
 
         /// <summary>
-        /// Возвращает колличество незагруженных строк
+        /// Возвращает количество незагруженных строк
         /// </summary>
         public int NonLoadedRowsCount
             {

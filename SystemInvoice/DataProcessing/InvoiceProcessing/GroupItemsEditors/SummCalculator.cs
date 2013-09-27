@@ -103,7 +103,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
                 }
             }
         /// <summary>
-        /// Распределяет сумму по группам с одинаковыми артикулами/ценой, начиная с групп с наибольшим колличеством товаром, заканчивая наименьшим
+        /// Распределяет сумму по группам с одинаковыми артикулами/ценой, начиная с групп с наибольшим количеством товаром, заканчивая наименьшим
         /// </summary>
         private int distributePrice(Dictionary<ArticlePriceGroupInfo, int> updateAmounts, List<ArticlePriceGroupInfo> articlePriceGroupInfos, int amountToDistribute, bool isPlus)
             {

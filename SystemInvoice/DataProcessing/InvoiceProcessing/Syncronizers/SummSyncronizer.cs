@@ -24,7 +24,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Syncronizers
 
         #region реализация ISyncronizer
         /// <summary>
-        /// Синхронизирует ячейки в колонке сумма, со значениями в колонке колличество, цена, процент наценки,
+        /// Синхронизирует ячейки в колонке сумма, со значениями в колонке количество, цена, процент наценки,
         ///  а также значения для колонок наценка, цена с наценкой со значениями цена, процент наценки
         /// </summary>
         public void Syncronize(DataRow row, string columnName, RequestForSyncronizationSource source)

@@ -24,7 +24,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// </summary>
         private DateTime lastModifiedDate = DateTime.MinValue;
         /// <summary>
-        /// Поле которое хранит колличество обрабатываемых объектов из БД, используется для определения актуальности кеша
+        /// Поле которое хранит количество обрабатываемых объектов из БД, используется для определения актуальности кеша
         /// </summary>
         protected long lastCachedCount = 0;
 
@@ -90,7 +90,7 @@ namespace SystemInvoice.DataProcessing.Cache
             get;
             }
         /// <summary>
-        /// Текст запроса возвращающего колличество обрабатываемых объектов, используется для определения актуальности кеша и необходимости его обновления
+        /// Текст запроса возвращающего количество обрабатываемых объектов, используется для определения актуальности кеша и необходимости его обновления
         /// </summary>
         protected abstract string LastProcessedCountQuery
             {

@@ -46,7 +46,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// <summary>
         /// Сообщение об ошибке создания объектов при неудасной попытке записать все объеты в БД
         /// </summary>
-        /// <param name="failCount">Колличество объектов, запись которых в БД завершилась ошибкой</param>
+        /// <param name="failCount">Количество объектов, запись которых в БД завершилась ошибкой</param>
         protected abstract string failToCreateMessage( int failCount );
 
         private int create()
@@ -209,7 +209,7 @@ namespace SystemInvoice.DataProcessing.Cache
             }
 
         /// <summary>
-        /// Колличество успешно записанных объектов
+        /// Количество успешно записанных объектов
         /// </summary>
         public int ObjectsToCreateCount
             {

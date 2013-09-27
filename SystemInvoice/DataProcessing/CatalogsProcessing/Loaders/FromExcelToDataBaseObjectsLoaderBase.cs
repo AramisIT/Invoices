@@ -53,8 +53,8 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
         /// </summary>
         /// <param name="fileName">Имя файла</param>
         /// <param name="startIndex">начальный индекс</param>
-        /// <param name="loadedCount">колличество загруженных строк</param>
-        /// <param name="nonLoadedCount">колличество незагруженных строк</param>
+        /// <param name="loadedCount">количество загруженных строк</param>
+        /// <param name="nonLoadedCount">количество незагруженных строк</param>
         public bool TryLoad(string fileName, int startIndex, out int loadedCount, out int nonLoadedCount)
             {
             loadedCount = 0;

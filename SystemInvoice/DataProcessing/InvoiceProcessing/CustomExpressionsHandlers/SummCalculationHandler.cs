@@ -17,7 +17,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
             {
             }
 
-        public override object ProcessRow(params object[] parameters)//Сумма[Колличество,Цена с наценкой]
+        public override object ProcessRow(params object[] parameters)//Сумма[Количество,Цена с наценкой]
             {
             if (parameters.Length < 2)
                 {

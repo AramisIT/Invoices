@@ -352,8 +352,8 @@ namespace SystemInvoice.Documents
         private int z_PlacesTotal = 0;
         #endregion
 
-        #region (int) CountTotal Колличество общее
-        [DataField(Description = "Колличество общее")]
+        #region (int) CountTotal Количество общее
+        [DataField(Description = "Количество общее")]
         public int CountTotal
             {
             get
@@ -389,8 +389,8 @@ namespace SystemInvoice.Documents
             }
         #endregion
 
-        #region (int) NumberOfPlaces Колличество мест
-        [DataField(Description = "Колличество мест", StorageType = StorageTypes.Local)]
+        #region (int) NumberOfPlaces Количество мест
+        [DataField(Description = "Количество мест", StorageType = StorageTypes.Local)]
         public int NumberOfPlaces
             {
             get
@@ -601,7 +601,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "Колличество", PropertyType = typeof(string), Size = 10)]
+        [SubTableField(Description = "Количество", PropertyType = typeof(string), Size = 10)]
         public DataColumn Count
             {
             get;

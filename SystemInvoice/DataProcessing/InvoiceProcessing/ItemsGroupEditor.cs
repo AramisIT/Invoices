@@ -48,7 +48,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         /// <summary>
         /// Распределяет места по строкам табличной части инвойса пропорционально весу брутто
         /// </summary>
-        /// <param name="totalPlacesCount">Общее колличество мест которое должно получится после распределения</param>
+        /// <param name="totalPlacesCount">Общее количество мест которое должно получится после распределения</param>
         public void SetPlaces(int totalPlacesCount)
             {
             ComputePlacesQuantity(totalPlacesCount);

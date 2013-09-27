@@ -11,7 +11,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
     public class CellErrorsCollection : List<CellError>
         {
         /// <summary>
-        /// Возвращает колличество "информационных" ошибок, которые не свидетельствуют о несоответствии данных загруженных из БД и данных из документа,
+        /// Возвращает количество "информационных" ошибок, которые не свидетельствуют о несоответствии данных загруженных из БД и данных из документа,
         /// а свидетельствуют о некоректности самих данных из документа
         /// </summary>
         public int NonNotificationErrorsCount

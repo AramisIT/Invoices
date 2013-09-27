@@ -175,7 +175,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
             get
                 {
                 int totalErrors = this.GetTotalErrorsCount();
-                return string.Format("Колличество ошибок: {0}", totalErrors);
+                return string.Format("Количество ошибок: {0}", totalErrors);
                 }
             }
 
@@ -242,7 +242,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
             }
 
         /// <summary>
-        /// Возвращает общее колличество ошибок в колонке таблицы
+        /// Возвращает общее количество ошибок в колонке таблицы
         /// </summary>
         public int GetColumnErrors(string columnName)
             {

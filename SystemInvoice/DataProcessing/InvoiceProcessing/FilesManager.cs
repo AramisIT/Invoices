@@ -37,7 +37,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             }
 
         /// <summary>
-        /// Возвращает колличество выгруженных для редактирования строк
+        /// Возвращает количество выгруженных для редактирования строк
         /// </summary>
         public int ToEditUnloadedCount
             {

@@ -88,7 +88,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
                     }
                 double diffRes = netWeightsInfo.CalcResidual(setForNomenclatureIdValue);
                 setForNomenclatureIdValue -= diffRes;
-                residual = proportionalUpdateValue + residual - setForNomenclatureIdValue;//добавляем остаток который возникает при делении с точностью до трех знаков для веса и затем умножении на колличество
+                residual = proportionalUpdateValue + residual - setForNomenclatureIdValue;//добавляем остаток который возникает при делении с точностью до трех знаков для веса и затем умножении на количество
                 arranged.Add(nomenclatureId, setForNomenclatureIdValue);
                 }
             }

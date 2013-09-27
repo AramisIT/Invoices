@@ -6,7 +6,7 @@ namespace Catalogs
     public class SystemInvoiceConstants : SystemConsts
         {
         /// <summary>
-        /// Колличество дней которое добавляется к текущей дате, все разрешительные которые заканчиваются раньше итоговой даты отображаются красным
+        /// Количество дней которое добавляется к текущей дате, все разрешительные которые заканчиваются раньше итоговой даты отображаются красным
         /// </summary>
         public static string AlarmForApprovalBecomeFailDays
             {

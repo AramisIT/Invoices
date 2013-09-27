@@ -429,7 +429,7 @@ namespace SystemInvoice.Catalogs
             set;
             }
 
-        [SubTableField(Description = "Колличество", PropertyType = typeof(int))]
+        [SubTableField(Description = "Количество", PropertyType = typeof(int))]
         public DataColumn ItemCount
             {
             get;

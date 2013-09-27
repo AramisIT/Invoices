@@ -7,7 +7,7 @@ using System.Text;
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.Syncronizers
     {
     /// <summary>
-    /// Синхронизирует общий вес нетто с весом нетто единицы товара и колличеством
+    /// Синхронизирует общий вес нетто с весом нетто единицы товара и количеством
     /// </summary>
     public class WeightSyncronizer : ISyncronizer
         {

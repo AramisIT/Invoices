@@ -102,7 +102,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Helpers
             }
 
         /// <summary>
-        /// Возвращает колличество единиц товара из табличной части инвойса
+        /// Возвращает количество единиц товара из табличной части инвойса
         /// </summary>
         /// <param name="row">Строка табличной части инвойса</param>
         public static int GetNomenclaturesCount(DataRow row)

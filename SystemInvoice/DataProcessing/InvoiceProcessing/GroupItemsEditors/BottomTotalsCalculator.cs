@@ -73,7 +73,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
                 }
             }
         /// <summary>
-        /// Возвращает итоговое колличество для номенклатуры таблицы
+        /// Возвращает итоговое количество для номенклатуры таблицы
         /// </summary>
         public double TotalCount
             {
@@ -85,7 +85,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
             }
 
         /// <summary>
-        /// Возвращает итоговое колличество для отображаемой номенклатуры таблицы
+        /// Возвращает итоговое количество для отображаемой номенклатуры таблицы
         /// </summary>
         public double VisibleTotalCount
             {
@@ -98,7 +98,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
 
 
         /// <summary>
-        /// Возвращает итоговое колличество мест
+        /// Возвращает итоговое количество мест
         /// </summary>
         public double TotalNumberOfPlaces
             {
@@ -110,7 +110,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
             }
 
         /// <summary>
-        /// Возвращает итоговое колличество мест для отображаемой номенклатуры
+        /// Возвращает итоговое количество мест для отображаемой номенклатуры
         /// </summary>
         public double VisibleTotalNumberOfPlaces
             {
