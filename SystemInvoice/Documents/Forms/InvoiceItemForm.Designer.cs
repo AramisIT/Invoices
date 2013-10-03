@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
             {
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
             this.ribbon = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.btnOk = new DevExpress.XtraBars.BarButtonItem();
             this.btnWrite = new DevExpress.XtraBars.BarButtonItem();
@@ -56,10 +56,10 @@
             this.settingsBtn = new DevExpress.XtraBars.BarSubItem();
             this.SetGrafHeader = new DevExpress.XtraBars.BarCheckItem();
             this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.GoodsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.GoodsControl = new DevExpress.XtraGrid.GridControl();
-            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.goodsGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.okBtn = new DevExpress.XtraBars.BarButtonItem();
             this.WriteBtn = new DevExpress.XtraBars.BarButtonItem();
@@ -97,7 +97,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GoodsControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.goodsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ExcelLoadingFormat.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -161,7 +161,7 @@
             this.repositoryItemCheckEdit1});
             this.ribbon.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
             this.ribbon.Size = new System.Drawing.Size(995, 27);
-            this.ribbon.StatusBar = this.GoodsButtonsBar;
+            this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // btnOk
             // 
@@ -344,21 +344,6 @@
             this.repositoryItemCheckEdit1.AutoHeight = false;
             this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
             // 
-            // ribbonStatusBar
-            // 
-            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
-            this.ribbonStatusBar.ItemLinks.Add(this.unloadProcessedBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.checkNetWeightBarBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
-            this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
-            this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
-            this.ribbonStatusBar.Name = "ribbonStatusBar";
-            this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
-            // 
             // GoodsButtonsBar
             // 
             this.GoodsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -379,26 +364,41 @@
             this.GoodsButtonsBar.Ribbon = this.ribbon;
             this.GoodsButtonsBar.Size = new System.Drawing.Size(982, 31);
             // 
+            // ribbonStatusBar
+            // 
+            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
+            this.ribbonStatusBar.ItemLinks.Add(this.unloadProcessedBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.checkNetWeightBarBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
+            this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
+            this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
+            this.ribbonStatusBar.Name = "ribbonStatusBar";
+            this.ribbonStatusBar.Ribbon = this.ribbon;
+            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
+            // 
             // GoodsControl
             // 
             this.GoodsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GoodsControl.Location = new System.Drawing.Point(7, 175);
-            this.GoodsControl.MainView = this.gridView1;
+            this.GoodsControl.MainView = this.goodsGridView;
             this.GoodsControl.MenuManager = this.ribbon;
             this.GoodsControl.Name = "GoodsControl";
             this.GoodsControl.Size = new System.Drawing.Size(982, 306);
             this.GoodsControl.TabIndex = 191;
             this.GoodsControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridView1,
+            this.goodsGridView,
             this.gridView3});
             // 
-            // gridView1
+            // goodsGridView
             // 
-            this.gridView1.GridControl = this.GoodsControl;
-            this.gridView1.Name = "gridView1";
-            this.gridView1.OptionsView.ShowFooter = true;
+            this.goodsGridView.GridControl = this.GoodsControl;
+            this.goodsGridView.Name = "goodsGridView";
+            this.goodsGridView.OptionsView.ShowFooter = true;
             // 
             // gridView3
             // 
@@ -432,7 +432,7 @@
             // 
             this.labelControl3.Location = new System.Drawing.Point(526, 20);
             this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(86, 13);
+            this.labelControl3.Size = new System.Drawing.Size(85, 13);
             this.labelControl3.TabIndex = 201;
             this.labelControl3.Text = "Формат загрузки";
             // 
@@ -632,7 +632,7 @@
             this.GrossWeight.MenuManager = this.ribbon;
             this.GrossWeight.Name = "GrossWeight";
             this.GrossWeight.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, "", null, null, true),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Close),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.OK)});
             this.GrossWeight.Properties.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.GrossWeight_Properties_ButtonClick);
@@ -645,7 +645,7 @@
             this.NumberOfPlaces.MenuManager = this.ribbon;
             this.NumberOfPlaces.Name = "NumberOfPlaces";
             this.NumberOfPlaces.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.OK)});
             this.NumberOfPlaces.Properties.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.NumberOfPlaces_Properties_ButtonClick);
             this.NumberOfPlaces.Size = new System.Drawing.Size(101, 20);
@@ -671,7 +671,7 @@
             // 
             this.labelControl12.Location = new System.Drawing.Point(7, 57);
             this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(56, 13);
+            this.labelControl12.Size = new System.Drawing.Size(55, 13);
             this.labelControl12.TabIndex = 220;
             this.labelControl12.Text = "Вес брутто";
             // 
@@ -681,7 +681,7 @@
             this.summArrangeBtn.MenuManager = this.ribbon;
             this.summArrangeBtn.Name = "summArrangeBtn";
             this.summArrangeBtn.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject3, "", null, null, true),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.OK)});
             this.summArrangeBtn.Properties.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.Summ_Properties_ButtonClick);
             this.summArrangeBtn.Size = new System.Drawing.Size(101, 20);
@@ -691,7 +691,7 @@
             // 
             this.labelControl5.Location = new System.Drawing.Point(181, 57);
             this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(31, 13);
+            this.labelControl5.Size = new System.Drawing.Size(30, 13);
             this.labelControl5.TabIndex = 273;
             this.labelControl5.Text = "Сумма";
             // 
@@ -701,7 +701,7 @@
             this.NetWeightCalc.MenuManager = this.ribbon;
             this.NetWeightCalc.Name = "NetWeightCalc";
             this.NetWeightCalc.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject3, "", null, null, true),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject4, "", null, null, true),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.OK)});
             this.NetWeightCalc.Properties.Precision = 12;
@@ -782,7 +782,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GoodsControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.goodsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ExcelLoadingFormat.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).EndInit();
@@ -824,7 +824,7 @@
         private DevExpress.XtraBars.BarButtonItem btnCancel;
         private DevExpress.XtraBars.Ribbon.RibbonStatusBar GoodsButtonsBar;
         private DevExpress.XtraGrid.GridControl GoodsControl;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private DevExpress.XtraGrid.Views.Grid.GridView goodsGridView;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView3;
         private DevExpress.XtraBars.BarButtonItem okBtn;
         private DevExpress.XtraBars.BarButtonItem WriteBtn;

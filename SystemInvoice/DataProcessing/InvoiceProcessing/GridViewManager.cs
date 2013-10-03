@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using SystemInvoice.Catalogs;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking;
@@ -11,6 +12,7 @@ using SystemInvoice.Documents;
 using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing
     {
@@ -41,7 +43,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         private TotalsManager totalsManager = null;
         private GridViewColumnsVisualStateManager columnsVisualStateManager = null;
 
-        public GridViewManager(Invoice invoice, GridView mainView, SystemInvoiceDBCache cachedData,InvoiceChecker invoiceChecker)
+        public GridViewManager(Invoice invoice, GridView mainView, SystemInvoiceDBCache cachedData, InvoiceChecker invoiceChecker)
             {
             this.invoiceChecker = invoiceChecker;
             this.columnsVisualStateManager = new GridViewColumnsVisualStateManager(mainView);
@@ -58,8 +60,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.mainView.EndGrouping += mainView_EndGrouping;
             this.mainView.EndSorting += mainView_EndSorting;
             this.mainView.ColumnFilterChanged += mainView_ColumnFilterChanged;
-            this.mainView.DoubleClick += mainView_DoubleClick;
-
+            this.mainView.MouseDown += mainView_MouseDown;
+            
             this.Invoice = invoice;
             this.invoiceChecker.ErrorsCountChanged += invoiceChecker_ErrorsCountChanged;
             this.invoiceChecker.CheckTable(false);
@@ -68,11 +70,13 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.totalsManager = new TotalsManager(invoice, mainView, this);
             this.customsCodeUpdater = new CustomsCodeUpdater(cachedData, invoice, mainView, filteredRowsSource);
 
-            this.resolveErrorsContextMenuManager = new ResolveErrorsContextMenuManager(mainView, invoiceChecker, filteredRowsSource);
+            this.resolveErrorsContextMenuManager = new ResolveErrorsContextMenuManager(mainView, invoiceChecker, filteredRowsSource, showItemFormForCurrentCell);
             this.resolveErrorsContextMenuManager.OnErrorResolved += resolveErrorsContextMenuManager_OnErrorResolved;
-            
+
             this.mainView.CellValueChanging += mainView_CellValueChanging;
             }
+
+
 
         /// <summary>
         /// Обновляет итоговые ячейки после каждого изменения значений в колонках по которым рассчитываются итоги
@@ -114,11 +118,29 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         #region Открытие таможенного кода/номенклатуры
 
         /// <summary>
-        /// Открывает номенклатуру или таможенный код (исли клик на таможенном коде), при двойном клике
+        /// Открывает номенклатуру или таможенный код (если клик на таможенном коде)
         /// </summary>
-        void mainView_DoubleClick(object sender, EventArgs e)
+        void mainView_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
             {
-            if (mainView.FocusedColumn != null && mainView.FocusedColumn.FieldName.Equals("CustomsCodeIntern"))
+            if (e.Button == MouseButtons.Right)
+                {
+                GridHitInfo hitInfo = mainView.CalcHitInfo(e.X, e.Y);
+                if (hitInfo.RowHandle >= 0)
+                    {
+                    mainView.FocusedColumn = hitInfo.Column;
+                    mainView.FocusedRowHandle = hitInfo.RowHandle;
+                    if (mainView.GridControl.ContextMenu == null)
+                        {
+                        showItemFormForCurrentCell();
+                        }
+                    }
+                }
+            }
+
+        private void showItemFormForCurrentCell()
+            {
+            if (mainView.FocusedColumn != null &&
+                mainView.FocusedColumn.FieldName.Equals("CustomsCodeIntern"))
                 {
                 customsCodeUpdater.UpdateCurrentRowCustomsCode();
                 TransactionManager.TransactionManagerInstance.BeginBusinessTransaction();
@@ -130,6 +152,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 }
             openSelectedNomenclature();
             }
+
 
         /// <summary>
         /// Открывает элемент справочника номенклатуры для текущей строки, если таковой существует
@@ -246,7 +269,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.refreshErorsRowsState();
             this.onCellSelect();
             }
-        
+
         #endregion
 
 
@@ -406,7 +429,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             invoiceChecker.CheckRow(lastFocusedRow, this.isDocumentLoaded, lastFocusedColumn);
             var currentError = invoiceChecker.GetError(lastFocusedRow, lastFocusedColumn);
             string currentNotification = invoiceChecker.GetNotification(lastFocusedRow, lastFocusedColumn);
-            this.resolveErrorsContextMenuManager.RefreshMenu(currentError, currentNotification);
+            this.resolveErrorsContextMenuManager.RefreshMenu(currentError, currentNotification,
+                "CustomsCodeIntern".Equals(mainView.FocusedColumn.FieldName));
             refreshErorsRowsState();
             }
 

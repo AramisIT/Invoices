@@ -27,20 +27,24 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
         MenuItem setDatabaseValueForAllSameItems = new MenuItem();
         MenuItem setCurrentCellValueForAllItems = new MenuItem();
         MenuItem setDataBaseValueForAllItems = new MenuItem();
-        MenuItem delimeterItem = new MenuItem(); 
+        MenuItem delimeterItem = new MenuItem();
+        MenuItem openCatalogForCurrentCell = new MenuItem();
         #endregion
 
         private FilteredRowsSource filteredRowsSource = null;
         private CellError currentError = null;
         private bool isDocumentLoaded = false;
 
-        public ResolveErrorsContextMenuManager(GridView mainView, InvoiceChecker invoiceChecker, FilteredRowsSource filteredRowsSource)
+        public ResolveErrorsContextMenuManager(GridView mainView, InvoiceChecker invoiceChecker, FilteredRowsSource filteredRowsSource, Action showItemFormForCurrentCell)
             {
+            this.showItemFormForCurrentCell = showItemFormForCurrentCell;
             this.mainView = mainView;
             this.invoiceChecker = invoiceChecker;
             this.filteredRowsSource = filteredRowsSource;
             initContextMenu();
             }
+
+        private Action showItemFormForCurrentCell;
 
         private void raiseErrorResolved()
             {
@@ -54,6 +58,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
         private void initContextMenu()
             {
             delimeterItem.Text = "-";
+
             descriptionCellValueItem.Enabled = false;
             showDownMenu = new ContextMenu(
                 new[] 
@@ -65,9 +70,12 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
                 setDatabaseValueForAllSameItems,
                 delimeterItem,
                 setCurrentCellValueForAllItems,
-                setDataBaseValueForAllItems
+                setDataBaseValueForAllItems,
+                delimeterItem,
+                openCatalogForCurrentCell
                 }
             );
+            openCatalogForCurrentCell.Click += (sender, e) => { showItemFormForCurrentCell(); };
             setCurrentCellValueItem.Click += setCurrentCellValueItem_Click;
             setCurrentCellValueForAllSameItems.Click += setCurrentCellValueForAllSameItems_Click;
             setDatabaseValueItem.Click += setDatabaseValueItem_Click;
@@ -82,7 +90,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
         /// </summary>
         /// <param name="error">Ошибка</param>
         /// <param name="currentNotification">Уведомление которое может отображатся вместо ошибки</param>
-        public void RefreshMenu(CellError error, string currentNotification)
+        public void RefreshMenu(CellError error, string currentNotification, bool internalCodeSelected)
             {
             this.currentError = error;
             this.mainView.GridControl.ContextMenu = null;
@@ -94,11 +102,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             this.mainView.GridControl.ContextMenu = showDownMenu;
             if (compareError != null)
                 {
-                this.setMenuItemsText(compareError.InDocumentValue, compareError.InDBValue, compareError.CanCopyFromDBOnly, currentNotification, compareError.ErrorDescription);
+                this.setMenuItemsText(compareError.InDocumentValue, compareError.InDBValue, compareError.CanCopyFromDBOnly, currentNotification, compareError.ErrorDescription, internalCodeSelected);
                 }
             else
                 {
-                this.setMenuItemsText(string.Empty, string.Empty, false, currentNotification, string.Empty);
+                this.setMenuItemsText(string.Empty, string.Empty, false, currentNotification, string.Empty, internalCodeSelected);
                 }
             }
 
@@ -150,7 +158,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
         /// <param name="showCopyFromDBOnly">Убрать элементы контекстного меню для установки данных в базу</param>
         /// <param name="currentNotification">Уведомление которое може по умолчанию отображатся вместо текста для обычных ошибок для которых нельзя изменить значения в базе или ячейке</param>
         /// <param name="errorDescription">Текст шапки меню.</param>
-        private void setMenuItemsText(string valueInCell, string valueInDatabase, bool showCopyFromDBOnly, string currentNotification, string errorDescription)
+        private void setMenuItemsText(string valueInCell, string valueInDatabase, bool showCopyFromDBOnly, string currentNotification, string errorDescription, bool internalCodeSelected)
             {
             //либо берем описание ошибки, которое отображается в первой строки из параметра, либо если не задано - формируем сами
             string errorToShow = !string.IsNullOrEmpty(errorDescription) ? errorDescription : string.Format(@"""{0}"" а должно быть ""{1}""", valueInCell, valueInDatabase);
@@ -186,6 +194,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             setDatabaseValueForAllSameItems.Text = string.Format(@"принять ""{0}"" для всех ячейеек у которых ""{1}""", valueInDatabase, valueInCell);
             setCurrentCellValueForAllItems.Text = "принять по всем как есть";
             setDataBaseValueForAllItems.Text = "принять по всем как в базе";
+            openCatalogForCurrentCell.Text = string.Format("Открыть справочник {0}", internalCodeSelected ? "Таможенные коды" : "Номенклатура");
             }
         }
     }

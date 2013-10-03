@@ -32,9 +32,9 @@
             this.okBtn = new DevExpress.XtraBars.BarButtonItem();
             this.WriteBtn = new DevExpress.XtraBars.BarButtonItem();
             this.CancelBtn = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.SetContentsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ApprovalsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.tab = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.Contractor = new Aramis.AramisSearchLookUpEdit();
@@ -141,8 +141,8 @@
             this.ribbon.Location = new System.Drawing.Point(0, 0);
             this.ribbon.MaxItemId = 4;
             this.ribbon.Name = "ribbon";
-            this.ribbon.Size = new System.Drawing.Size(695, 54);
-            this.ribbon.StatusBar = this.ribbonStatusBar;
+            this.ribbon.Size = new System.Drawing.Size(695, 49);
+            this.ribbon.StatusBar = this.ApprovalsButtonsBar;
             // 
             // okBtn
             // 
@@ -170,35 +170,31 @@
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.CancelBtn_ItemClick);
             // 
-            // SetContentsButtonsBar
-            // 
-            this.SetContentsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SetContentsButtonsBar.Dock = System.Windows.Forms.DockStyle.None;
-            this.SetContentsButtonsBar.Location = new System.Drawing.Point(6, 9);
-            this.SetContentsButtonsBar.Name = "SetContentsButtonsBar";
-            this.SetContentsButtonsBar.Ribbon = this.ribbon;
-            this.SetContentsButtonsBar.Size = new System.Drawing.Size(445, 23);
-            // 
-            // ApprovalsButtonsBar
-            // 
-            this.ApprovalsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ApprovalsButtonsBar.Dock = System.Windows.Forms.DockStyle.None;
-            this.ApprovalsButtonsBar.Location = new System.Drawing.Point(6, 7);
-            this.ApprovalsButtonsBar.Name = "ApprovalsButtonsBar";
-            this.ApprovalsButtonsBar.Ribbon = this.ribbon;
-            this.ApprovalsButtonsBar.Size = new System.Drawing.Size(475, 23);
-            // 
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.okBtn);
             this.ribbonStatusBar.ItemLinks.Add(this.WriteBtn);
             this.ribbonStatusBar.ItemLinks.Add(this.CancelBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 473);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 468);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(695, 23);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(695, 31);
+            // 
+            // SetContentsButtonsBar
+            // 
+            this.SetContentsButtonsBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SetContentsButtonsBar.Location = new System.Drawing.Point(0, 0);
+            this.SetContentsButtonsBar.Name = "SetContentsButtonsBar";
+            this.SetContentsButtonsBar.Ribbon = this.ribbon;
+            this.SetContentsButtonsBar.Size = new System.Drawing.Size(483, 27);
+            // 
+            // ApprovalsButtonsBar
+            // 
+            this.ApprovalsButtonsBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ApprovalsButtonsBar.Location = new System.Drawing.Point(0, 0);
+            this.ApprovalsButtonsBar.Name = "ApprovalsButtonsBar";
+            this.ApprovalsButtonsBar.Ribbon = this.ribbon;
+            this.ApprovalsButtonsBar.Size = new System.Drawing.Size(483, 27);
             // 
             // tab
             // 
@@ -209,7 +205,7 @@
             this.tab.Margin = new System.Windows.Forms.Padding(0);
             this.tab.Name = "tab";
             this.tab.SelectedTabPage = this.xtraTabPage1;
-            this.tab.Size = new System.Drawing.Size(489, 413);
+            this.tab.Size = new System.Drawing.Size(489, 408);
             this.tab.TabIndex = 0;
             this.tab.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -251,7 +247,7 @@
             this.xtraTabPage1.Controls.Add(this.Article);
             this.xtraTabPage1.Controls.Add(this.labelControl23);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(484, 387);
+            this.xtraTabPage1.Size = new System.Drawing.Size(483, 380);
             this.xtraTabPage1.Text = "Основные данные";
             // 
             // Contractor
@@ -384,7 +380,7 @@
             // 
             this.labelControl12.Location = new System.Drawing.Point(11, 302);
             this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(71, 13);
+            this.labelControl12.Size = new System.Drawing.Size(70, 13);
             this.labelControl12.TabIndex = 182;
             this.labelControl12.Text = "Вес брутто от";
             // 
@@ -478,7 +474,7 @@
             // 
             this.labelControl7.Location = new System.Drawing.Point(10, 222);
             this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(94, 13);
+            this.labelControl7.Size = new System.Drawing.Size(93, 13);
             this.labelControl7.TabIndex = 174;
             this.labelControl7.Text = "Подгруппа товара";
             // 
@@ -506,7 +502,7 @@
             // 
             this.labelControl6.Location = new System.Drawing.Point(10, 196);
             this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(120, 13);
+            this.labelControl6.Size = new System.Drawing.Size(119, 13);
             this.labelControl6.TabIndex = 172;
             this.labelControl6.Text = "Страна происхождения";
             // 
@@ -579,7 +575,7 @@
             // 
             this.labelControl3.Location = new System.Drawing.Point(11, 92);
             this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(58, 13);
+            this.labelControl3.Size = new System.Drawing.Size(57, 13);
             this.labelControl3.TabIndex = 166;
             this.labelControl3.Text = "Штрих-Код";
             // 
@@ -621,7 +617,7 @@
             // 
             this.labelControl23.Location = new System.Drawing.Point(11, 14);
             this.labelControl23.Name = "labelControl23";
-            this.labelControl23.Size = new System.Drawing.Size(43, 13);
+            this.labelControl23.Size = new System.Drawing.Size(42, 13);
             this.labelControl23.TabIndex = 160;
             this.labelControl23.Text = "Артикул";
             // 
@@ -630,18 +626,16 @@
             this.xtraTabPage2.Controls.Add(this.SetContentsControl);
             this.xtraTabPage2.Controls.Add(this.SetContentsButtonsBar);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(484, 387);
+            this.xtraTabPage2.Size = new System.Drawing.Size(483, 380);
             this.xtraTabPage2.Text = "Состав набора";
             // 
             // SetContentsControl
             // 
-            this.SetContentsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SetContentsControl.Location = new System.Drawing.Point(6, 32);
+            this.SetContentsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SetContentsControl.Location = new System.Drawing.Point(0, 27);
             this.SetContentsControl.MainView = this.gridView1;
             this.SetContentsControl.Name = "SetContentsControl";
-            this.SetContentsControl.Size = new System.Drawing.Size(445, 350);
+            this.SetContentsControl.Size = new System.Drawing.Size(483, 353);
             this.SetContentsControl.TabIndex = 55;
             this.SetContentsControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -666,18 +660,16 @@
             this.rdPage.Controls.Add(this.ApprovalsControl);
             this.rdPage.Controls.Add(this.ApprovalsButtonsBar);
             this.rdPage.Name = "rdPage";
-            this.rdPage.Size = new System.Drawing.Size(484, 387);
+            this.rdPage.Size = new System.Drawing.Size(483, 380);
             this.rdPage.Text = "Разрешительные документы";
             // 
             // ApprovalsControl
             // 
-            this.ApprovalsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ApprovalsControl.Location = new System.Drawing.Point(6, 30);
+            this.ApprovalsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ApprovalsControl.Location = new System.Drawing.Point(0, 27);
             this.ApprovalsControl.MainView = this.gridView2;
             this.ApprovalsControl.Name = "ApprovalsControl";
-            this.ApprovalsControl.Size = new System.Drawing.Size(475, 350);
+            this.ApprovalsControl.Size = new System.Drawing.Size(483, 353);
             this.ApprovalsControl.TabIndex = 57;
             this.ApprovalsControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2,
@@ -712,7 +704,7 @@
             // 
             this.xtraTabPage3.Controls.Add(this.NameEng);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(190, 158);
+            this.xtraTabPage3.Size = new System.Drawing.Size(189, 156);
             this.xtraTabPage3.Text = "Исходное";
             // 
             // NameEng
@@ -734,7 +726,7 @@
             this.xtraTabControl3.Location = new System.Drawing.Point(500, 275);
             this.xtraTabControl3.Name = "xtraTabControl3";
             this.xtraTabControl3.SelectedTabPage = this.xtraTabPage5;
-            this.xtraTabControl3.Size = new System.Drawing.Size(195, 195);
+            this.xtraTabControl3.Size = new System.Drawing.Size(195, 190);
             this.xtraTabControl3.TabIndex = 1;
             this.xtraTabControl3.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage5,
@@ -744,38 +736,34 @@
             // 
             this.xtraTabPage5.Controls.Add(this.NameDecl);
             this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(190, 169);
+            this.xtraTabPage5.Size = new System.Drawing.Size(189, 157);
             this.xtraTabPage5.Text = "Декларация";
             // 
             // NameDecl
             // 
-            this.NameDecl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.NameDecl.Location = new System.Drawing.Point(3, 7);
+            this.NameDecl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NameDecl.Location = new System.Drawing.Point(0, 0);
             this.NameDecl.MenuManager = this.ribbon;
             this.NameDecl.Name = "NameDecl";
             this.NameDecl.Properties.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.NameDecl.Size = new System.Drawing.Size(194, 181);
+            this.NameDecl.Size = new System.Drawing.Size(189, 157);
             this.NameDecl.TabIndex = 231;
             // 
             // xtraTabPage6
             // 
             this.xtraTabPage6.Controls.Add(this.Description);
             this.xtraTabPage6.Name = "xtraTabPage6";
-            this.xtraTabPage6.Size = new System.Drawing.Size(190, 169);
+            this.xtraTabPage6.Size = new System.Drawing.Size(189, 162);
             this.xtraTabPage6.Text = "Инвойс";
             // 
             // Description
             // 
-            this.Description.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Description.Location = new System.Drawing.Point(3, 4);
+            this.Description.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Description.Location = new System.Drawing.Point(0, 0);
             this.Description.MenuManager = this.ribbon;
             this.Description.Name = "Description";
             this.Description.Properties.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.Description.Size = new System.Drawing.Size(184, 162);
+            this.Description.Size = new System.Drawing.Size(189, 162);
             this.Description.TabIndex = 232;
             // 
             // labelControl16
@@ -814,7 +802,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(695, 496);
+            this.ClientSize = new System.Drawing.Size(695, 499);
             this.Controls.Add(this.labelControl16);
             this.Controls.Add(this.xtraTabControl3);
             this.Controls.Add(this.tab);

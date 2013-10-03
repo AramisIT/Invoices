@@ -175,7 +175,7 @@ namespace SystemInvoice.Documents
         #endregion
 
         #region (string) ReplaceStr Автозамена в текущей колонке
-        [DataField(Description = "Автозамена в текущей колонке", StorageType = StorageTypes.Local)]
+        [DataField(Description = "Автозамена в текущей колонке", StorageType = StorageTypes.Local, Size = 100)]
         public string ReplaceStr
             {
             get

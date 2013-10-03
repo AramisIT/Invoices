@@ -64,7 +64,7 @@ namespace SystemInvoice.Documents.Forms
             mainView.KeyDown += mainView_KeyDown;
             this.mainView.FocusedColumnChanged += mainView_FocusedColumnChanged;
             this.mainView.FocusedRowChanged += mainView_FocusedRowChanged;
-            this.gridView1.KeyDown += mainView_KeyDown;
+            this.goodsGridView.KeyDown += mainView_KeyDown;
             this.Load += InvoiceItemForm_Load;
             ApprovalsByNomenclatureUpdater.OnApprovalsUpdated += ApprovalsByNomenclatureUpdater_OnApprovalsUpdated;
             }
