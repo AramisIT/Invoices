@@ -13,7 +13,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
     /// <summary>
     /// Формирует графу 31, вместе с шапкой.
     /// </summary>
-    public class GrafCalcHandler 
+    public class GrafCalcHandler
         {
         private static string contentPlaceHolderA = "(НАБОР)";
         private static string contentPlaceHolderB = "НАБОР";
@@ -214,14 +214,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     i = this.checkContentWords(i, parts, resultBuilder, existedWords);
                     continue;
                     }
-                /*  if (isWordContent(part))
-                      {
-                      if (!existedWords.Contains(part.Trim().ToUpper()))
-                          {
-                          continue;
-                          }
-                      }*/
-                if (!(i == 0) && !part.StartsWith(".") && !part.StartsWith(",") && !part.StartsWith(":") && !part.StartsWith(";") && !part.StartsWith("-"))
+
+                if (!(i == 0 || part.StartsWith(".") || part.StartsWith(",") || part.StartsWith(":") || part.StartsWith(";") || part.StartsWith("-")))
                     {
                     resultBuilder.Append(" ");
                     }
@@ -244,8 +238,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
         private int checkContentWords(int i, string[] parts, StringBuilder resultBuilder, HashSet<string> existedWords)
             {
             resultBuilder.Append(" ");
-            resultBuilder.Append(parts[i]);
-            resultBuilder.Append(" ");
+
             int lastContentWordIndex = i;
             int contentWordsCount = 0;
             HashSet<string> exitedInCurrentCustomsCodeContentWords = new HashSet<string>();
@@ -264,57 +257,122 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 }
             if (contentWordsCount == 0)
                 {
+                resultBuilder.Append(parts[i]);
+                resultBuilder.Append(" ");
                 for (int k = i + 1; k <= lastContentWordIndex; k++)
                     {
                     resultBuilder.Append(" ");
                     resultBuilder.Append(parts[k]);
                     }
                 }
-            if (contentWordsCount > 0)
+            else
                 {
-                for (int k = i + 1; k <= lastContentWordIndex; k++)
+                var contentWords = new string[lastContentWordIndex - i + 1];
+                for (int k = i; k <= lastContentWordIndex; k++)
                     {
-                    string wordToCheck = parts[k].Trim().ToUpper();
-                    if (isWordContent(wordToCheck))
-                        {
-                        if (exitedInCurrentCustomsCodeContentWords.Contains(wordToCheck))
-                            {
-                            resultBuilder.Append(" ");
-                            resultBuilder.Append(wordToCheck);
-                            }
-                        else
-                            {
-                            if (k + 1 > lastContentWordIndex)
-                                {
-                                continue;
-                                }
-                            string nextWord = parts[k + 1].Trim().ToUpper();
-                            if (nextWord.Equals("АБО") || nextWord.Equals("ТА") || nextWord.Equals("І"))
-                                {
-                                k++;
-                                }
-                            }
-                        continue;
-                        }
-                    if (wordToCheck.Equals("АБО") || wordToCheck.Equals("ТА") || wordToCheck.Equals("І"))
-                        {
-                        if (k + 1 > lastContentWordIndex)
-                            {
-                            resultBuilder.Append(" ");
-                            resultBuilder.Append(wordToCheck);
-                            continue;
-                            }
-                        string nextWord = parts[k + 1].Trim().ToUpper();
-                        if (isWordContent(nextWord) && !exitedInCurrentCustomsCodeContentWords.Contains(nextWord))
-                            {
-                            continue;
-                            }
-                        }
-                    resultBuilder.Append(parts[k]);
-                    resultBuilder.Append(" ");
+                    contentWords[k - i] = parts[k].Trim();
                     }
+
+                resultBuilder.Append(getClearContent(contentWords, exitedInCurrentCustomsCodeContentWords));
                 }
             return lastContentWordIndex;
+            }
+
+        private StringBuilder getClearContent(string[] contentWords, HashSet<string> exitedInCurrentCustomsCodeContentWords)
+            {
+            var resultBuilder = new StringBuilder();
+
+            var firstWordOfSetIndex = 0;
+            var addCurrentWordsSet = false;
+            var skipCurrentSet = false;
+
+            for (int wordIndex = 0; wordIndex < contentWords.Length; wordIndex++)
+                {
+                string wordToCheck = contentWords[wordIndex].ToUpper();
+                var isComma = wordToCheck.Equals(",");
+                var lastWord = wordIndex + 1 == contentWords.Length;
+                var endOfSet = isComma || lastWord;
+
+                var nextWord = !lastWord ? contentWords[wordIndex + 1].ToUpper() : string.Empty;
+                var isUnion = nextWord.Equals("АБО") || nextWord.Equals("ТА") || nextWord.Equals("І");
+
+                if (!addCurrentWordsSet && !skipCurrentSet)
+                    {
+                    if (isWordContent(wordToCheck))
+                        {
+                        addCurrentWordsSet = exitedInCurrentCustomsCodeContentWords.Contains(wordToCheck);
+                        if (!addCurrentWordsSet)
+                            {
+                            skipCurrentSet = true;
+                            }
+                        }
+                    }
+
+                if (endOfSet)
+                    {
+                    if (addCurrentWordsSet)
+                        {
+                        for (int addedWordIndex = firstWordOfSetIndex; addedWordIndex <= (isComma ? wordIndex - 1 : wordIndex); addedWordIndex++)
+                            {
+                            var addingWord = contentWords[addedWordIndex];
+                            if (resultBuilder.Length != 0 || !addingWord.Equals(","))
+                                {
+                                resultBuilder.Append(addingWord);
+                                resultBuilder.Append(" ");
+                                }
+                            }
+                        }
+                    firstWordOfSetIndex = wordIndex;
+                    addCurrentWordsSet = false;
+                    skipCurrentSet = false;
+                    }
+                }
+
+            return resultBuilder;
+
+            //{
+            //var resultBuilder = new StringBuilder();
+
+            //for (int wordIndex = 0; wordIndex < contentWords.Length; wordIndex++)
+            //    {
+            //    var notLastWord = wordIndex + 1 != contentWords.Length;
+            //    var nextWord = notLastWord ? contentWords[wordIndex + 1].ToUpper() : string.Empty;
+            //    var isUnion = nextWord.Equals("АБО") || nextWord.Equals("ТА") || nextWord.Equals("І");
+
+            //    string wordToCheck = contentWords[wordIndex].ToUpper();
+            //    if (isWordContent(wordToCheck))
+            //        {
+            //        if (exitedInCurrentCustomsCodeContentWords.Contains(wordToCheck))
+            //            {
+            //            resultBuilder.Append(" ");
+            //            resultBuilder.Append(wordToCheck);
+            //            }
+            //        else
+            //            {
+            //            if (notLastWord && isUnion)
+            //                {
+            //                wordIndex++;
+            //                }
+            //            }
+            //        continue;
+            //        }
+
+            //    if (isUnion)
+            //        {
+            //        if (notLastWord)
+            //            {
+            //            resultBuilder.Append(" ");
+            //            resultBuilder.Append(wordToCheck);
+            //            continue;
+            //            }
+            //        }
+
+            //    resultBuilder.Append(contentWords[wordIndex]);
+            //    resultBuilder.Append(" ");
+            //    }
+
+            //return resultBuilder;
+            //}
             }
 
         private bool isWordContent(string part)
