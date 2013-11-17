@@ -242,9 +242,9 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             int lastContentWordIndex = i;
             int contentWordsCount = 0;
             HashSet<string> exitedInCurrentCustomsCodeContentWords = new HashSet<string>();
-            for (int k = i; k < parts.Length; k++)
+            for (int wordIndex = i; wordIndex < parts.Length; wordIndex++)
                 {
-                string wordToCheck = parts[k].Trim().ToUpper(); ;
+                string wordToCheck = parts[wordIndex].Trim().ToUpper(); ;
                 if (isWordContent(wordToCheck))
                     {
                     if (existedWords.Contains(wordToCheck))
@@ -252,30 +252,43 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                         contentWordsCount++;
                         exitedInCurrentCustomsCodeContentWords.Add(wordToCheck);
                         }
-                    lastContentWordIndex = k;
+                    lastContentWordIndex = wordIndex;
                     }
                 }
             if (contentWordsCount == 0)
                 {
-                resultBuilder.Append(parts[i]);
-                resultBuilder.Append(" ");
-                for (int k = i + 1; k <= lastContentWordIndex; k++)
-                    {
-                    resultBuilder.Append(" ");
-                    resultBuilder.Append(parts[k]);
-                    }
+                //resultBuilder.Append(parts[i]);
+                //resultBuilder.Append(" ");
+                //for (int k = i + 1; k <= lastContentWordIndex; k++)
+                //    {
+                //    resultBuilder.Append(" ");
+                //    resultBuilder.Append(parts[k]);
+                //    }
                 }
             else
                 {
-                var contentWords = new string[lastContentWordIndex - i + 1];
-                for (int k = i; k <= lastContentWordIndex; k++)
+                var contentWords = new string[lastContentWordIndex - i];
+                for (int k = i + 1; k <= lastContentWordIndex; k++)
                     {
-                    contentWords[k - i] = parts[k].Trim();
+                    contentWords[k - i - 1] = parts[k].Trim();
                     }
 
-                resultBuilder.Append(getClearContent(contentWords, exitedInCurrentCustomsCodeContentWords));
+                var content = getClearContent(contentWords, exitedInCurrentCustomsCodeContentWords);
+                if (content.Length > 0)
+                    {
+                    resultBuilder.Append(" ");
+                    resultBuilder.Append(parts[i]);
+                    resultBuilder.Append(" ");
+                    resultBuilder.Append(content);
+                    }
                 }
             return lastContentWordIndex;
+            }
+
+        private bool isSeparator(string word)
+            {
+            var result = word.Equals(",") || word.Equals("АБО") || word.Equals("ТА") || word.Equals("І");
+            return result;
             }
 
         private StringBuilder getClearContent(string[] contentWords, HashSet<string> exitedInCurrentCustomsCodeContentWords)
@@ -289,12 +302,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             for (int wordIndex = 0; wordIndex < contentWords.Length; wordIndex++)
                 {
                 string wordToCheck = contentWords[wordIndex].ToUpper();
-                var isComma = wordToCheck.Equals(",");
                 var lastWord = wordIndex + 1 == contentWords.Length;
-                var endOfSet = isComma || lastWord;
-
-                var nextWord = !lastWord ? contentWords[wordIndex + 1].ToUpper() : string.Empty;
-                var isUnion = nextWord.Equals("АБО") || nextWord.Equals("ТА") || nextWord.Equals("І");
 
                 if (!addCurrentWordsSet && !skipCurrentSet)
                     {
@@ -308,6 +316,9 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                         }
                     }
 
+                var isComma = isSeparator(wordToCheck);
+                var endOfSet = isComma || lastWord;
+
                 if (endOfSet)
                     {
                     if (addCurrentWordsSet)
@@ -315,7 +326,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                         for (int addedWordIndex = firstWordOfSetIndex; addedWordIndex <= (isComma ? wordIndex - 1 : wordIndex); addedWordIndex++)
                             {
                             var addingWord = contentWords[addedWordIndex];
-                            if (resultBuilder.Length != 0 || !addingWord.Equals(","))
+                            if (resultBuilder.Length != 0 || !isSeparator(addingWord))
                                 {
                                 resultBuilder.Append(addingWord);
                                 resultBuilder.Append(" ");
