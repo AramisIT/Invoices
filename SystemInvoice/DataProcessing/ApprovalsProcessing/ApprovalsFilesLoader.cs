@@ -208,7 +208,8 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
                 string customsCodeIntern = row.TrySafeGetColumnValue<string>("CustomsCodeIntern", "");
                 string declarationName = row.TrySafeGetColumnValue<string>("DeclarationName", "");
                 long subGroupId = 0;
-                nomenclatureCreator.AddNomenclature(article, string.Empty, manufacturer, customsCodeIntern, declarationName, string.Empty,
+                long CustomsCodeId = nomenclatureCreator.CustomsCodesStore.GetCustomsCodeIdForCodeName(customsCodeIntern);
+                nomenclatureCreator.AddNomenclature(article, string.Empty, manufacturer, CustomsCodeId, declarationName, string.Empty,
                     string.Empty, customsCodeExtern, string.Empty, 0, 0, 0, 0, string.Empty, declarationName, subGroupId);
                 }
             return nomenclatureCreator.TryCreate();

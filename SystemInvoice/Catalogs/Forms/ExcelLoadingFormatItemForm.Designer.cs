@@ -33,8 +33,8 @@
             this.btnOk = new DevExpress.XtraBars.BarButtonItem();
             this.btnWrite = new DevExpress.XtraBars.BarButtonItem();
             this.btnCancel = new DevExpress.XtraBars.BarButtonItem();
-            this.ColumnsMappingsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.ColumnsMappingsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.SubGroupOfGoods = new Aramis.AramisSearchLookUpEdit();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.Contractor = new Aramis.AramisSearchLookUpEdit();
@@ -59,6 +59,7 @@
             this.GrafSwitchValue = new DevExpress.XtraEditors.TextEdit();
             this.ColumnIndexForGrafShoes = new DevExpress.XtraEditors.TextEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            this.UseMaxBordersWithNomenclatureCreating = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SubGroupOfGoods.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -70,6 +71,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GrafSwitchValue.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColumnIndexForGrafShoes.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UseMaxBordersWithNomenclatureCreating.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -84,8 +86,8 @@
             this.ribbon.Location = new System.Drawing.Point(0, 0);
             this.ribbon.MaxItemId = 4;
             this.ribbon.Name = "ribbon";
-            this.ribbon.Size = new System.Drawing.Size(783, 54);
-            this.ribbon.StatusBar = this.ribbonStatusBar;
+            this.ribbon.Size = new System.Drawing.Size(783, 49);
+            this.ribbon.StatusBar = this.ColumnsMappingsButtonsBar;
             // 
             // btnOk
             // 
@@ -113,25 +115,25 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
-            // ColumnsMappingsButtonsBar
-            // 
-            this.ColumnsMappingsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ColumnsMappingsButtonsBar.Dock = System.Windows.Forms.DockStyle.None;
-            this.ColumnsMappingsButtonsBar.Location = new System.Drawing.Point(7, 225);
-            this.ColumnsMappingsButtonsBar.Name = "ColumnsMappingsButtonsBar";
-            this.ColumnsMappingsButtonsBar.Ribbon = this.ribbon;
-            this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(767, 23);
-            // 
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
             this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
             this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 491);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 483);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(783, 23);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(783, 31);
+            // 
+            // ColumnsMappingsButtonsBar
+            // 
+            this.ColumnsMappingsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColumnsMappingsButtonsBar.Dock = System.Windows.Forms.DockStyle.None;
+            this.ColumnsMappingsButtonsBar.Location = new System.Drawing.Point(7, 221);
+            this.ColumnsMappingsButtonsBar.Name = "ColumnsMappingsButtonsBar";
+            this.ColumnsMappingsButtonsBar.Ribbon = this.ribbon;
+            this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(767, 27);
             // 
             // SubGroupOfGoods
             // 
@@ -157,7 +159,7 @@
             // 
             this.labelControl6.Location = new System.Drawing.Point(12, 119);
             this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(75, 13);
+            this.labelControl6.Size = new System.Drawing.Size(74, 13);
             this.labelControl6.TabIndex = 178;
             this.labelControl6.Text = "Группа товара";
             // 
@@ -238,17 +240,17 @@
             // 
             this.FirstRowNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.FirstRowNumber.Location = new System.Drawing.Point(154, 168);
+            this.FirstRowNumber.Location = new System.Drawing.Point(682, 117);
             this.FirstRowNumber.MenuManager = this.ribbon;
             this.FirstRowNumber.Name = "FirstRowNumber";
             this.FirstRowNumber.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.FirstRowNumber.Size = new System.Drawing.Size(391, 20);
+            this.FirstRowNumber.Size = new System.Drawing.Size(92, 20);
             this.FirstRowNumber.TabIndex = 189;
             // 
             // labelControl13
             // 
-            this.labelControl13.Location = new System.Drawing.Point(13, 171);
+            this.labelControl13.Location = new System.Drawing.Point(551, 120);
             this.labelControl13.Name = "labelControl13";
             this.labelControl13.Size = new System.Drawing.Size(108, 13);
             this.labelControl13.TabIndex = 188;
@@ -332,7 +334,7 @@
             this.labelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl1.Location = new System.Drawing.Point(551, 67);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(94, 13);
+            this.labelControl1.Size = new System.Drawing.Size(93, 13);
             this.labelControl1.TabIndex = 215;
             this.labelControl1.Text = "Загрузить из Excel";
             // 
@@ -341,7 +343,7 @@
             this.labelControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl2.Location = new System.Drawing.Point(551, 93);
             this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(91, 13);
+            this.labelControl2.Size = new System.Drawing.Size(90, 13);
             this.labelControl2.TabIndex = 216;
             this.labelControl2.Text = "Выгрузить в Excel";
             // 
@@ -349,7 +351,7 @@
             // 
             this.labelControl7.Location = new System.Drawing.Point(290, 197);
             this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(255, 13);
+            this.labelControl7.Size = new System.Drawing.Size(254, 13);
             this.labelControl7.TabIndex = 222;
             this.labelControl7.Text = "Значение в колонке фильтра графы 31 для обуви";
             // 
@@ -357,7 +359,7 @@
             // 
             this.GrafSwitchValue.Location = new System.Drawing.Point(551, 194);
             this.GrafSwitchValue.Name = "GrafSwitchValue";
-            this.GrafSwitchValue.Size = new System.Drawing.Size(209, 20);
+            this.GrafSwitchValue.Size = new System.Drawing.Size(223, 20);
             this.GrafSwitchValue.TabIndex = 223;
             // 
             // ColumnIndexForGrafShoes
@@ -371,15 +373,26 @@
             // 
             this.labelControl3.Location = new System.Drawing.Point(12, 198);
             this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(106, 13);
+            this.labelControl3.Size = new System.Drawing.Size(105, 13);
             this.labelControl3.TabIndex = 227;
             this.labelControl3.Text = "№  для обуви (Гр31)";
+            // 
+            // UseMaxBordersWithNomenclatureCreating
+            // 
+            this.UseMaxBordersWithNomenclatureCreating.Location = new System.Drawing.Point(12, 169);
+            this.UseMaxBordersWithNomenclatureCreating.MenuManager = this.ribbon;
+            this.UseMaxBordersWithNomenclatureCreating.Name = "UseMaxBordersWithNomenclatureCreating";
+            this.UseMaxBordersWithNomenclatureCreating.Properties.AutoWidth = true;
+            this.UseMaxBordersWithNomenclatureCreating.Properties.Caption = "Использовать максимальные рамки нетто при создании номенклатуры";
+            this.UseMaxBordersWithNomenclatureCreating.Size = new System.Drawing.Size(383, 19);
+            this.UseMaxBordersWithNomenclatureCreating.TabIndex = 232;
             // 
             // ExcelLoadingFormatItemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 514);
+            this.Controls.Add(this.UseMaxBordersWithNomenclatureCreating);
             this.Controls.Add(this.ColumnIndexForGrafShoes);
             this.Controls.Add(this.labelControl3);
             this.Controls.Add(this.GrafSwitchValue);
@@ -417,6 +430,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GrafSwitchValue.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColumnIndexForGrafShoes.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UseMaxBordersWithNomenclatureCreating.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -454,5 +468,6 @@
         private DevExpress.XtraEditors.TextEdit GrafSwitchValue;
         private DevExpress.XtraEditors.TextEdit ColumnIndexForGrafShoes;
         private DevExpress.XtraEditors.LabelControl labelControl3;
+        private DevExpress.XtraEditors.CheckEdit UseMaxBordersWithNomenclatureCreating;
         }
     }

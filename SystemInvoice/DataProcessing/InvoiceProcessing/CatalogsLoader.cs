@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using SystemInvoice.Catalogs;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.DataProcessing.Cache.NomenclaturesCache;
+using SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.GroupOfGoodsCreation;
+using SystemInvoice.Documents;
+using Aramis.DatabaseConnector;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing
     {
@@ -16,9 +20,10 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         {
         private SystemInvoiceDBCache cachedData = null;
 
-        public CatalogsLoader(SystemInvoiceDBCache invoiceDBCache)
+        public CatalogsLoader(SystemInvoiceDBCache invoiceDBCache, Invoice invoice)
             {
             this.cachedData = invoiceDBCache;
+            this.invoice = invoice;
             }
 
         public bool TryCreateNewCatalogsItems(DataTable dataTable)
@@ -116,14 +121,33 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 int totalCount = Helpers.InvoiceDataRetrieveHelper.GetNomenclaturesCount(row);
                 double totalNetWeight = Helpers.InvoiceDataRetrieveHelper.GetRowNetWeight(row);
                 double unitNetWeight = Helpers.InvoiceDataRetrieveHelper.GetRowItemNetWeight(row);
-                if (totalCount > 0 && totalNetWeight > 0)
+
+                long customsCodeId = nomenclatureCreator.CustomsCodesStore.GetCustomsCodeIdForCodeName(customCodeName);
+                NetWeightsInfo netWeightsInfo = null;
+                var useMaxBordersWithNomenclatureCreating =
+                    invoice.ExcelLoadingFormat.UseMaxBordersWithNomenclatureCreating;
+
+                if (useMaxBordersWithNomenclatureCreating)
                     {
-                    netWightFrom = Math.Round(Math.Floor(1000 * totalNetWeight / totalCount) / 1000, 3);
-                    netWeightTo = Math.Round(Math.Ceiling(1000 * totalNetWeight / totalCount) / 1000, 3);
+                    netWeightsInfo = getNetWeightsInfo(customsCodeId);
+                    }
+
+                if (useMaxBordersWithNomenclatureCreating && netWeightsInfo != null)
+                    {
+                    netWightFrom = netWeightsInfo.MinWeight;
+                    netWeightTo = netWeightsInfo.MaxWeight;
                     }
                 else
                     {
-                    netWeightTo = netWightFrom = unitNetWeight;
+                    if (totalCount > 0 && totalNetWeight > 0)
+                        {
+                        netWightFrom = Math.Round(Math.Floor(1000 * totalNetWeight / totalCount) / 1000, 3);
+                        netWeightTo = Math.Round(Math.Ceiling(1000 * totalNetWeight / totalCount) / 1000, 3);
+                        }
+                    else
+                        {
+                        netWeightTo = netWightFrom = unitNetWeight;
+                        }
                     }
                 double grossWeight = Helpers.InvoiceDataRetrieveHelper.GetRowGrossWeight(row);
                 double price = Helpers.InvoiceDataRetrieveHelper.GetRowPrice(row);
@@ -134,9 +158,46 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 string subGroupName = Helpers.InvoiceDataRetrieveHelper.GetRowSubGroupName(row);
                 string subGroupCode = Helpers.InvoiceDataRetrieveHelper.GetRowSubGroupCode(row);
                 long groupId = cachedData.GetSubGroupId(groupName, subGroupName, subGroupCode);
-                nomenclatureCreator.AddNomenclature(article, trademark, manufacturerName, customCodeName, nameInvoice, countryName,
+
+                nomenclatureCreator.AddNomenclature(article, trademark, manufacturerName, customsCodeId, nameInvoice, countryName,
                     unitOfMeasureCode, externCode, barCode, netWightFrom, netWeightTo, grossWeight, price, nameOriginal, nameDecl, groupId);
                 }
+            }
+
+        private Dictionary<long, NetWeightsInfo> netWeightsInfoCache = new Dictionary<long, NetWeightsInfo>();
+        private Invoice invoice;
+
+        private NetWeightsInfo getNetWeightsInfo(long customsCodeId)
+            {
+            NetWeightsInfo result;
+            if (!netWeightsInfoCache.TryGetValue(customsCodeId, out result))
+                {
+                result = readNetInfo(customsCodeId);
+                netWeightsInfoCache.Add(customsCodeId, result);
+                }
+
+            return result;
+            }
+
+        private NetWeightsInfo readNetInfo(long customsCodeId)
+            {
+            var q = DB.NewQuery(@"
+select max(NetWeightTo) maxNet, min(NetWeightFrom) minNet
+from Nomenclature where TradeMark = @TradeMark and CustomsCodeInternal = @CustomsCodeInternal");
+
+            q.AddInputParameter("CustomsCodeInternal", customsCodeId);
+            q.AddInputParameter("TradeMark", invoice.TradeMark.Id);
+
+            var qResult = q.SelectRow();
+            if (qResult == null 
+                || DBNull.Value.Equals(qResult["maxNet"]) || DBNull.Value.Equals(qResult["minNet"]) 
+                || qResult["maxNet"] == null || qResult["minNet"] == null)
+                {
+                return null;
+                }
+
+            var result = new NetWeightsInfo(Convert.ToDouble(qResult["minNet"]), Convert.ToDouble(qResult["maxNet"]), 0.0, 0);
+            return result;
             }
 
         /// <summary>

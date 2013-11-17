@@ -11,11 +11,9 @@ namespace SystemInvoice.Catalogs
     /// <summary>
     /// Справочник. Содержит описание контрагентов
     /// </summary>
-    [Catalog( Description = "Контрагенты", GUID = "A72E0B94-F792-44F6-A60C-ECAC7AF8C41A", DescriptionSize = 120, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false )]
+    [Catalog(Description = "Контрагенты", GUID = "A72E0B94-F792-44F6-A60C-ECAC7AF8C41A", DescriptionSize = 120, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false)]
     public class Contractor : CatalogTable
         {
-        #region Свойства
-
         #region (bool) UseComodityPrices Использовать биржевые цены
         [DataField(Description = "Использовать биржевые цены")]
         public bool UseComodityPrices
@@ -39,37 +37,37 @@ namespace SystemInvoice.Catalogs
         #endregion
 
         #region (RelationWithCustomersType) RelationWithCustomersType Тип взаимоотношений
-        [DataField( Description = "Тип взаимоотношений" )]
+        [DataField(Description = "Тип взаимоотношений")]
         public RelationWithCustomersType RelationWithCustomersType
             {
             get
                 {
-                return (RelationWithCustomersType)GetValueForObjectProperty( "RelationWithCustomersType" );
+                return (RelationWithCustomersType)GetValueForObjectProperty("RelationWithCustomersType");
                 }
             set
                 {
-                SetValueForObjectProperty( "RelationWithCustomersType", value );
+                SetValueForObjectProperty("RelationWithCustomersType", value);
                 }
             }
         #endregion
 
         #region (Country) Country Страна
-        [DataField( Description = "Страна" )]//Размер в документе указан 15, но у самой страны может быть 20 поэтому тут не указывал
+        [DataField(Description = "Страна")]//Размер в документе указан 15, но у самой страны может быть 20 поэтому тут не указывал
         public Country Country
             {
             get
                 {
-                return (Country)GetValueForObjectProperty( "Country" );
+                return (Country)GetValueForObjectProperty("Country");
                 }
             set
                 {
-                SetValueForObjectProperty( "Country", value );
+                SetValueForObjectProperty("Country", value);
                 }
             }
         #endregion
 
         #region (string) PhisicalAddress Физический адрес
-        [DataField( Description = "Физический адрес", Size = 40 )]
+        [DataField(Description = "Физический адрес", Size = 40)]
         public string PhisicalAddress
             {
             get
@@ -84,14 +82,14 @@ namespace SystemInvoice.Catalogs
                     }
 
                 z_PhisicalAddress = value;
-                NotifyPropertyChanged( "PhisicalAddress" );
+                NotifyPropertyChanged("PhisicalAddress");
                 }
             }
         private string z_PhisicalAddress = "";
         #endregion
 
         #region (string) JuridicalAddress Юридический адресс
-        [DataField( Description = "Юридический адресс", Size = 40 )]
+        [DataField(Description = "Юридический адресс", Size = 40)]
         public string JuridicalAddress
             {
             get
@@ -106,14 +104,14 @@ namespace SystemInvoice.Catalogs
                     }
 
                 z_JuridicalAddress = value;
-                NotifyPropertyChanged( "JuridicalAddress" );
+                NotifyPropertyChanged("JuridicalAddress");
                 }
             }
         private string z_JuridicalAddress = "";
         #endregion
 
         #region (string) ContractorCode Код
-        [DataField( Description = "Код", NotEmpty = true, Size = 50, ShowInList = true )]
+        [DataField(Description = "Код", NotEmpty = true, Size = 50, ShowInList = true)]
         public string ContractorCode
             {
             get
@@ -128,14 +126,14 @@ namespace SystemInvoice.Catalogs
                     }
 
                 z_ContractorCode = value;
-                NotifyPropertyChanged( "ContractorCode" );
+                NotifyPropertyChanged("ContractorCode");
                 }
             }
         private string z_ContractorCode = "";
         #endregion
 
         #region (string) Phone Телефон
-        [DataField( Description = "Телефон", Size = 50 )]
+        [DataField(Description = "Телефон", Size = 50)]
         public string Phone
             {
             get
@@ -150,11 +148,11 @@ namespace SystemInvoice.Catalogs
                     }
 
                 z_Phone = value;
-                NotifyPropertyChanged( "Phone" );
+                NotifyPropertyChanged("Phone");
                 }
             }
         private string z_Phone = "";
         #endregion
-        #endregion
+        
         }
     }

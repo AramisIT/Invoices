@@ -59,7 +59,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.namesTranslationHandler = new NamesTranslationHandler(invoice, dbCache);
             this.unitOfMeasureCodeRetreiveHandler = new UnitOfMeasureCodeRetreiveHandler(invoice, dbCache);
             this.sizeTranslationHandler = new SizeTranslationHandler(dbCache);
-            this.catalogsLoader = new CatalogsLoader(dbCache);
+            this.catalogsLoader = new CatalogsLoader(dbCache, invoice);
             }
 
         /// <summary>

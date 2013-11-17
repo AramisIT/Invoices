@@ -15,7 +15,7 @@ namespace SystemInvoice.Catalogs
     public class MaterialType : CatalogTable
         {
         #region (string) CustomsCodeKeyWord Описание в таможенном коде
-        [DataField(Description = "Описание в таможенном коде")]
+        [DataField(Description = "Описание в таможенном коде", Size = 100)]
         public string CustomsCodeKeyWord
             {
             get

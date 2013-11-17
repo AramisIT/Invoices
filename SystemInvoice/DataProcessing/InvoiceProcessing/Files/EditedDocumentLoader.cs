@@ -39,7 +39,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
             this.invoice = invoice;
             this.cachedData = cachedData;
             this.fromInvoiceCreator = new ApprovalsFromInvoiceCreator(cachedData);
-            this.catalogsLoader = new CatalogsLoader(cachedData);
+            this.catalogsLoader = new CatalogsLoader(cachedData, invoice);
             if (invoice == null)
                 {
                 throw new NotImplementedException("Oтсутствует формат загрузки");

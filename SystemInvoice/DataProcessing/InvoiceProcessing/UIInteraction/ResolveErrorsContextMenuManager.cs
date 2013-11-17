@@ -169,6 +169,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             setCurrentCellValueForAllItems.Visible = false;
             setDataBaseValueForAllItems.Visible = false;
             delimeterItem.Visible = false;
+            openCatalogForCurrentCell.Text = string.Format("Открыть справочник {0}", internalCodeSelected ? "Таможенные коды" : "Номенклатура");
             if (string.IsNullOrEmpty(valueInCell) && string.IsNullOrEmpty(valueInDatabase))
                 {
                 string notification = string.IsNullOrEmpty(currentNotification)
@@ -194,7 +195,6 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             setDatabaseValueForAllSameItems.Text = string.Format(@"принять ""{0}"" для всех ячейеек у которых ""{1}""", valueInDatabase, valueInCell);
             setCurrentCellValueForAllItems.Text = "принять по всем как есть";
             setDataBaseValueForAllItems.Text = "принять по всем как в базе";
-            openCatalogForCurrentCell.Text = string.Format("Открыть справочник {0}", internalCodeSelected ? "Таможенные коды" : "Номенклатура");
             }
         }
     }

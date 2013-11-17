@@ -62,10 +62,10 @@ namespace SystemInvoice.Documents.Forms
             InitializeComponent();
             mainView = this.GoodsControl.MainView as GridView;
             mainView.KeyDown += mainView_KeyDown;
-            this.mainView.FocusedColumnChanged += mainView_FocusedColumnChanged;
-            this.mainView.FocusedRowChanged += mainView_FocusedRowChanged;
-            this.goodsGridView.KeyDown += mainView_KeyDown;
-            this.Load += InvoiceItemForm_Load;
+            mainView.FocusedColumnChanged += mainView_FocusedColumnChanged;
+            mainView.FocusedRowChanged += mainView_FocusedRowChanged;
+            goodsGridView.KeyDown += mainView_KeyDown;
+            Load += InvoiceItemForm_Load;
             ApprovalsByNomenclatureUpdater.OnApprovalsUpdated += ApprovalsByNomenclatureUpdater_OnApprovalsUpdated;
             }
 
@@ -158,6 +158,7 @@ namespace SystemInvoice.Documents.Forms
             this.invoiceChecker = new InvoiceChecker(Invoice, cachedData);
             this.invoiceChecker.ErrorsCountChanged += () => this.barBtnErrorsCountSource.Caption = invoiceChecker.ErrorsDescription;
             gridViewManager = new GridViewManager(Invoice, mainView, cachedData, this.invoiceChecker);
+           
             this.filesManager = new FilesManager(this.Invoice, cachedData, gridViewManager.Checker, loadedDocumentHandler);
             this.itemsGroupEditor = new ItemsGroupEditor(gridViewManager, cachedData);
             filterManager = new FilterManager(mainView);

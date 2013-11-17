@@ -19,13 +19,15 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
         NomenclatureCacheObjectsStore nomenclatureStore = null;
         ManufacturerCacheObjectsStore manufacturersStore = null;
         TradeMarkCacheObjectsStore tradeMarksStore = null;
-        CustomsCodesCacheObjectsStore customsCodesStore = null;
+       
         UnitOfMeasureCacheObjectsStore unitsOfMeasuresStore = null;
         CountryCahceObjectsStore countriesStore = null;
         /// <summary>
         /// Используется для проверки того что мы добавляем каждую номенклатуру в список на создание только один раз
         /// </summary>
         NomenclatureFastSearchSet createdNomenclatures = new NomenclatureFastSearchSet();
+
+        public CustomsCodesCacheObjectsStore CustomsCodesStore { get; private set; }
 
         public NomenclatureObjectsCreator(NomenclatureCacheObjectsStore nomenclatureStore,
             ManufacturerCacheObjectsStore manufacturersStore,
@@ -38,7 +40,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
             this.nomenclatureStore = nomenclatureStore;
             this.tradeMarksStore = tradeMarksStore;
             this.manufacturersStore = manufacturersStore;
-            this.customsCodesStore = customsCodesStore;
+            this.CustomsCodesStore = customsCodesStore;
             this.unitsOfMeasuresStore = unitsOfMeasuresStore;
             this.countriesStore = countriesStore;
             }
@@ -81,8 +83,8 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
             nomenclature.CustomsCodeExtern = cacheObject.CustomsCodeExtern;
             nomenclature.BarCode = cacheObject.BarCode;
             nomenclature.Price = double.IsNaN(cacheObject.Price) ? 0 : cacheObject.Price;
-            nomenclature.NetWeightFrom = double.IsNaN(cacheObject.NetWeightFrom)?0: cacheObject.NetWeightFrom;
-            nomenclature.NetWeightTo = double.IsNaN(cacheObject.NetWeightTo)?0: cacheObject.NetWeightTo;
+            nomenclature.NetWeightFrom = double.IsNaN(cacheObject.NetWeightFrom) ? 0 : cacheObject.NetWeightFrom;
+            nomenclature.NetWeightTo = double.IsNaN(cacheObject.NetWeightTo) ? 0 : cacheObject.NetWeightTo;
             nomenclature.GrossWeightFrom = double.IsNaN(cacheObject.GrossWeight) ? 0 : cacheObject.GrossWeight;
             nomenclature.GrossWeightTo = double.IsNaN(cacheObject.GrossWeight) ? 0 : cacheObject.GrossWeight;
             nomenclature.SubGroupOfGoods = subGroupOfGoods;
@@ -119,7 +121,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
         /// Добавляет информацию необходимую для создания новой номенклатуры
         /// </summary>
         /// <returns>Была ли информация добавлена и будет ли номенклатура создана при вызове метода Create</returns>
-        public bool AddNomenclature(string article, string trademark, string manufacturer, string customsCode, string invoiceName,
+        public bool AddNomenclature(string article, string trademark, string manufacturer, long CustomsCodeId, string invoiceName,
             string countryShortName, string unitOfMeasureName, string customsCodeExtern, string barCode, double netWeightFrom, double netWeightTo, double grossWright, double price,
             string nameOriginal, string nameDecl, long groupId)//, string groupNamestring subGroupName,string subGroupCode)
             {
@@ -129,7 +131,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
                 long TradeMarkId = tradeMarksStore.GetTradeMarkIdOrCurrent(trademark);
                 long ContractorId = tradeMarksStore.CurrentContractor;
                 long ManufacturerId = manufacturersStore.GetManufcaturerId(manufacturer);
-                long CustomsCodeId = customsCodesStore.GetCustomsCodeIdForCodeName(customsCode);
+
                 long CountryId = countriesStore.GetIdForCountryShortName(countryShortName);
                 long UnitOfMeasureId = unitsOfMeasuresStore.GetCachedObjectId(new UnitOfMeasureCacheObject(unitOfMeasureName, string.Empty));
                 //значения непосредственно присваиваемые номенклатуре

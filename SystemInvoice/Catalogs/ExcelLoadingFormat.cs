@@ -46,6 +46,27 @@ namespace SystemInvoice.Catalogs
 
         #region Свойства
 
+        [DataField(Description = "Использовать максимальные рамки нетто при создании номенклатуры", Size = 50)]
+        public bool UseMaxBordersWithNomenclatureCreating
+            {
+            get
+                {
+                return z_UseMaxBordersWithNomenclatureCreating;
+                }
+            set
+                {
+                if (z_UseMaxBordersWithNomenclatureCreating == value)
+                    {
+                    return;
+                    }
+
+                z_UseMaxBordersWithNomenclatureCreating = value;
+                NotifyPropertyChanged("UseMaxBordersWithNomenclatureCreating");
+                }
+            }
+
+        private bool z_UseMaxBordersWithNomenclatureCreating;
+
         #region (Contractor) Contractor Контрагент
         [DataField( Description = "Контрагент", NotEmpty = true, ShowInList = true )]
         public Contractor Contractor

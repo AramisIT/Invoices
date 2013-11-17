@@ -56,8 +56,8 @@
             this.settingsBtn = new DevExpress.XtraBars.BarSubItem();
             this.SetGrafHeader = new DevExpress.XtraBars.BarCheckItem();
             this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.GoodsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.GoodsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.GoodsControl = new DevExpress.XtraGrid.GridControl();
             this.goodsGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -161,7 +161,7 @@
             this.repositoryItemCheckEdit1});
             this.ribbon.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
             this.ribbon.Size = new System.Drawing.Size(995, 27);
-            this.ribbon.StatusBar = this.ribbonStatusBar;
+            this.ribbon.StatusBar = this.GoodsButtonsBar;
             // 
             // btnOk
             // 
@@ -273,7 +273,7 @@
             // 
             this.refreshGroupingBtn.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
             this.refreshGroupingBtn.Glyph = global::SystemInvoice.Properties.Resources.refresh;
-            this.refreshGroupingBtn.Hint = "Сгруппировать номенклатуру";
+            this.refreshGroupingBtn.Hint = "Обновить";
             this.refreshGroupingBtn.Id = 28;
             this.refreshGroupingBtn.Name = "refreshGroupingBtn";
             this.refreshGroupingBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.refreshGroupingBtn_ItemClick);
@@ -344,6 +344,21 @@
             this.repositoryItemCheckEdit1.AutoHeight = false;
             this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
             // 
+            // ribbonStatusBar
+            // 
+            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
+            this.ribbonStatusBar.ItemLinks.Add(this.unloadProcessedBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.checkNetWeightBarBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
+            this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
+            this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
+            this.ribbonStatusBar.Name = "ribbonStatusBar";
+            this.ribbonStatusBar.Ribbon = this.ribbon;
+            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
+            // 
             // GoodsButtonsBar
             // 
             this.GoodsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -363,21 +378,6 @@
             this.GoodsButtonsBar.Name = "GoodsButtonsBar";
             this.GoodsButtonsBar.Ribbon = this.ribbon;
             this.GoodsButtonsBar.Size = new System.Drawing.Size(982, 31);
-            // 
-            // ribbonStatusBar
-            // 
-            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
-            this.ribbonStatusBar.ItemLinks.Add(this.unloadProcessedBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.checkNetWeightBarBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
-            this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
-            this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
-            this.ribbonStatusBar.Name = "ribbonStatusBar";
-            this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
             // 
             // GoodsControl
             // 

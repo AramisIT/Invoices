@@ -13,7 +13,7 @@ namespace SystemInvoice.Catalogs
     /// <summary>
     /// Справочник. Содержит описание таможенного кода
     /// </summary>
-    [Catalog(Description = "Таможенные коды", GUID = "AD8C0B21-B521-4CD0-8F98-5B6564B9A604", DescriptionSize = 50, DescriptionUnique = true, ShowCodeFieldInForm = false, HierarchicType = HierarchicTypes.Elements)]
+    [Catalog(Description = "Таможенные коды", GUID = "AD8C0B21-B521-4CD0-8F98-5B6564B9A604", DescriptionSize = 50, DescriptionUnique = true, ShowCodeFieldInForm = false, HierarchicType = HierarchicTypes.None)]
     public class CustomsCode : CatalogTable
         {
         public const string emptyCodeStr = "Отсутствует";
