@@ -25,16 +25,16 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorManufacturerSyncronizer( DatabaseObject dbObj )
-            : base( dbObj )
+        public TradeMarkContractorManufacturerSyncronizer(DatabaseObject dbObj)
+            : base(dbObj)
             {
             this.manufacturerDataSource = dbObj as ITradeMarkContractorManufacturerSource;
             }
 
-        protected override void onPropertyChanged( string propertyName )
+        protected override void onPropertyChanged(string propertyName)
             {
-            base.onPropertyChanged( propertyName );
-            if (propertyName.Equals( "Manufacturer" ))
+            base.onPropertyChanged(propertyName);
+            if (propertyName.Equals("Manufacturer"))
                 {
                 if (this.Manufacturer.Id != 0)
                     {
@@ -60,10 +60,10 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        protected override void setFilterForProperty( string propertyName, out GetListFilterDelegate filterDelegate )
+        protected override void setFilterForProperty(string propertyName, out GetListFilterDelegate filterDelegate)
             {
-            base.setFilterForProperty( propertyName, out filterDelegate );
-            if (propertyName.Equals( "Manufacturer" ))
+            base.setFilterForProperty(propertyName, out filterDelegate);
+            if (propertyName.Equals("Manufacturer"))
                 {
                 filterDelegate = manufacturerFilter;
                 }
@@ -71,7 +71,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter manufacturerFilter()
             {
-            ListFilter result = new ListFilter( "Manufacturer" );
+            ListFilter result = new ListFilter(typeof(Manufacturer));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;

@@ -25,8 +25,8 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorExcelLoadingFormatSyncronizer( DatabaseObject dbObject )
-            : base( dbObject )
+        public TradeMarkContractorExcelLoadingFormatSyncronizer(DatabaseObject dbObject)
+            : base(dbObject)
             {
             this.excelLoadingSource = dbObject as ITradeMarkContractorExcelLoadFormatSource;
             }
@@ -37,10 +37,10 @@ namespace SystemInvoice.PropsSyncronization
             base.RefreshAll();
             }
 
-        protected override void onPropertyChanged( string propertyName )
+        protected override void onPropertyChanged(string propertyName)
             {
-            base.onPropertyChanged( propertyName );
-            if (propertyName.Equals( "ExcelLoadingFormat" ))
+            base.onPropertyChanged(propertyName);
+            if (propertyName.Equals("ExcelLoadingFormat"))
                 {
                 if (ExcelLoadingFormat.Id != 0)
                     {
@@ -79,10 +79,10 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        protected override void setFilterForProperty( string propertyName, out GetListFilterDelegate filterDelegate )
+        protected override void setFilterForProperty(string propertyName, out GetListFilterDelegate filterDelegate)
             {
-            base.setFilterForProperty( propertyName, out filterDelegate );
-            if (propertyName.Equals( "ExcelLoadingFormat" ))
+            base.setFilterForProperty(propertyName, out filterDelegate);
+            if (propertyName.Equals("ExcelLoadingFormat"))
                 {
                 filterDelegate = excelLoadingFormatFilter;
                 }
@@ -90,7 +90,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter excelLoadingFormatFilter()
             {
-            ListFilter result = new ListFilter( "ExcelLoadingFormat" );
+            ListFilter result = new ListFilter(typeof(ExcelLoadingFormat));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;

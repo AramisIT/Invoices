@@ -39,7 +39,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorSyncronizer( Aramis.Core.DatabaseObject dbObject )
+        public TradeMarkContractorSyncronizer(Aramis.Core.DatabaseObject dbObject)
             {
             tradeMarkContractorSource = dbObject as ITradeMarkContractorSource;
             this.dbObject = dbObject;
@@ -52,15 +52,15 @@ namespace SystemInvoice.PropsSyncronization
             onContractorChanged();
             }
 
-        void dbObject_ValueOfObjectPropertyChanged( string propertyName )
+        void dbObject_ValueOfObjectPropertyChanged(string propertyName)
             {
             if (dbObject != null && tradeMarkContractorSource != null)
                 {
-                onPropertyChanged( propertyName );
+                onPropertyChanged(propertyName);
                 }
             }
 
-        protected virtual void onPropertyChanged( string propertyName )
+        protected virtual void onPropertyChanged(string propertyName)
             {
             switch (propertyName)
                 {
@@ -100,17 +100,17 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public GetListFilterDelegate GetFuncGetCustomFilter( string propertyName )
+        public GetListFilterDelegate GetFuncGetCustomFilter(string propertyName)
             {
             GetListFilterDelegate listFilter = null;
-            setFilterForProperty( propertyName, out listFilter );
+            setFilterForProperty(propertyName, out listFilter);
             return listFilter;
             }
 
-        protected virtual void setFilterForProperty( string propertyName, out  GetListFilterDelegate filterDelegate )
+        protected virtual void setFilterForProperty(string propertyName, out  GetListFilterDelegate filterDelegate)
             {
             filterDelegate = null;
-            if (propertyName.Equals( "TradeMark" ))
+            if (propertyName.Equals("TradeMark"))
                 {
                 filterDelegate = tradeMarkFilter;
                 }
@@ -118,7 +118,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter tradeMarkFilter()
             {
-            ListFilter result = new ListFilter( "TradeMark" );
+            ListFilter result = new ListFilter(typeof(TradeMark));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;

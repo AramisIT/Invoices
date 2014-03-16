@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Aramis.Core;
 using SystemInvoice.Catalogs;
+using Aramis.Core;
 using Aramis.UI.DBObjectsListFilter;
 
 namespace SystemInvoice.PropsSyncronization
     {
     public class TradeMarkContractorAprovalsLoadFormatSyncronizer : TradeMarkContractorSyncronizer
-        {        
+        {
         ITradeMarkContractorApprovalsLoadFormatSource excelLoadingSource = null;
 
         public ApprovalsLoadFormat ApprovalsLoadFormat
@@ -25,8 +25,8 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorAprovalsLoadFormatSyncronizer( DatabaseObject dbObject )
-            : base( dbObject )
+        public TradeMarkContractorAprovalsLoadFormatSyncronizer(DatabaseObject dbObject)
+            : base(dbObject)
             {
             this.excelLoadingSource = dbObject as ITradeMarkContractorApprovalsLoadFormatSource;
             }
@@ -37,10 +37,10 @@ namespace SystemInvoice.PropsSyncronization
             base.RefreshAll();
             }
 
-        protected override void onPropertyChanged( string propertyName )
+        protected override void onPropertyChanged(string propertyName)
             {
-            base.onPropertyChanged( propertyName );
-            if (propertyName.Equals( "ApprovalsLoadFormat" ))
+            base.onPropertyChanged(propertyName);
+            if (propertyName.Equals("ApprovalsLoadFormat"))
                 {
                 if (ApprovalsLoadFormat.Id != 0)
                     {
@@ -79,10 +79,10 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        protected override void setFilterForProperty( string propertyName, out GetListFilterDelegate filterDelegate )
+        protected override void setFilterForProperty(string propertyName, out GetListFilterDelegate filterDelegate)
             {
-            base.setFilterForProperty( propertyName, out filterDelegate );
-            if (propertyName.Equals( "ApprovalsLoadFormat" ))
+            base.setFilterForProperty(propertyName, out filterDelegate);
+            if (propertyName.Equals("ApprovalsLoadFormat"))
                 {
                 filterDelegate = approvalsLoadingFormatFilter;
                 }
@@ -90,7 +90,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter approvalsLoadingFormatFilter()
             {
-            ListFilter result = new ListFilter( "ApprovalsLoadFormat" );
+            ListFilter result = new ListFilter(typeof(ApprovalsLoadFormat));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;

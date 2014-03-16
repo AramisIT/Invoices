@@ -38,16 +38,16 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TrademarkContractorSubGroupOfGoodsSyncronizer( Aramis.Core.DatabaseObject dbObject )
-            : base( dbObject )
+        public TrademarkContractorSubGroupOfGoodsSyncronizer(Aramis.Core.DatabaseObject dbObject)
+            : base(dbObject)
             {
             this.goodsDataSource = dbObject as ITradeMarkContractorSubGroupOfGoodsSource;
             }
 
-        protected override void onPropertyChanged( string propertyName )
+        protected override void onPropertyChanged(string propertyName)
             {
-            base.onPropertyChanged( propertyName );
-            if (propertyName.Equals( "SubGroupOfGoods" ))
+            base.onPropertyChanged(propertyName);
+            if (propertyName.Equals("SubGroupOfGoods"))
                 {
                 if (this.SubGroupOfGoods.Id != 0)
                     {
@@ -56,7 +56,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        protected  virtual void onSubGroupOfGoodsChanged()
+        protected virtual void onSubGroupOfGoodsChanged()
             {
             if (SubGroupOfGoods.Contractor.Id != this.Contractor.Id && this.SubGroupOfGoods.Contractor.Id != 0)
                 {
@@ -81,10 +81,10 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        protected override void setFilterForProperty( string propertyName, out Aramis.Core.GetListFilterDelegate filterDelegate )
+        protected override void setFilterForProperty(string propertyName, out Aramis.Core.GetListFilterDelegate filterDelegate)
             {
-            base.setFilterForProperty( propertyName, out filterDelegate );
-            if (propertyName.Equals( "SubGroupOfGoods" ))
+            base.setFilterForProperty(propertyName, out filterDelegate);
+            if (propertyName.Equals("SubGroupOfGoods"))
                 {
                 filterDelegate = SubGroupOfGoodsFilter;
                 }
@@ -92,7 +92,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter SubGroupOfGoodsFilter()
             {
-            ListFilter result = new ListFilter( "SubGroupOfGoods" );
+            ListFilter result = new ListFilter(typeof(SubGroupOfGoods));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;
