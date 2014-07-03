@@ -21,7 +21,7 @@ using Aramis.DatabaseConnector;
 
 namespace SystemInvoice.Documents.Forms
     {
-    [View( DBObjectGuid = "0980DB9C-524B-43B6-91F4-424982EF9B99", ViewType = ViewFormType.DocItem )]
+    [Aramis.Attributes.View(DBObjectGuid = "0980DB9C-524B-43B6-91F4-424982EF9B99", ViewType = ViewFormType.DocItem)]
     public partial class ApprovalsItemForm : DevExpress.XtraBars.Ribbon.RibbonForm, IItemForm
         {
         private SystemInvoiceDBCache cachedData = null;
@@ -33,8 +33,8 @@ namespace SystemInvoice.Documents.Forms
             InitializeComponent();
             }
 
-        private DatabaseObject item = null;
-        public DatabaseObject Item
+        private IDatabaseObject item = null;
+        public IDatabaseObject Item
             {
             get { return item; }
             set

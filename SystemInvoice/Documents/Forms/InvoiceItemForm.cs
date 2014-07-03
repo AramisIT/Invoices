@@ -34,7 +34,7 @@ using DevExpress.XtraGrid;
 
 namespace SystemInvoice.Documents.Forms
     {
-    [View(DBObjectGuid = "0ECCE2A0-F801-411B-AE06-E6E488720327", ViewType = ViewFormType.DocItem, IsMDI = true)]
+    [Aramis.Attributes.View(DBObjectGuid = "0ECCE2A0-F801-411B-AE06-E6E488720327", ViewType = ViewFormType.DocItem, IsMDI = true)]
     public partial class InvoiceItemForm : DevExpress.XtraBars.Ribbon.RibbonForm, IItemForm
         {
         private FilesManager filesManager = null;
@@ -186,7 +186,7 @@ namespace SystemInvoice.Documents.Forms
             }
 
         private DatabaseObject item = null;
-        public DatabaseObject Item
+        public IDatabaseObject Item
             {
             get { return item; }
             set

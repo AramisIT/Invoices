@@ -13,14 +13,14 @@ using Aramis.UI.WinFormsDevXpress;
 
 namespace SystemInvoice.Catalogs.Forms
     {
-    [View( DBObjectGuid = "A8592D01-0B9C-4FED-9BE7-1C54F920003F", ViewType = ViewFormType.CatalogItem )]
+    [Aramis.Attributes.View(DBObjectGuid = "A8592D01-0B9C-4FED-9BE7-1C54F920003F", ViewType = ViewFormType.CatalogItem)]
     public partial class ApprovalsLoadFormatItemForm : DevExpress.XtraBars.Ribbon.RibbonForm,IItemForm
         {
         public ApprovalsLoadFormatItemForm()
             {
             InitializeComponent();
             }
-        public DatabaseObject Item
+        public IDatabaseObject Item
             {
             get;
             set;

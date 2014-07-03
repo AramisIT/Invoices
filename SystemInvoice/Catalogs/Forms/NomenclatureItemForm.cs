@@ -13,7 +13,7 @@ using Aramis.UI.WinFormsDevXpress;
 
 namespace SystemInvoice.Catalogs.Forms
     {
-    [View( DBObjectGuid = "AC3B7088-DDB8-49D7-9C7F-1063ACEF0619", ViewType = ViewFormType.CatalogItem )]
+    [global::Aramis.Attributes.View(DBObjectGuid = "AC3B7088-DDB8-49D7-9C7F-1063ACEF0619", ViewType = ViewFormType.CatalogItem)]
     public partial class NomenclatureItemForm : DevExpress.XtraBars.Ribbon.RibbonForm, IItemForm
         {
         public NomenclatureItemForm()
@@ -21,7 +21,7 @@ namespace SystemInvoice.Catalogs.Forms
             InitializeComponent();
             }
 
-        public DatabaseObject Item
+        public IDatabaseObject Item
             {
             get;
             set;

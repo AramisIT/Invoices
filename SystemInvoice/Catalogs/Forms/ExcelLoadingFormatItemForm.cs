@@ -17,7 +17,7 @@ using SystemInvoice.Documents;
 
 namespace SystemInvoice.Catalogs.Forms
     {
-    [View( DBObjectGuid = "AAB86D95-95DF-4C81-92F2-D45C02769441", ViewType = ViewFormType.CatalogItem )]
+    [Aramis.Attributes.View(DBObjectGuid = "AAB86D95-95DF-4C81-92F2-D45C02769441", ViewType = ViewFormType.CatalogItem)]
     public partial class ExcelLoadingFormatItemForm : DevExpress.XtraBars.Ribbon.RibbonForm, IItemForm
         {
         TableLoader excelLoader = new TableLoader();
@@ -28,7 +28,7 @@ namespace SystemInvoice.Catalogs.Forms
             }
 
 
-        public DatabaseObject Item
+        public IDatabaseObject Item
             {
             get;
             set;

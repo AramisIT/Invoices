@@ -9,7 +9,6 @@ using Aramis.UI.WinFormsDevXpress;
 using Catalogs;
 using DevExpress.XtraBars;
 using DevExpress.XtraEditors;
-using Aramis.Core;
 
 namespace Aramis.CommonForms
     {
@@ -24,7 +23,7 @@ namespace Aramis.CommonForms
 
         private Users item;
 
-        public DatabaseObject Item
+        public IDatabaseObject Item
             {
             get
                 {
