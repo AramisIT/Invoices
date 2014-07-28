@@ -191,7 +191,7 @@ namespace SystemInvoice.Documents.Forms
             get { return item; }
             set
                 {
-                item = value;
+                item = value as DatabaseObject;
                 }
             }
 

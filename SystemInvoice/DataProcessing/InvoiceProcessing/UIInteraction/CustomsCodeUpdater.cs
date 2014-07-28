@@ -4,6 +4,7 @@ using SystemInvoice.Catalogs;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.DataProcessing.InvoiceProcessing.Helpers;
 using SystemInvoice.Documents;
+using Aramis.Core;
 using DevExpress.XtraGrid.Views.Grid;
 using System.Collections.Generic;
 
@@ -30,7 +31,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             this.invoice = invoice;
             this.mainView = mainView;
             }
-        
+
         /// <summary>
         /// Меняет таможенные код в текущей строке и в связанных строках
         /// </summary>
@@ -49,7 +50,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             //обновляем таможенные коды
             this.UpdateCustomsCodesGroup(selectedID, selectedRowIndex);
             }
-        
+
         private long getRowCustomCodeId(int selectedRowIndex)
             {
             long customCodeId = 0;
@@ -152,8 +153,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
 
         private static void writeNewCustomsCodeToDB(long nomenclatureId, long customsCodeNewId)
             {
-            Nomenclature nomenclature = new Nomenclature();
-            nomenclature.Read(nomenclatureId);
+            Nomenclature nomenclature = A.New<Nomenclature>(nomenclatureId);
             nomenclature.CustomsCodeInternal = new CustomsCode() { Id = customsCodeNewId };
             nomenclature.Write();
             }

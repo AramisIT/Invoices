@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Aramis.Core;
 using Aramis.DatabaseConnector;
 using Aramis.Enums;
 using Aramis.Platform;
@@ -180,8 +181,8 @@ namespace Aramis.CommonForms
                 {
                 UIConsts.Skin = ( Skins ) ( Skin.SelectedIndex );
 
-                UIConsts.Manager.GetFormsList(AramisObjectType.Catalog, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
-                UIConsts.Manager.GetFormsList(AramisObjectType.Document, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
+                UIConsts.WindowsManager.GetFormsList(AramisObjectType.Catalog, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
+                UIConsts.WindowsManager.GetFormsList(AramisObjectType.Document, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
                 }
             }
 

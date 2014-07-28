@@ -551,8 +551,7 @@ namespace SystemInvoice.Catalogs
                     return;
                     }
                 //выполняем синхронизацию
-                Nomenclature itemNomenclature = new Nomenclature();
-                itemNomenclature.Read(itemId);
+                Nomenclature itemNomenclature = A.New<Nomenclature>(itemId);
                 if (directionToArticle)
                     {
                     currentRow[ItemArticle] = itemNomenclature.Article;

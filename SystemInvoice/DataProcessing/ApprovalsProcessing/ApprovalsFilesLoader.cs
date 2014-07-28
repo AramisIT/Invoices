@@ -243,8 +243,7 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
                     {
                     errorsCount++;
                     }
-                Nomenclature nomenclature = new Nomenclature();
-                nomenclature.Read(nomenclatureID);
+                var nomenclature = A.New<Nomenclature>(nomenclatureID);
                 Manufacturer newManufacturer = new Manufacturer();
                 newManufacturer.Contractor = nomenclature.Contractor;
                 newManufacturer.Id = manufacturerId;

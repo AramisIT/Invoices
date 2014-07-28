@@ -368,8 +368,7 @@ namespace SystemInvoice.Documents
 
             if (currentRow[ItemNomenclature] != null && currentRow[ItemNomenclature] != DBNull.Value)
                 {
-                Nomenclature nomenclatureRow = new Nomenclature();
-                nomenclatureRow.Read(currentRow[ItemNomenclature]);
+                var nomenclatureRow = A.New<Nomenclature>(currentRow[ItemNomenclature]);
                 currentRow[ItemArticle] = nomenclatureRow.Article;
                 currentRow[ItemCustomsCodeInternal] = nomenclatureRow.CustomsCodeInternal.Description;
                 currentRow[ItemManufacturer] = nomenclatureRow.Manufacturer.Description;

@@ -55,7 +55,7 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
             if (customsCodes.ContainsKey(checkItemStr) || customsCodesCodes.ContainsKey(itemToCheck.Description.Trim()))//проверяем что такого кода не существует
                 {
                 long id = customsCodesCodes[itemToCheck.Description.Trim()];
-                itemToCheck.Read(customsCodesCodes);
+                itemToCheck.ReadingId = customsCodesCodes;
                 return false;
                 }
             return true;

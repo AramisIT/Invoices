@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.Catalogs;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
     {
@@ -83,8 +84,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
                 {
                 return null;
                 }
-            Nomenclature nomenclature = new Nomenclature();
-            nomenclature.Read(nomenclatureId);
+            var nomenclature = A.New<Nomenclature>(nomenclatureId);
             return nomenclature;
             }
 
