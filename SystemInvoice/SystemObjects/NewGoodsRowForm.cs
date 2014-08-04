@@ -27,13 +27,10 @@ namespace SystemInvoice.Catalogs.Forms
             splitContainer.Panel2Collapsed = true;
             }
 
-
         private void CancelBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
-            Close();
+            DialogResult = DialogResult.Cancel;
             }
-
-
 
         private void NewGoodsRowForm_Load(object sender, EventArgs e)
             {
@@ -82,10 +79,24 @@ namespace SystemInvoice.Catalogs.Forms
             var hitInfo = gridView.CalcHitInfo(mousePosition);
             if (hitInfo.RowHandle >= 0)
                 {
-                Item.Nomenclature = A.New<Nomenclature>(Item.SearchRows[gridView.GetDataSourceRowIndex(hitInfo.RowHandle)].Id);
                 setTableVisibility(false);
-                Item.Article = Item.Nomenclature.Article;
+                var rowIndex = gridView.GetDataSourceRowIndex(hitInfo.RowHandle);
+                fillFromNomenclature(Item.SearchRows[rowIndex].Id);
                 }
+            }
+
+        private void fillFromNomenclature(long nomenclatureId)
+            {
+            Item.Nomenclature = A.New<Nomenclature>(nomenclatureId);
+            Item.Article = Item.Nomenclature.Article;
+            Item.Country = A.New<Country>(Item.Nomenclature.Country.Id);
+            Item.UnitOfMeasure = A.New<UnitOfMeasure>(Item.Nomenclature.UnitOfMeasure.Id);
+            Item.Price = Convert.ToDecimal(Item.Nomenclature.Price);
+            Item.NameDecl = Item.Nomenclature.NameDecl;
+            Item.NameInvoice = Item.Nomenclature.Description;
+            Item.ItemProducer = A.New<Manufacturer>(Item.Nomenclature.Manufacturer.Id);
+            Item.InternalCode = A.New<CustomsCode>(Item.Nomenclature.CustomsCodeInternal.Id);
+            Item.TradeMark = A.New<ITradeMark>(Item.Nomenclature.TradeMark.Id);
             }
 
         private void SearchRowsControl_Leave(object sender, EventArgs e)
@@ -95,6 +106,11 @@ namespace SystemInvoice.Catalogs.Forms
             setTableVisibility(false);
 
             checkNomenclature();
+            }
+
+        private void okBtn_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            DialogResult = DialogResult.OK;
             }
         }
     }

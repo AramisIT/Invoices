@@ -824,7 +824,6 @@ namespace SystemInvoice.Documents.Forms
             }
         #endregion
 
-
         private void refreshGroupingBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             syncronizationManager.DenySyncronization();
@@ -857,14 +856,24 @@ namespace SystemInvoice.Documents.Forms
             this.Invoice.SetGrafHeader = SetGrafHeader.Checked;
             }
 
+        private DateTime lastEnteredDate = DateTime.MinValue;
+        private string invoiceNumberLastValue = string.Empty;
+
         void Invoice_TableRowAdded(DataTable dataTable, DataRow currentRow)
             {
             if (dataTable != Invoice.Goods) return;
 
             var newRow = A.New<INewGoodsRow>();
+            newRow.InvoiceNumber = invoiceNumberLastValue;
+            newRow.InvoiceDate = lastEnteredDate;
+
             newRow.Contractor = Invoice.Contractor;
             var form = new NewGoodsRowForm() { Item = newRow };
-            UserInterface.Current.ShowSystemObject(newRow, form, true);
+            var dialogResult = UserInterface.Current.ShowSystemObject(newRow, form, true);
+            if (dialogResult != DialogResult.OK) return;
+
+            invoiceNumberLastValue = newRow.InvoiceNumber;
+            lastEnteredDate = newRow.InvoiceDate;
             }
 
         }

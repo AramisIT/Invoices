@@ -48,7 +48,7 @@
             this.ItemProducer = new Aramis.AramisSearchLookUpEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.TradeMark = new Aramis.AramisSearchLookUpEdit();
-            this.dateEdit1 = new DevExpress.XtraEditors.DateEdit();
+            this.InvoiceDate = new DevExpress.XtraEditors.DateEdit();
             this.Article = new DevExpress.XtraEditors.TextEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
@@ -88,8 +88,8 @@
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ItemProducer.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TradeMark.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dateEdit1.Properties.VistaTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dateEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties.VistaTimeProperties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Article.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NameInvoice.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NameDecl.Properties)).BeginInit();
@@ -125,6 +125,7 @@
             this.okBtn.Id = 1;
             this.okBtn.ImageIndex = 0;
             this.okBtn.Name = "okBtn";
+            this.okBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.okBtn_ItemClick);
             // 
             // CancelBtn
             // 
@@ -294,7 +295,7 @@
             this.panelControl1.Controls.Add(this.InternalCode);
             this.panelControl1.Controls.Add(this.TradeMark);
             this.panelControl1.Controls.Add(this.desc);
-            this.panelControl1.Controls.Add(this.dateEdit1);
+            this.panelControl1.Controls.Add(this.InvoiceDate);
             this.panelControl1.Controls.Add(this.Article);
             this.panelControl1.Controls.Add(this.labelControl1);
             this.panelControl1.Controls.Add(this.labelControl2);
@@ -362,18 +363,18 @@
             this.TradeMark.Size = new System.Drawing.Size(168, 20);
             this.TradeMark.TabIndex = 212;
             // 
-            // dateEdit1
+            // InvoiceDate
             // 
-            this.dateEdit1.EditValue = null;
-            this.dateEdit1.Location = new System.Drawing.Point(288, 17);
-            this.dateEdit1.MenuManager = this.ribbon;
-            this.dateEdit1.Name = "dateEdit1";
-            this.dateEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.InvoiceDate.EditValue = null;
+            this.InvoiceDate.Location = new System.Drawing.Point(288, 17);
+            this.InvoiceDate.MenuManager = this.ribbon;
+            this.InvoiceDate.Name = "InvoiceDate";
+            this.InvoiceDate.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.dateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.InvoiceDate.Properties.VistaTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.dateEdit1.Size = new System.Drawing.Size(118, 20);
-            this.dateEdit1.TabIndex = 211;
+            this.InvoiceDate.Size = new System.Drawing.Size(118, 20);
+            this.InvoiceDate.TabIndex = 211;
             // 
             // Article
             // 
@@ -581,7 +582,7 @@
             this.UnitOfMeasure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.UnitOfMeasure.BaseFilter = null;
-            this.UnitOfMeasure.Location = new System.Drawing.Point(288, 213);
+            this.UnitOfMeasure.Location = new System.Drawing.Point(288, 216);
             this.UnitOfMeasure.MenuManager = this.ribbon;
             this.UnitOfMeasure.Name = "UnitOfMeasure";
             this.UnitOfMeasure.Properties.BaseFilter = null;
@@ -602,7 +603,7 @@
             this.Country.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Country.BaseFilter = null;
-            this.Country.Location = new System.Drawing.Point(499, 213);
+            this.Country.Location = new System.Drawing.Point(499, 216);
             this.Country.MenuManager = this.ribbon;
             this.Country.Name = "Country";
             this.Country.Properties.BaseFilter = null;
@@ -648,8 +649,8 @@
             this.panelControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ItemProducer.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TradeMark.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dateEdit1.Properties.VistaTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dateEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties.VistaTimeProperties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Article.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NameInvoice.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NameDecl.Properties)).EndInit();
@@ -687,7 +688,7 @@
         private DevExpress.XtraEditors.TextEdit Article;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
-        private DevExpress.XtraEditors.DateEdit dateEdit1;
+        private DevExpress.XtraEditors.DateEdit InvoiceDate;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private Aramis.AramisSearchLookUpEdit TradeMark;
         private DevExpress.XtraEditors.LabelControl labelControl4;
