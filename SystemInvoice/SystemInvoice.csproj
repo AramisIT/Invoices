@@ -380,7 +380,7 @@
     <Compile Include="PropsSyncronization\TradeMarkContractorManufacturerSyncronizer.cs" />
     <Compile Include="PropsSyncronization\TradeMarkContractorSyncronizer.cs" />
     <Compile Include="DataProcessing\CatalogsProcessing\CatalogsFromExcelConverter.cs" />
-    <Compile Include="Catalogs\Contractor.cs" />
+    <Compile Include="Catalogs\IContractor.cs" />
     <Compile Include="Catalogs\Country.cs" />
     <Compile Include="Catalogs\Currency.cs" />
     <Compile Include="Catalogs\CustomsCode.cs" />
@@ -404,7 +404,7 @@
     <Compile Include="Catalogs\Nomenclature.cs" />
     <Compile Include="Catalogs\PropertyType.cs" />
     <Compile Include="Catalogs\RelationWithCustomersType.cs" />
-    <Compile Include="Catalogs\TradeMark.cs" />
+    <Compile Include="Catalogs\ITradeMark.cs" />
     <Compile Include="Catalogs\UnitOfMeasure.cs" />
     <Compile Include="Catalogs\Users.cs" />
     <Compile Include="ComponentTests.cs" />
@@ -480,6 +480,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemObjects\NewGoodsRowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemObjects\NewGoodsRowForm.Designer.cs">
+      <DependentUpon>NewGoodsRowForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SystemObjects\INewGoodsRow.cs" />
     <EmbeddedResource Include="Catalogs\Forms\ApprovalsLoadFormatItemForm.resx">
       <DependentUpon>ApprovalsLoadFormatItemForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -522,6 +529,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SystemObjects\NewGoodsRowForm.resx">
+      <DependentUpon>NewGoodsRowForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

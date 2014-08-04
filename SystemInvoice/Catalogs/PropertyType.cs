@@ -197,11 +197,11 @@ namespace SystemInvoice.Catalogs
 
         #region (TradeMark) TradeMark Торговая марка
         [DataField(Description = "Торговая марка")]
-        public TradeMark TradeMark
+        public ITradeMark TradeMark
             {
             get
                 {
-                return (TradeMark)GetValueForObjectProperty("TradeMark");
+                return (ITradeMark)GetValueForObjectProperty("TradeMark");
                 }
             set
                 {
@@ -212,11 +212,11 @@ namespace SystemInvoice.Catalogs
 
         #region (Contractor) Contractor Контрагент
         [DataField(Description = "Контрагент", ShowInList = true)]
-        public Contractor Contractor
+        public IContractor Contractor
             {
             get
                 {
-                return (Contractor)GetValueForObjectProperty("Contractor");
+                return (IContractor)GetValueForObjectProperty("Contractor");
                 }
             set
                 {

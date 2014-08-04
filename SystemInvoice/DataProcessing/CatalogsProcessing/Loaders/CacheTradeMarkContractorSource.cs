@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SystemInvoice.Catalogs;
 using SystemInvoice.PropsSyncronization;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
     {
@@ -12,28 +13,28 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
     /// </summary>
     class CacheTradeMarkContractorSource : ITradeMarkContractorSource
         {
-        private Contractor contractor = null;
-        private TradeMark tradeMark = null;
-        public Contractor Contractor
+        private IContractor contractor = null;
+        private ITradeMark tradeMark = null;
+        public IContractor Contractor
             {
             get
                 {
                 if (contractor == null)
                     {
-                    contractor = new Contractor() { Id = 0 };
+                    contractor = A.New<IContractor>();
                     }
                 return contractor;
                 }
             set { contractor = value; }
             }
 
-        public TradeMark TradeMark
+        public ITradeMark TradeMark
             {
             get
                 {
                 if (tradeMark == null)
                     {
-                    tradeMark = new TradeMark() { Id = 0 };
+                    tradeMark = A.New<ITradeMark>();
                     }
                 return tradeMark;
                 }

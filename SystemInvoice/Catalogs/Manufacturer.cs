@@ -16,11 +16,11 @@ namespace SystemInvoice.Catalogs
         {
         #region (Contractor) Contractor Контрагент
         [DataField( Description = "Контрагент", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true )]
-        public Contractor Contractor
+        public IContractor Contractor
             {
             get
                 {
-                return (Contractor)GetValueForObjectProperty( "Contractor" );
+                return (IContractor)GetValueForObjectProperty( "Contractor" );
                 }
             set
                 {

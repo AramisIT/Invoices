@@ -47,7 +47,8 @@ namespace SystemInvoice.PropsSyncronization
             {
             if (this.Manufacturer.Id != 0 && this.Contractor.Id != this.Manufacturer.Contractor.Id)
                 {
-                this.Contractor = new Contractor() { Id = this.Manufacturer.Contractor.Id };
+                this.Contractor = A.New<IContractor>();
+                this.Contractor.Id = this.Manufacturer.Contractor.Id;
                 }
             }
 

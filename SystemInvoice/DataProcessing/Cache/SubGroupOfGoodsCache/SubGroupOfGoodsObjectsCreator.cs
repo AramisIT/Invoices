@@ -6,6 +6,7 @@ using SystemInvoice.Catalogs;
 using SystemInvoice.DataProcessing.Cache.ManufacturersCache;
 using SystemInvoice.DataProcessing.Cache.TradeMarksCache;
 using SystemInvoice.DataProcessing.Cache.GroupOfGoodsCache;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.Cache.SubGroupOfGoodsCache
     {
@@ -32,9 +33,9 @@ namespace SystemInvoice.DataProcessing.Cache.SubGroupOfGoodsCache
 
         protected override SubGroupOfGoods createDBObject( SubGroupOfGoodsCacheObject cacheObject )
             {
-            Contractor contractor = new Contractor();
+            IContractor contractor = A.New<IContractor>();
             contractor.Id = cacheObject.Contractor;
-            TradeMark tm = new TradeMark();
+            ITradeMark tm = A.New<ITradeMark>();
             tm.Id = cacheObject.TradeMark;
             tm.Contractor = contractor;
             Manufacturer mf = new Manufacturer();

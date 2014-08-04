@@ -56,8 +56,8 @@
             this.settingsBtn = new DevExpress.XtraBars.BarSubItem();
             this.SetGrafHeader = new DevExpress.XtraBars.BarCheckItem();
             this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.GoodsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.GoodsControl = new DevExpress.XtraGrid.GridControl();
             this.goodsGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -161,7 +161,7 @@
             this.repositoryItemCheckEdit1});
             this.ribbon.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
             this.ribbon.Size = new System.Drawing.Size(995, 27);
-            this.ribbon.StatusBar = this.GoodsButtonsBar;
+            this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // btnOk
             // 
@@ -344,21 +344,6 @@
             this.repositoryItemCheckEdit1.AutoHeight = false;
             this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
             // 
-            // ribbonStatusBar
-            // 
-            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
-            this.ribbonStatusBar.ItemLinks.Add(this.unloadProcessedBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.checkNetWeightBarBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
-            this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
-            this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
-            this.ribbonStatusBar.Name = "ribbonStatusBar";
-            this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
-            // 
             // GoodsButtonsBar
             // 
             this.GoodsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -378,6 +363,21 @@
             this.GoodsButtonsBar.Name = "GoodsButtonsBar";
             this.GoodsButtonsBar.Ribbon = this.ribbon;
             this.GoodsButtonsBar.Size = new System.Drawing.Size(982, 31);
+            // 
+            // ribbonStatusBar
+            // 
+            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
+            this.ribbonStatusBar.ItemLinks.Add(this.unloadProcessedBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.checkNetWeightBarBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
+            this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
+            this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
+            this.ribbonStatusBar.Name = "ribbonStatusBar";
+            this.ribbonStatusBar.Ribbon = this.ribbon;
+            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
             // 
             // GoodsControl
             // 
@@ -450,6 +450,7 @@
             this.ExcelLoadingFormat.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.ExcelLoadingFormat.Properties.EditFormat.FormatString = "d";
             this.ExcelLoadingFormat.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.ExcelLoadingFormat.Properties.FirstPopUp = null;
             this.ExcelLoadingFormat.Properties.NullText = "";
             this.ExcelLoadingFormat.Size = new System.Drawing.Size(145, 20);
             this.ExcelLoadingFormat.TabIndex = 202;
@@ -468,6 +469,7 @@
             this.Contractor.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Contractor.Properties.EditFormat.FormatString = "d";
             this.Contractor.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Contractor.Properties.FirstPopUp = null;
             this.Contractor.Properties.NullText = "";
             this.Contractor.Size = new System.Drawing.Size(145, 20);
             this.Contractor.TabIndex = 204;
@@ -494,6 +496,7 @@
             this.TradeMark.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.TradeMark.Properties.EditFormat.FormatString = "d";
             this.TradeMark.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.TradeMark.Properties.FirstPopUp = null;
             this.TradeMark.Properties.NullText = "";
             this.TradeMark.Size = new System.Drawing.Size(145, 20);
             this.TradeMark.TabIndex = 206;
@@ -536,6 +539,7 @@
             this.Currency.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Currency.Properties.EditFormat.FormatString = "d";
             this.Currency.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Currency.Properties.FirstPopUp = null;
             this.Currency.Properties.NullText = "";
             this.Currency.Size = new System.Drawing.Size(145, 20);
             this.Currency.TabIndex = 222;
@@ -779,6 +783,7 @@
             this.Ribbon = this.ribbon;
             this.StatusBar = this.GoodsButtonsBar;
             this.Text = "Формат загрузки файлов Excel";
+            
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GoodsControl)).EndInit();

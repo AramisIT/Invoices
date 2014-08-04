@@ -5,6 +5,7 @@ using System.Text;
 using SystemInvoice.Documents;
 using SystemInvoice.Catalogs;
 using System.Data;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
     {
@@ -54,7 +55,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 }
             else//создаем новый РД
                 {
-                Contractor contractor = new Contractor();
+                IContractor contractor = A.New<IContractor>();
                 contractor.Id = cacheObject.ContractorId;
                 DocumentType docType = new DocumentType();
                 docType.Id = cacheObject.DocumentTypeId;

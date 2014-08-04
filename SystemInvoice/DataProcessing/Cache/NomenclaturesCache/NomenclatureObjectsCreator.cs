@@ -8,6 +8,7 @@ using SystemInvoice.DataProcessing.Cache.TradeMarksCache;
 using SystemInvoice.DataProcessing.Cache.CustomCodesCache;
 using SystemInvoice.DataProcessing.Cache.UnitOfMeasureCache;
 using SystemInvoice.DataProcessing.Cache.CountryCache;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
     {
@@ -52,12 +53,12 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
                 int k = 0;//просто тест для того что бы понять в отладчике почему не создается номенклатура
                 }
             //вспомогательные объекты
-            Contractor contractor = new Contractor();
+            IContractor contractor = A.New<IContractor>();
             contractor.Id = cacheObject.ContractorId;
             Manufacturer manufacturerN = new Manufacturer();
             manufacturerN.Id = cacheObject.ManufacturerId;
             manufacturerN.Contractor = contractor;
-            TradeMark tmark = new TradeMark();
+            ITradeMark tmark = A.New<ITradeMark>();
             tmark.Contractor = contractor;
             tmark.Id = cacheObject.TradeMarkId;
             CustomsCode code = new CustomsCode();

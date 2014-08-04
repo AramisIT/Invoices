@@ -137,11 +137,11 @@ namespace SystemInvoice.Documents
 
         #region (Contractor) Contractor Контрагент
         [DataField(Description = "Контрагент", NotEmpty = true, ShowInList = true)]
-        public Contractor Contractor
+        public IContractor Contractor
             {
             get
                 {
-                return (Contractor)GetValueForObjectProperty("Contractor");
+                return (IContractor)GetValueForObjectProperty("Contractor");
                 }
             set
                 {
@@ -152,11 +152,11 @@ namespace SystemInvoice.Documents
 
         #region (TradeMark) TradeMark Торговая марка
         [DataField(Description = "Торговая марка", ShowInList = true)]
-        public TradeMark TradeMark
+        public ITradeMark TradeMark
             {
             get
                 {
-                return (TradeMark)GetValueForObjectProperty("TradeMark");
+                return (ITradeMark)GetValueForObjectProperty("TradeMark");
                 }
             set
                 {
@@ -324,9 +324,9 @@ namespace SystemInvoice.Documents
             if (value != null && value != DBNull.Value)
                 {
                 long id = (long)value;
-                Contractor contractorForApprovals = new Catalogs.Contractor();
+                IContractor contractorForApprovals = A.New<IContractor>();
                 contractorForApprovals.Id = this.Contractor.Id;
-                TradeMark tradeMarkForApprovals = new Catalogs.TradeMark();
+                ITradeMark tradeMarkForApprovals = A.New<ITradeMark>();
                 tradeMarkForApprovals.Contractor = contractorForApprovals;
                 tradeMarkForApprovals.Id = this.TradeMark.Id;
                 ApprovalsLoadFormat loadFormat = new ApprovalsLoadFormat();

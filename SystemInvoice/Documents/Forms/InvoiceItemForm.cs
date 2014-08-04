@@ -6,12 +6,15 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SystemInvoice.Catalogs.Forms;
 using SystemInvoice.DataProcessing.InvoiceProcessing.Filtering;
 using SystemInvoice.DataProcessing.InvoiceProcessing.Filtering.Dialog;
 using SystemInvoice.DataProcessing.InvoiceProcessing.Helpers;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.CatalogsInTableSearch;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.SpecificCachesManagement;
+using SystemInvoice.SystemObjects;
+using Aramis.UI;
 using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
@@ -158,13 +161,14 @@ namespace SystemInvoice.Documents.Forms
             this.invoiceChecker = new InvoiceChecker(Invoice, cachedData);
             this.invoiceChecker.ErrorsCountChanged += () => this.barBtnErrorsCountSource.Caption = invoiceChecker.ErrorsDescription;
             gridViewManager = new GridViewManager(Invoice, mainView, cachedData, this.invoiceChecker);
-           
+
             this.filesManager = new FilesManager(this.Invoice, cachedData, gridViewManager.Checker, loadedDocumentHandler);
             this.itemsGroupEditor = new ItemsGroupEditor(gridViewManager, cachedData);
             filterManager = new FilterManager(mainView);
             this.refreshInvoiceApprovalsCache();
             this.syncronizationManager.RefreshAll();
             Invoice.PropertyChanged += Invoice_PropertyChanged;
+            Invoice.ValueOfObjectPropertyChanged += Invoice_ValueOfObjectPropertyChanged;
             if (Invoice != null && Invoice.HaveToBeWritten)
                 {
                 notifyTableChanged();
@@ -173,6 +177,18 @@ namespace SystemInvoice.Documents.Forms
             this.gridViewManager.SetColumnsVisibility(this.Invoice.ExcelLoadingFormat);
 
             SetGrafHeader.Checked = this.Invoice.SetGrafHeader;
+            }
+
+        void Invoice_ValueOfObjectPropertyChanged(string propertyName)
+            {
+            if (propertyName.Equals("Contractor"))
+                {
+                Invoice.TableRowAdded -= Invoice_TableRowAdded;
+                if (Invoice.Contractor.AllowManualFilling)
+                    {
+                    Invoice.TableRowAdded += Invoice_TableRowAdded;
+                    }
+                }
             }
 
         void syncronizationManager_OnSyncronized(DataRow dataRow, string columnName)
@@ -686,13 +702,14 @@ namespace SystemInvoice.Documents.Forms
                 }
             int loadedCount = this.gridViewManager.Checker.LoadedRowsCount;
             loadingInfo.Caption = string.Format("Строк с новыми позициями {0} ", totalCount - loadedCount);
-           //  loadingInfo.Caption =string.Format("Загружено {0} из {1} строк. Выгружено в новый файл {2}.", loadedCount, totalCount, countToFileUnloaded);
+            //  loadingInfo.Caption =string.Format("Загружено {0} из {1} строк. Выгружено в новый файл {2}.", loadedCount, totalCount, countToFileUnloaded);
             //
             }
 
         private void refreshExcelLoadFormat()
             {
-            if (this.Invoice.ExcelLoadingFormat.Id != 0){
+            if (this.Invoice.ExcelLoadingFormat.Id != 0)
+                {
                 ExcelLoadingFormat loadFormat = new ExcelLoadingFormat();
                 loadFormat.Id = this.Invoice.ExcelLoadingFormat.Id;
                 loadFormat.Read();
@@ -838,6 +855,16 @@ namespace SystemInvoice.Documents.Forms
         private void SetGrafHeader_CheckedChanged(object sender, ItemClickEventArgs e)
             {
             this.Invoice.SetGrafHeader = SetGrafHeader.Checked;
+            }
+
+        void Invoice_TableRowAdded(DataTable dataTable, DataRow currentRow)
+            {
+            if (dataTable != Invoice.Goods) return;
+
+            var newRow = A.New<INewGoodsRow>();
+            newRow.Contractor = Invoice.Contractor;
+            var form = new NewGoodsRowForm() { Item = newRow };
+            UserInterface.Current.ShowSystemObject(newRow, form, true);
             }
 
         }

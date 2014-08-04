@@ -71,11 +71,14 @@ namespace SystemInvoice.PropsSyncronization
             {
             if (ApprovalsLoadFormat.Contractor.Id != this.Contractor.Id && this.ApprovalsLoadFormat.Contractor.Id != 0)
                 {
-                this.Contractor = new Contractor() { Id = ApprovalsLoadFormat.Contractor.Id };
+                this.Contractor = A.New<IContractor>(ApprovalsLoadFormat.Contractor.Id);
                 }
             if (ApprovalsLoadFormat.TradeMark.Id != TradeMark.Id)
                 {
-                this.TradeMark = new TradeMark() { Id = ApprovalsLoadFormat.TradeMark.Id, Contractor = new Contractor() { Id = ApprovalsLoadFormat.Contractor.Id } };
+                this.TradeMark = A.New<ITradeMark>();
+                TradeMark.Id = ApprovalsLoadFormat.TradeMark.Id;
+                TradeMark.Contractor = A.New<IContractor>();
+                TradeMark.Contractor.Id = ApprovalsLoadFormat.Contractor.Id;
                 }
             }
 

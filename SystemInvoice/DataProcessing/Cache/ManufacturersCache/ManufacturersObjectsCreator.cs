@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SystemInvoice.Catalogs;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.Cache.ManufacturersCache
     {
@@ -26,7 +27,7 @@ namespace SystemInvoice.DataProcessing.Cache.ManufacturersCache
             {
             Manufacturer manufacturer = new Manufacturer();
             manufacturer.Description = cacheObject.ManufacturerName;
-            Contractor contractor = new Contractor();
+            IContractor contractor = A.New<IContractor>();
             contractor.Id = cacheObject.ContractorId;
             manufacturer.Contractor = contractor;
             return manufacturer;

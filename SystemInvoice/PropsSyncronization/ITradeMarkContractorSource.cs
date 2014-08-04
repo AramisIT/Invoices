@@ -8,7 +8,7 @@ namespace SystemInvoice.PropsSyncronization
     {
     public interface ITradeMarkContractorSource
         {
-        Contractor Contractor { get; set; }
-        TradeMark TradeMark { get; set; }
+        IContractor Contractor { get; set; }
+        ITradeMark TradeMark { get; set; }
         }
     }

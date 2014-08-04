@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Aramis;
 using DevExpress.LookAndFeel;
 using Aramis.Platform;
 using System;
@@ -16,7 +17,7 @@ namespace SystemInvoice
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [STAThread]
+        [STAThread, AramisSystem(DefaultLanguage = Language.MultiLanguage)]
         static void Main(string[] args)
             {
             //args = new string[] { "Deploy", "sqlpath=localhost;InvoiceDeplTest2;skipStart" };

@@ -102,7 +102,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
         /// <param name="fileName">путь к загружаемому файлу</param>
         private bool checkCatalogs(string fileName)
             {
-            Contractor currentContractor = this.invoice.Contractor;
+            IContractor currentContractor = this.invoice.Contractor;
             TableLoader loader = new TableLoader();
             cachedData.TradeMarksCreator.Refresh();
             cachedData.ManufacturersCreator.Refresh();
@@ -139,7 +139,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
             return true;
             }
 
-        private bool checkLoadingInfo(Contractor currentContractor)
+        private bool checkLoadingInfo(IContractor currentContractor)
             {
             if (currentContractor.Id == 0)
                 {

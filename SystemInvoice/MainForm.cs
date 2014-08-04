@@ -200,7 +200,7 @@ namespace SystemInvoice
 
         private void contractorsBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
-            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.Contractor));
+            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.IContractor));
             }
 
         private void countryBtn_ItemClick(object sender, ItemClickEventArgs e)
@@ -265,7 +265,7 @@ namespace SystemInvoice
 
         private void tradeMarkBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
-            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.TradeMark));
+            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.ITradeMark));
             }
 
         private void UnitOfMeasureBtn_ItemClick(object sender, ItemClickEventArgs e)

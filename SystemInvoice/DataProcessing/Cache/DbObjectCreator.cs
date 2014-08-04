@@ -8,12 +8,12 @@ using Aramis.DatabaseConnector;
 namespace SystemInvoice.DataProcessing.Cache
     {
     /// <summary>
-    /// Базовый клас, создающий новые екземпляры документов/справочников в системе и записующий их в БД
+    /// Базовый клас, создающий новые екземпляры документов/справочников в системе и записывающий их в БД
     /// </summary>
     /// <typeparam name="D">Тип создаваемого объекта</typeparam>
     /// <typeparam name="C">Тип объекта - кеша, данные которого используются для создания документа/справочника</typeparam>
     public abstract class DbObjectCreator<D, C>
-        where D : DatabaseObject
+        where D : IDatabaseObject
         where C : CacheObject<C>
         {
         /// <summary>
@@ -21,7 +21,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// </summary>
         private CacheObjectsStore<C> cacheStore = null;
 
-        public DbObjectCreator( CacheObjectsStore<C> cacheStore )
+        public DbObjectCreator(CacheObjectsStore<C> cacheStore)
             {
             this.cacheStore = cacheStore;
             }
@@ -38,22 +38,22 @@ namespace SystemInvoice.DataProcessing.Cache
         /// Создает екземпляр объекта документа/справочника, который необходимо записать в БД
         /// </summary>
         /// <param name="cacheObject">Кешированный объект данные которого используются для создания объекта документа/справочника</param>
-        protected abstract D createDBObject( C cacheObject );
+        protected abstract D createDBObject(C cacheObject);
         /// <summary>
         /// Осуществляет удаление объекта и связанных с ним объектов из БД
         /// </summary>
-        protected abstract void deleteObject( D objectToDelete );
+        protected abstract void deleteObject(D objectToDelete);
         /// <summary>
         /// Сообщение об ошибке создания объектов при неудасной попытке записать все объеты в БД
         /// </summary>
         /// <param name="failCount">Количество объектов, запись которых в БД завершилась ошибкой</param>
-        protected abstract string failToCreateMessage( int failCount );
+        protected abstract string failToCreateMessage(int failCount);
 
         private int create()
             {
             if (createdObjects.Count > 0)//в принципе такое не может быть вызвано, но на всякий случай я делаю эту проверку, что бы убедится, что в случае неудачи мы не удалим "лишние" объекты
                 {
-                throw new NotImplementedException( "Обнаружены созданные ранее объекты" );
+                throw new NotImplementedException("Обнаружены созданные ранее объекты");
                 }
             int createdSuccess = 0;
             foreach (C item in cachedObjectsToCreate)
@@ -62,17 +62,18 @@ namespace SystemInvoice.DataProcessing.Cache
                     {
                     continue;
                     }
-                D dataBaseObjectItem = createDBObject( item );
+                D dataBaseObjectItem = createDBObject(item);
                 if (dataBaseObjectItem == null)
                     {
                     continue;
                     }
                 if (dataBaseObjectItem.Write() == WritingResult.Success)
                     {
-                    createdObjects.Add( dataBaseObjectItem );
+                    createdObjects.Add(dataBaseObjectItem);
                     createdSuccess++;
                     }
-                else{
+                else
+                    {
                     int i = 0;
                     }
                 }
@@ -82,9 +83,9 @@ namespace SystemInvoice.DataProcessing.Cache
         /// Выполняет скалярный запрос к БД
         /// </summary>
         /// <param name="queryText"></param>
-        protected void ExceuteQuery( string queryText )
+        protected void ExceuteQuery(string queryText)
             {
-            Query query = DB.NewQuery( queryText );
+            Query query = DB.NewQuery(queryText);
             query.Execute();
             }
 
@@ -150,7 +151,7 @@ namespace SystemInvoice.DataProcessing.Cache
                 int nonCreated = itemsToHaveCreateCount - createdCount;
                 if (nonCreated > 0)
                     {
-                    string ask = string.Concat( failToCreateMessage( nonCreated ), " Продолжить загрузку?" );
+                    string ask = string.Concat(failToCreateMessage(nonCreated), " Продолжить загрузку?");
                     if (ask.Ask())
                         {
                         CommitTransaction();
@@ -176,7 +177,7 @@ namespace SystemInvoice.DataProcessing.Cache
             {
             foreach (D dbObject in createdObjects)
                 {
-                deleteObject( dbObject );
+                deleteObject(dbObject);
                 }
             }
 
@@ -190,11 +191,11 @@ namespace SystemInvoice.DataProcessing.Cache
         /// <summary>
         /// Добавляет объект кеша на основании которого создается записываемый в БД объект документа/справочника
         /// </summary>
-        public bool TryAddToCreationList( C newItem )
+        public bool TryAddToCreationList(C newItem)
             {
-            if (CheckCanAddItem( newItem ) && !cachedObjectsToCreate.Contains( newItem ))
+            if (CheckCanAddItem(newItem) && !cachedObjectsToCreate.Contains(newItem))
                 {
-                cachedObjectsToCreate.Add( newItem );
+                cachedObjectsToCreate.Add(newItem);
                 return true;
                 }
             return false;
@@ -203,9 +204,9 @@ namespace SystemInvoice.DataProcessing.Cache
         /// <summary>
         /// Проверяет можно ли записывать елемент документа/справочника в БД
         /// </summary>
-        protected virtual bool CheckCanAddItem( C newItem )
+        protected virtual bool CheckCanAddItem(C newItem)
             {
-            return cacheStore.GetCachedObjectId( newItem ) == 0;
+            return cacheStore.GetCachedObjectId(newItem) == 0;
             }
 
         /// <summary>

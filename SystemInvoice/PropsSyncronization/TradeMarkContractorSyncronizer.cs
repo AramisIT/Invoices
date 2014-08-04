@@ -13,7 +13,7 @@ namespace SystemInvoice.PropsSyncronization
         ITradeMarkContractorSource tradeMarkContractorSource = null;
         Aramis.Core.DatabaseObject dbObject = null;
 
-        protected Contractor Contractor
+        protected IContractor Contractor
             {
             get
                 {
@@ -26,7 +26,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMark TradeMark
+        public ITradeMark TradeMark
             {
             get
                 {
@@ -88,7 +88,7 @@ namespace SystemInvoice.PropsSyncronization
             {
             if (TradeMark.Contractor.Id != this.Contractor.Id)
                 {
-                this.TradeMark = new TradeMark();
+                this.TradeMark = A.New<ITradeMark>();
                 }
             }
 
@@ -96,7 +96,8 @@ namespace SystemInvoice.PropsSyncronization
             {
             if (this.TradeMark.Id != 0 && this.Contractor.Id != TradeMark.Contractor.Id)
                 {
-                this.Contractor = new Contractor() { Id = TradeMark.Contractor.Id };
+                this.Contractor = A.New<IContractor>();
+                this.Contractor.Id = TradeMark.Contractor.Id;
                 }
             }
 
@@ -118,7 +119,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter tradeMarkFilter()
             {
-            ListFilter result = new ListFilter(typeof(TradeMark));
+            ListFilter result = new ListFilter(typeof(ITradeMark));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;

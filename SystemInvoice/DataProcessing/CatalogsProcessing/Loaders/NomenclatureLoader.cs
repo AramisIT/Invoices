@@ -5,6 +5,7 @@ using System.Text;
 using SystemInvoice.Catalogs;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.DataProcessing.Cache.NomenclaturesCache;
+using Aramis.Core;
 using AramisWpfComponents.Excel;
 using SystemInvoice.PropsSyncronization;
 
@@ -120,9 +121,9 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
             return customsCode;
             }
 
-        private Contractor selectContractor(Row row)
+        private IContractor selectContractor(Row row)
             {
-            Contractor contractor = new Contractor();
+            IContractor contractor = A.New<IContractor>();
             contractor.Id = currentContractorId;
             return contractor;
             }
@@ -147,12 +148,12 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
             return manufacturer;
             }
 
-        private TradeMark selectTradeMark(Row row)
+        private ITradeMark selectTradeMark(Row row)
             {
             string tradeMarkName = row[trademarkColumnIndex].Value.ToString().Trim();
             long tradeMarkId = cachedData.TradeMarkCacheObjectsStore.GetTradeMarkId(tradeMarkName, currentContractorId);
 
-            TradeMark tradeMark = new TradeMark();
+            ITradeMark tradeMark = A.New<ITradeMark>();
             tradeMark.Contractor = selectContractor(row);
             tradeMark.Id = tradeMarkId;
             //создаем новую торговую марку если такой еще нету
@@ -218,8 +219,8 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
 
         protected override void OnLoadComplete()
             {
-            this.tradeMarkContractorSource.Contractor = new Contractor() { Id = 0 };
-            this.tradeMarkContractorSource.TradeMark = new TradeMark() { Id = 0 };
+            this.tradeMarkContractorSource.Contractor = A.New<IContractor>();
+            this.tradeMarkContractorSource.TradeMark = A.New<ITradeMark>();
             base.OnLoadComplete();
             string countStr = string.Format("createdNumbers: {0}", createdObjects.Count);
             Console.WriteLine(countStr);
@@ -235,9 +236,10 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
 
         private bool trySelectCurrentContractor()
             {
-            currentContractorId = Aramis.UI.UserInterface.Current.SelectItemFromList((new Contractor()).GUID, 0);
-            this.tradeMarkContractorSource.Contractor = new Contractor() { Id = currentContractorId };
-            this.tradeMarkContractorSource.TradeMark = new TradeMark() { Id = 0 };
+            currentContractorId = Aramis.UI.UserInterface.Current.SelectItemFromList((A.New<IContractor>()).GUID, 0);
+            this.tradeMarkContractorSource.Contractor = A.New<IContractor>();
+            this.tradeMarkContractorSource.Contractor.Id = currentContractorId;
+            this.tradeMarkContractorSource.TradeMark = A.New<ITradeMark>();
             return currentContractorId > 0;
             }
         }

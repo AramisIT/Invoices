@@ -60,11 +60,14 @@ namespace SystemInvoice.PropsSyncronization
             {
             if (SubGroupOfGoods.Contractor.Id != this.Contractor.Id && this.SubGroupOfGoods.Contractor.Id != 0)
                 {
-                this.Contractor = new Contractor() { Id = SubGroupOfGoods.Contractor.Id };
+                this.Contractor = A.New<IContractor>(SubGroupOfGoods.Contractor.Id);
                 }
             if (SubGroupOfGoods.TradeMark.Contractor.Id == SubGroupOfGoods.Contractor.Id && SubGroupOfGoods.TradeMark.Id != 0 && SubGroupOfGoods.TradeMark.Id != TradeMark.Id)
                 {
-                this.TradeMark = new TradeMark() { Id = SubGroupOfGoods.TradeMark.Id, Contractor = new Contractor() { Id = SubGroupOfGoods.Contractor.Id } };
+                this.TradeMark = A.New<ITradeMark>();
+                TradeMark.Id = SubGroupOfGoods.TradeMark.Id;
+                TradeMark.Contractor = A.New<IContractor>();
+                TradeMark.Contractor.Id = SubGroupOfGoods.Contractor.Id;
                 }
             if (SubGroupOfGoods.GroupOfGoods.Id != 0)
                 {

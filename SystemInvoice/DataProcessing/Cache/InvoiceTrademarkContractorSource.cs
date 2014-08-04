@@ -19,7 +19,7 @@ namespace SystemInvoice.DataProcessing.Cache
             this.invoice = invoice;
             }
 
-        public Catalogs.Contractor Contractor
+        public Catalogs.IContractor Contractor
             {
             get
                 {
@@ -30,7 +30,7 @@ namespace SystemInvoice.DataProcessing.Cache
                 }
             }
 
-        public Catalogs.TradeMark TradeMark
+        public Catalogs.ITradeMark TradeMark
             {
             get
                 {
