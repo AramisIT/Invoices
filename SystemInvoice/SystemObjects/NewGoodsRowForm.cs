@@ -57,6 +57,11 @@ namespace SystemInvoice.Catalogs.Forms
 
         private void Article_Leave(object sender, EventArgs e)
             {
+            finishEditArticle();
+            }
+
+        private void finishEditArticle()
+            {
             if (!SearchRowsControl.Focused)
                 {
                 setTableVisibility(false);
@@ -110,7 +115,37 @@ namespace SystemInvoice.Catalogs.Forms
 
         private void okBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
+            finishEditArticle();
+
+            if (!Item.CheckIsAllNecessaryPropertiesAreFilled(errorText => string.Format("Заполните поле \"{0}\"", errorText).NotifyToUser())) return;
+
+            if (Item.Nomenclature.IsNew || !Item.Nomenclature.Article.Equals(Item.Article))
+                {
+                Item.Nomenclature = A.New<Nomenclature>();
+                Item.Nomenclature.Article = Item.Article;
+                Item.Nomenclature.Price = Convert.ToDouble(Item.Price);
+                Item.Nomenclature.NameDecl = Item.NameDecl;
+                Item.Nomenclature.Description = Item.NameInvoice;
+
+                Item.Nomenclature.UnitOfMeasure = A.New<UnitOfMeasure>(Item.UnitOfMeasure.Id);
+                Item.Nomenclature.Country = A.New<Country>(Item.Country.Id);
+                Item.Nomenclature.TradeMark = A.New<ITradeMark>(Item.TradeMark.Id);
+                Item.Nomenclature.CustomsCodeInternal = A.New<CustomsCode>(Item.InternalCode.Id);
+                Item.Nomenclature.Contractor = A.New<IContractor>(Item.Contractor.Id);
+                Item.Nomenclature.Manufacturer = A.New<Manufacturer>(Item.ItemProducer.Id);
+                Item.Nomenclature.NetWeightFrom = Convert.ToDouble(Item.NetPerUnit);
+                Item.Nomenclature.NetWeightTo = Item.Nomenclature.NetWeightFrom;
+                }
+
             DialogResult = DialogResult.OK;
+            }
+
+        private void Article_KeyDown(object sender, KeyEventArgs e)
+            {
+            if (e.KeyCode == Keys.Enter)
+                {
+                finishEditArticle();
+                }
             }
         }
     }

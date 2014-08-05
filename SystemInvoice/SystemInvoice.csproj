@@ -614,6 +614,8 @@
     <None Include="Resources\1365792903_folder-open_16.png" />
     <None Include="Resources\1365792852_tick.png" />
     <None Include="Resources\1325753463_delete.png" />
+    <None Include="Resources\exit.png" />
+    <None Include="Resources\restart.png" />
     <Content Include="TraceAramis.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

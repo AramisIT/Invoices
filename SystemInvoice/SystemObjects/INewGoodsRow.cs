@@ -9,27 +9,34 @@ namespace SystemInvoice.SystemObjects
     {
     public interface INewGoodsRow : IAramisModel
         {
-        [DataField(Size = Invoice.MAX_INVOICE_NUMBER_SIZE + 1)]
+        [DataField(NotEmpty = true, Description = "Инвойс", Size = Invoice.MAX_INVOICE_NUMBER_SIZE + 1)]
         string InvoiceNumber { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Контрагент")]
         IContractor Contractor { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Дата")]
         DateTime InvoiceDate { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Торговая марка")]
         ITradeMark TradeMark { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Производитель")]
         Manufacturer ItemProducer { get; set; }
 
+        [DataField(NotEmpty = true, Description = "УКТЗЕД")]
         CustomsCode InternalCode { get; set; }
 
+        [DataField(Description = "Номенклатура")]
         Nomenclature Nomenclature { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Артикул")]
         string Article { get; set; }
 
         [DataField(Size = 600)]
         string NameDecl { get; set; }
 
-        [DataField(Size = 400)]
+        [DataField(NotEmpty = true, Description = "Назва", Size = 400)]
         string NameInvoice { get; set; }
 
         [DataField(DecimalPointsNumber = 3)]
@@ -52,8 +59,10 @@ namespace SystemInvoice.SystemObjects
 
         int PlacesCount { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Страна")]
         Country Country { get; set; }
 
+        [DataField(NotEmpty = true, Description = "Ед измерения")]
         UnitOfMeasure UnitOfMeasure { get; set; }
 
         Table<IArticleRow> SearchRows { get; }
@@ -76,7 +85,13 @@ namespace SystemInvoice.SystemObjects
         public NewGoodsRowBehaviour(INewGoodsRow item)
             : base(item)
             {
+            O.AddPropertyChanged(O.Price, () => updateSum());
+            O.AddPropertyChanged(O.Amount, () => updateSum());
+            }
 
+        private void updateSum()
+            {
+            O.Sum = O.Price * O.Amount;
             }
 
         public override void InitItemBeforeShowing()

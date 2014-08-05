@@ -121,8 +121,35 @@
   <data name="Documents" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Documents.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FilterSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FilterSetup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_1362436075_page_white_excel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1362436075_page_white_excel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NextErrorCell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NextErrorCell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProcessExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ProcessExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1333525747_guarantee" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1333525747_guarantee.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1365792852_tick" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1365792852_tick.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_6_filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\6_filter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OpenExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1325753463_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1325753463_delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1364997793_invoice" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1364997793_invoice.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="filter_clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\filter clear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -130,64 +157,43 @@
   <data name="LoadExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LoadExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="My_catalogs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\My catalogs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="My_documents" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\My documents.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NextErrorCell" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NextErrorCell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NextPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NextPage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OpenExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OpenExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PreviousPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PreviousPage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ProcessExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ProcessExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_13657825_Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\13657825_Search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_1306484724_gnome_help" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1306484724_gnome-help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1333525747_guarantee" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1333525747_guarantee.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_1362436075_page_white_excel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1362436075_page_white_excel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_1364997793_invoice" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1364997793_invoice.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_1365181885_circle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1365181885_circle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_13657825_Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\13657825_Search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_1365792852_tick" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1365792852_tick.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_1365792903_folder_open_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1365792903_folder-open_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="_5778325_olumns" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5778325_olumns.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FilterSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FilterSetup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="My_catalogs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\My catalogs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_57insert_rows" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\57insert-rows.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_6_filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\6_filter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="My_documents" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\My documents.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_1325753463_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1325753463_delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_1365181885_circle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1365181885_circle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NextPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NextPage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PreviousPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PreviousPage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1365792903_folder_open_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1365792903_folder-open_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="restart" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\restart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -60,6 +60,12 @@ namespace SystemInvoice.Documents.Forms
                 }
             }
 
+        public bool IsVisible()
+            {
+            var result = goodsGridView.Columns["InvoiceNumber"].VisibleIndex > -1;
+            return result;
+            }
+
         public InvoiceItemForm()
             {
             InitializeComponent();
@@ -174,20 +180,38 @@ namespace SystemInvoice.Documents.Forms
                 notifyTableChanged();
                 }
             Console.WriteLine("loaded on: {0}", (DateTime.Now - from).TotalMilliseconds);
-            this.gridViewManager.SetColumnsVisibility(this.Invoice.ExcelLoadingFormat);
+            updateColumnsVisibility();
 
             SetGrafHeader.Checked = this.Invoice.SetGrafHeader;
             }
 
+        private void updateColumnsVisibility()
+            {
+            this.gridViewManager.SetColumnsVisibility(this.Invoice.ExcelLoadingFormat);
+            }
+
         void Invoice_ValueOfObjectPropertyChanged(string propertyName)
             {
-            if (propertyName.Equals("Contractor"))
+            switch (propertyName)
                 {
-                Invoice.TableRowAdded -= Invoice_TableRowAdded;
-                if (Invoice.Contractor.AllowManualFilling)
-                    {
-                    Invoice.TableRowAdded += Invoice_TableRowAdded;
-                    }
+                case "Contractor":
+                    Invoice.TableRowAdded -= Invoice_TableRowAdded;
+                    if (Invoice.Contractor.AllowManualFilling)
+                        {
+                        Invoice.TableRowAdded += Invoice_TableRowAdded;
+                        if (!Invoice.ExcelLoadingFormat.IsNew)
+                            {
+                            updateColumnsVisibility();
+                            }
+                        }
+                    break;
+
+                case "ExcelLoadingFormat":
+                    if (Invoice.Contractor.AllowManualFilling)
+                        {
+                        updateColumnsVisibility();
+                        }
+                    break;
                 }
             }
 
@@ -867,13 +891,56 @@ namespace SystemInvoice.Documents.Forms
             newRow.InvoiceNumber = invoiceNumberLastValue;
             newRow.InvoiceDate = lastEnteredDate;
 
-            newRow.Contractor = Invoice.Contractor;
+            newRow.Contractor = A.New<IContractor>(Invoice.Contractor.Id);
             var form = new NewGoodsRowForm() { Item = newRow };
             var dialogResult = UserInterface.Current.ShowSystemObject(newRow, form, true);
-            if (dialogResult != DialogResult.OK) return;
+            if (dialogResult != DialogResult.OK)
+                {
+                dataTable.Rows.Remove(currentRow);
+                return;
+                }
 
+            if (newRow.Nomenclature.IsNew || !newRow.Nomenclature.Article.Equals(newRow.Article))
+                {
+                var writingResult = newRow.Nomenclature.Write();
+                if (writingResult != WritingResult.Success)
+                    {
+                    "Не удалось сохранить номенклатуру!".NotifyToUser(MessagesToUserTypes.Error);
+                    dataTable.Rows.Remove(currentRow);
+                    return;
+                    }
+                }
             invoiceNumberLastValue = newRow.InvoiceNumber;
             lastEnteredDate = newRow.InvoiceDate;
+            fillRowWithNewRowGoods(currentRow, newRow);
+            }
+
+        private void fillRowWithNewRowGoods(DataRow row, INewGoodsRow newRow)
+            {
+            var invoice = Invoice;
+
+            row[invoice.InvoiceNumber] = newRow.InvoiceNumber;
+            row[invoice.InvoiceCode] = "3105";
+            row[invoice.InvoiceDate] = newRow.InvoiceDate.ToString("dd.MM.yyyy");
+            row[invoice.ItemTradeMark] = newRow.TradeMark.Description;
+            row[invoice.ItemContractor] = newRow.ItemProducer.Description;
+            row[invoice.CustomsCodeIntern] = newRow.InternalCode.Description;
+            row[invoice.Article] = newRow.Article;
+            row[invoice.NomenclatureDeclaration] = newRow.NameDecl;
+            row[invoice.NomenclatureInvoice] = newRow.NameInvoice;
+
+            row[invoice.Price] = newRow.Price.ConvertToString();
+            row[invoice.Count] = newRow.Amount.ConvertToString();
+            row[invoice.Sum] = newRow.Sum.ConvertToString();
+
+            row[invoice.NetWeight] = newRow.Net.ConvertToString();
+            row[invoice.ItemGrossWeight] = newRow.Gross.ConvertToString();
+
+            row[invoice.ItemNumberOfPlaces] = newRow.PlacesCount.ToString();
+
+            row[invoice.Country] = newRow.Country.InternationalCode;
+            row[invoice.UnitOfMeasure] = newRow.UnitOfMeasure.Description;
+            row[invoice.UnitOfMeasureCode] = newRow.UnitOfMeasure.InternationalCode;
             }
 
         }

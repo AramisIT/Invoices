@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
             {
+            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
             this.ribbon = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.okBtn = new DevExpress.XtraBars.BarButtonItem();
             this.CancelBtn = new DevExpress.XtraBars.BarButtonItem();
@@ -43,6 +46,28 @@
             this.InvoiceNumber = new DevExpress.XtraEditors.TextEdit();
             this.desc = new DevExpress.XtraEditors.LabelControl();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.Country = new Aramis.AramisSearchLookUpEdit();
+            this.UnitOfMeasure = new Aramis.AramisSearchLookUpEdit();
+            this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
+            this.PlacesCount = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
+            this.Gross = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
+            this.Net = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
+            this.NetPerUnit = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
+            this.Sum = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
+            this.Price = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
+            this.Amount = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
+            this.NameDecl = new DevExpress.XtraEditors.MemoEdit();
+            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
+            this.NameInvoice = new DevExpress.XtraEditors.MemoEdit();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.ItemProducer = new Aramis.AramisSearchLookUpEdit();
@@ -52,28 +77,6 @@
             this.Article = new DevExpress.XtraEditors.TextEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.NameInvoice = new DevExpress.XtraEditors.MemoEdit();
-            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
-            this.NameDecl = new DevExpress.XtraEditors.MemoEdit();
-            this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
-            this.Amount = new DevExpress.XtraEditors.CalcEdit();
-            this.Price = new DevExpress.XtraEditors.CalcEdit();
-            this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
-            this.Sum = new DevExpress.XtraEditors.CalcEdit();
-            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
-            this.Gross = new DevExpress.XtraEditors.CalcEdit();
-            this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
-            this.Net = new DevExpress.XtraEditors.CalcEdit();
-            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
-            this.NetPerUnit = new DevExpress.XtraEditors.CalcEdit();
-            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
-            this.PlacesCount = new DevExpress.XtraEditors.CalcEdit();
-            this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
-            this.UnitOfMeasure = new Aramis.AramisSearchLookUpEdit();
-            this.Country = new Aramis.AramisSearchLookUpEdit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchRowsControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
@@ -84,6 +87,17 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Country.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UnitOfMeasure.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlacesCount.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Gross.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Net.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NetPerUnit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Sum.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Price.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Amount.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NameDecl.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NameInvoice.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ItemProducer.Properties)).BeginInit();
@@ -91,17 +105,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties.VistaTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Article.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NameInvoice.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NameDecl.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Amount.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Price.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Sum.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Gross.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Net.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NetPerUnit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PlacesCount.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UnitOfMeasure.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Country.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -115,7 +118,7 @@
             this.ribbon.Location = new System.Drawing.Point(0, 0);
             this.ribbon.MaxItemId = 4;
             this.ribbon.Name = "ribbon";
-            this.ribbon.Size = new System.Drawing.Size(679, 49);
+            this.ribbon.Size = new System.Drawing.Size(679, 27);
             this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // okBtn
@@ -151,7 +154,7 @@
             this.SearchRowsControl.Location = new System.Drawing.Point(0, 0);
             this.SearchRowsControl.MainView = this.gridView;
             this.SearchRowsControl.Name = "SearchRowsControl";
-            this.SearchRowsControl.Size = new System.Drawing.Size(679, 132);
+            this.SearchRowsControl.Size = new System.Drawing.Size(150, 46);
             this.SearchRowsControl.TabIndex = 193;
             this.SearchRowsControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView,
@@ -248,7 +251,7 @@
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 124);
+            this.splitContainer.Location = new System.Drawing.Point(0, 102);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -281,9 +284,225 @@
             // 
             this.splitContainer.Panel2.Controls.Add(this.SearchRowsControl);
             this.splitContainer.Panel2Collapsed = true;
-            this.splitContainer.Size = new System.Drawing.Size(679, 246);
+            this.splitContainer.Size = new System.Drawing.Size(679, 268);
             this.splitContainer.SplitterDistance = 179;
             this.splitContainer.TabIndex = 205;
+            // 
+            // Country
+            // 
+            this.Country.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Country.BaseFilter = null;
+            this.Country.Location = new System.Drawing.Point(499, 216);
+            this.Country.MenuManager = this.ribbon;
+            this.Country.Name = "Country";
+            this.Country.Properties.BaseFilter = null;
+            this.Country.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.Country.Properties.CloseUpKey = new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None);
+            this.Country.Properties.DisplayFormat.FormatString = "d";
+            this.Country.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Country.Properties.EditFormat.FormatString = "d";
+            this.Country.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Country.Properties.FirstPopUp = null;
+            this.Country.Properties.NullText = "";
+            this.Country.Size = new System.Drawing.Size(168, 20);
+            this.Country.TabIndex = 230;
+            // 
+            // UnitOfMeasure
+            // 
+            this.UnitOfMeasure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.UnitOfMeasure.BaseFilter = null;
+            this.UnitOfMeasure.Location = new System.Drawing.Point(288, 216);
+            this.UnitOfMeasure.MenuManager = this.ribbon;
+            this.UnitOfMeasure.Name = "UnitOfMeasure";
+            this.UnitOfMeasure.Properties.BaseFilter = null;
+            this.UnitOfMeasure.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.UnitOfMeasure.Properties.CloseUpKey = new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None);
+            this.UnitOfMeasure.Properties.DisplayFormat.FormatString = "d";
+            this.UnitOfMeasure.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.UnitOfMeasure.Properties.EditFormat.FormatString = "d";
+            this.UnitOfMeasure.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.UnitOfMeasure.Properties.FirstPopUp = null;
+            this.UnitOfMeasure.Properties.NullText = "";
+            this.UnitOfMeasure.Size = new System.Drawing.Size(118, 20);
+            this.UnitOfMeasure.TabIndex = 229;
+            // 
+            // labelControl13
+            // 
+            this.labelControl13.Location = new System.Drawing.Point(414, 220);
+            this.labelControl13.Name = "labelControl13";
+            this.labelControl13.Size = new System.Drawing.Size(37, 13);
+            this.labelControl13.TabIndex = 228;
+            this.labelControl13.Text = "Страна";
+            // 
+            // labelControl14
+            // 
+            this.labelControl14.Location = new System.Drawing.Point(238, 220);
+            this.labelControl14.Name = "labelControl14";
+            this.labelControl14.Size = new System.Drawing.Size(41, 13);
+            this.labelControl14.TabIndex = 226;
+            this.labelControl14.Text = "Ед. изм.";
+            // 
+            // PlacesCount
+            // 
+            this.PlacesCount.Location = new System.Drawing.Point(80, 216);
+            this.PlacesCount.MenuManager = this.ribbon;
+            this.PlacesCount.Name = "PlacesCount";
+            this.PlacesCount.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.PlacesCount.Size = new System.Drawing.Size(145, 20);
+            this.PlacesCount.TabIndex = 225;
+            // 
+            // labelControl15
+            // 
+            this.labelControl15.Location = new System.Drawing.Point(9, 220);
+            this.labelControl15.Name = "labelControl15";
+            this.labelControl15.Size = new System.Drawing.Size(25, 13);
+            this.labelControl15.TabIndex = 224;
+            this.labelControl15.Text = "Мест";
+            // 
+            // Gross
+            // 
+            this.Gross.Location = new System.Drawing.Point(499, 190);
+            this.Gross.MenuManager = this.ribbon;
+            this.Gross.Name = "Gross";
+            this.Gross.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.Gross.Size = new System.Drawing.Size(168, 20);
+            this.Gross.TabIndex = 223;
+            // 
+            // labelControl10
+            // 
+            this.labelControl10.Location = new System.Drawing.Point(414, 194);
+            this.labelControl10.Name = "labelControl10";
+            this.labelControl10.Size = new System.Drawing.Size(35, 13);
+            this.labelControl10.TabIndex = 222;
+            this.labelControl10.Text = "Брутто";
+            // 
+            // Net
+            // 
+            this.Net.Location = new System.Drawing.Point(288, 190);
+            this.Net.MenuManager = this.ribbon;
+            this.Net.Name = "Net";
+            this.Net.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.Net.Size = new System.Drawing.Size(118, 20);
+            this.Net.TabIndex = 221;
+            // 
+            // labelControl11
+            // 
+            this.labelControl11.Location = new System.Drawing.Point(238, 194);
+            this.labelControl11.Name = "labelControl11";
+            this.labelControl11.Size = new System.Drawing.Size(31, 13);
+            this.labelControl11.TabIndex = 220;
+            this.labelControl11.Text = "Нетто";
+            // 
+            // NetPerUnit
+            // 
+            this.NetPerUnit.Location = new System.Drawing.Point(80, 190);
+            this.NetPerUnit.MenuManager = this.ribbon;
+            this.NetPerUnit.Name = "NetPerUnit";
+            this.NetPerUnit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.NetPerUnit.Size = new System.Drawing.Size(145, 20);
+            this.NetPerUnit.TabIndex = 219;
+            // 
+            // labelControl12
+            // 
+            this.labelControl12.Location = new System.Drawing.Point(9, 194);
+            this.labelControl12.Name = "labelControl12";
+            this.labelControl12.Size = new System.Drawing.Size(65, 13);
+            this.labelControl12.TabIndex = 218;
+            this.labelControl12.Text = "Нетто 1 тов.";
+            // 
+            // Sum
+            // 
+            this.Sum.Location = new System.Drawing.Point(499, 164);
+            this.Sum.MenuManager = this.ribbon;
+            this.Sum.Name = "Sum";
+            this.Sum.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.Sum.Size = new System.Drawing.Size(168, 20);
+            this.Sum.TabIndex = 217;
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(414, 168);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(54, 13);
+            this.labelControl9.TabIndex = 216;
+            this.labelControl9.Text = "Стоимость";
+            // 
+            // Price
+            // 
+            this.Price.Location = new System.Drawing.Point(288, 164);
+            this.Price.MenuManager = this.ribbon;
+            this.Price.Name = "Price";
+            this.Price.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.Price.Size = new System.Drawing.Size(118, 20);
+            this.Price.TabIndex = 215;
+            // 
+            // labelControl8
+            // 
+            this.labelControl8.Location = new System.Drawing.Point(238, 168);
+            this.labelControl8.Name = "labelControl8";
+            this.labelControl8.Size = new System.Drawing.Size(26, 13);
+            this.labelControl8.TabIndex = 214;
+            this.labelControl8.Text = "Цена";
+            // 
+            // Amount
+            // 
+            this.Amount.Location = new System.Drawing.Point(80, 164);
+            this.Amount.MenuManager = this.ribbon;
+            this.Amount.Name = "Amount";
+            this.Amount.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.Amount.Size = new System.Drawing.Size(145, 20);
+            this.Amount.TabIndex = 213;
+            // 
+            // labelControl7
+            // 
+            this.labelControl7.Location = new System.Drawing.Point(9, 168);
+            this.labelControl7.Name = "labelControl7";
+            this.labelControl7.Size = new System.Drawing.Size(60, 13);
+            this.labelControl7.TabIndex = 212;
+            this.labelControl7.Text = "Количество";
+            // 
+            // labelControl6
+            // 
+            this.labelControl6.Location = new System.Drawing.Point(9, 91);
+            this.labelControl6.Name = "labelControl6";
+            this.labelControl6.Size = new System.Drawing.Size(94, 13);
+            this.labelControl6.TabIndex = 211;
+            this.labelControl6.Text = "Товар декларация";
+            // 
+            // NameDecl
+            // 
+            this.NameDecl.Location = new System.Drawing.Point(9, 110);
+            this.NameDecl.MenuManager = this.ribbon;
+            this.NameDecl.Name = "NameDecl";
+            this.NameDecl.Size = new System.Drawing.Size(658, 49);
+            this.NameDecl.TabIndex = 210;
+            // 
+            // labelControl5
+            // 
+            this.labelControl5.Location = new System.Drawing.Point(9, 11);
+            this.labelControl5.Name = "labelControl5";
+            this.labelControl5.Size = new System.Drawing.Size(68, 13);
+            this.labelControl5.TabIndex = 209;
+            this.labelControl5.Text = "Товар инвойс";
+            // 
+            // NameInvoice
+            // 
+            this.NameInvoice.Location = new System.Drawing.Point(9, 30);
+            this.NameInvoice.MenuManager = this.ribbon;
+            this.NameInvoice.Name = "NameInvoice";
+            this.NameInvoice.Size = new System.Drawing.Size(658, 49);
+            this.NameInvoice.TabIndex = 0;
             // 
             // panelControl1
             // 
@@ -300,7 +519,7 @@
             this.panelControl1.Controls.Add(this.labelControl1);
             this.panelControl1.Controls.Add(this.labelControl2);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelControl1.Location = new System.Drawing.Point(0, 49);
+            this.panelControl1.Location = new System.Drawing.Point(0, 27);
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(679, 75);
             this.panelControl1.TabIndex = 206;
@@ -385,6 +604,7 @@
             this.Article.Size = new System.Drawing.Size(145, 20);
             this.Article.TabIndex = 207;
             this.Article.Enter += new System.EventHandler(this.Article_Enter);
+            this.Article.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Article_KeyDown);
             this.Article.Leave += new System.EventHandler(this.Article_Leave);
             // 
             // labelControl1
@@ -400,227 +620,18 @@
             this.labelControl2.Location = new System.Drawing.Point(238, 47);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(40, 13);
+            toolTipTitleItem1.Text = "УКТЗЕД";
+            toolTipItem1.LeftIndent = 6;
+            toolTipItem1.Text = "Українська Класифікація Товарів ЗовнішньоЕкономічної Діяльності";
+            superToolTip1.Items.Add(toolTipTitleItem1);
+            superToolTip1.Items.Add(toolTipItem1);
+            this.labelControl2.SuperTip = superToolTip1;
             this.labelControl2.TabIndex = 208;
             this.labelControl2.Text = "УКТЗЕД";
             // 
-            // NameInvoice
-            // 
-            this.NameInvoice.Location = new System.Drawing.Point(9, 30);
-            this.NameInvoice.MenuManager = this.ribbon;
-            this.NameInvoice.Name = "NameInvoice";
-            this.NameInvoice.Size = new System.Drawing.Size(658, 49);
-            this.NameInvoice.TabIndex = 0;
-            // 
-            // labelControl5
-            // 
-            this.labelControl5.Location = new System.Drawing.Point(9, 11);
-            this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(68, 13);
-            this.labelControl5.TabIndex = 209;
-            this.labelControl5.Text = "Товар инвойс";
-            // 
-            // labelControl6
-            // 
-            this.labelControl6.Location = new System.Drawing.Point(9, 91);
-            this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(94, 13);
-            this.labelControl6.TabIndex = 211;
-            this.labelControl6.Text = "Товар декларация";
-            // 
-            // NameDecl
-            // 
-            this.NameDecl.Location = new System.Drawing.Point(9, 110);
-            this.NameDecl.MenuManager = this.ribbon;
-            this.NameDecl.Name = "NameDecl";
-            this.NameDecl.Size = new System.Drawing.Size(658, 49);
-            this.NameDecl.TabIndex = 210;
-            // 
-            // labelControl7
-            // 
-            this.labelControl7.Location = new System.Drawing.Point(9, 168);
-            this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(60, 13);
-            this.labelControl7.TabIndex = 212;
-            this.labelControl7.Text = "Количество";
-            // 
-            // Amount
-            // 
-            this.Amount.Location = new System.Drawing.Point(80, 164);
-            this.Amount.MenuManager = this.ribbon;
-            this.Amount.Name = "Amount";
-            this.Amount.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.Amount.Size = new System.Drawing.Size(145, 20);
-            this.Amount.TabIndex = 213;
-            // 
-            // Price
-            // 
-            this.Price.Location = new System.Drawing.Point(288, 164);
-            this.Price.MenuManager = this.ribbon;
-            this.Price.Name = "Price";
-            this.Price.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.Price.Size = new System.Drawing.Size(118, 20);
-            this.Price.TabIndex = 215;
-            // 
-            // labelControl8
-            // 
-            this.labelControl8.Location = new System.Drawing.Point(238, 168);
-            this.labelControl8.Name = "labelControl8";
-            this.labelControl8.Size = new System.Drawing.Size(26, 13);
-            this.labelControl8.TabIndex = 214;
-            this.labelControl8.Text = "Цена";
-            // 
-            // Sum
-            // 
-            this.Sum.Location = new System.Drawing.Point(499, 164);
-            this.Sum.MenuManager = this.ribbon;
-            this.Sum.Name = "Sum";
-            this.Sum.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.Sum.Size = new System.Drawing.Size(168, 20);
-            this.Sum.TabIndex = 217;
-            // 
-            // labelControl9
-            // 
-            this.labelControl9.Location = new System.Drawing.Point(414, 168);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(54, 13);
-            this.labelControl9.TabIndex = 216;
-            this.labelControl9.Text = "Стоимость";
-            // 
-            // Gross
-            // 
-            this.Gross.Location = new System.Drawing.Point(499, 190);
-            this.Gross.MenuManager = this.ribbon;
-            this.Gross.Name = "Gross";
-            this.Gross.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.Gross.Size = new System.Drawing.Size(168, 20);
-            this.Gross.TabIndex = 223;
-            // 
-            // labelControl10
-            // 
-            this.labelControl10.Location = new System.Drawing.Point(414, 194);
-            this.labelControl10.Name = "labelControl10";
-            this.labelControl10.Size = new System.Drawing.Size(35, 13);
-            this.labelControl10.TabIndex = 222;
-            this.labelControl10.Text = "Брутто";
-            // 
-            // Net
-            // 
-            this.Net.Location = new System.Drawing.Point(288, 190);
-            this.Net.MenuManager = this.ribbon;
-            this.Net.Name = "Net";
-            this.Net.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.Net.Size = new System.Drawing.Size(118, 20);
-            this.Net.TabIndex = 221;
-            // 
-            // labelControl11
-            // 
-            this.labelControl11.Location = new System.Drawing.Point(238, 194);
-            this.labelControl11.Name = "labelControl11";
-            this.labelControl11.Size = new System.Drawing.Size(31, 13);
-            this.labelControl11.TabIndex = 220;
-            this.labelControl11.Text = "Нетто";
-            // 
-            // NetPerUnit
-            // 
-            this.NetPerUnit.Location = new System.Drawing.Point(80, 190);
-            this.NetPerUnit.MenuManager = this.ribbon;
-            this.NetPerUnit.Name = "NetPerUnit";
-            this.NetPerUnit.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.NetPerUnit.Size = new System.Drawing.Size(145, 20);
-            this.NetPerUnit.TabIndex = 219;
-            // 
-            // labelControl12
-            // 
-            this.labelControl12.Location = new System.Drawing.Point(9, 194);
-            this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(65, 13);
-            this.labelControl12.TabIndex = 218;
-            this.labelControl12.Text = "Нетто 1 тов.";
-            // 
-            // labelControl13
-            // 
-            this.labelControl13.Location = new System.Drawing.Point(414, 220);
-            this.labelControl13.Name = "labelControl13";
-            this.labelControl13.Size = new System.Drawing.Size(37, 13);
-            this.labelControl13.TabIndex = 228;
-            this.labelControl13.Text = "Страна";
-            // 
-            // labelControl14
-            // 
-            this.labelControl14.Location = new System.Drawing.Point(238, 220);
-            this.labelControl14.Name = "labelControl14";
-            this.labelControl14.Size = new System.Drawing.Size(41, 13);
-            this.labelControl14.TabIndex = 226;
-            this.labelControl14.Text = "Ед. изм.";
-            // 
-            // PlacesCount
-            // 
-            this.PlacesCount.Location = new System.Drawing.Point(80, 216);
-            this.PlacesCount.MenuManager = this.ribbon;
-            this.PlacesCount.Name = "PlacesCount";
-            this.PlacesCount.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.PlacesCount.Size = new System.Drawing.Size(145, 20);
-            this.PlacesCount.TabIndex = 225;
-            // 
-            // labelControl15
-            // 
-            this.labelControl15.Location = new System.Drawing.Point(9, 220);
-            this.labelControl15.Name = "labelControl15";
-            this.labelControl15.Size = new System.Drawing.Size(25, 13);
-            this.labelControl15.TabIndex = 224;
-            this.labelControl15.Text = "Мест";
-            // 
-            // UnitOfMeasure
-            // 
-            this.UnitOfMeasure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.UnitOfMeasure.BaseFilter = null;
-            this.UnitOfMeasure.Location = new System.Drawing.Point(288, 216);
-            this.UnitOfMeasure.MenuManager = this.ribbon;
-            this.UnitOfMeasure.Name = "UnitOfMeasure";
-            this.UnitOfMeasure.Properties.BaseFilter = null;
-            this.UnitOfMeasure.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.UnitOfMeasure.Properties.CloseUpKey = new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None);
-            this.UnitOfMeasure.Properties.DisplayFormat.FormatString = "d";
-            this.UnitOfMeasure.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.UnitOfMeasure.Properties.EditFormat.FormatString = "d";
-            this.UnitOfMeasure.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.UnitOfMeasure.Properties.FirstPopUp = null;
-            this.UnitOfMeasure.Properties.NullText = "";
-            this.UnitOfMeasure.Size = new System.Drawing.Size(118, 20);
-            this.UnitOfMeasure.TabIndex = 229;
-            // 
-            // Country
-            // 
-            this.Country.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Country.BaseFilter = null;
-            this.Country.Location = new System.Drawing.Point(499, 216);
-            this.Country.MenuManager = this.ribbon;
-            this.Country.Name = "Country";
-            this.Country.Properties.BaseFilter = null;
-            this.Country.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.Country.Properties.CloseUpKey = new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None);
-            this.Country.Properties.DisplayFormat.FormatString = "d";
-            this.Country.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.Country.Properties.EditFormat.FormatString = "d";
-            this.Country.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
-            this.Country.Properties.FirstPopUp = null;
-            this.Country.Properties.NullText = "";
-            this.Country.Size = new System.Drawing.Size(168, 20);
-            this.Country.TabIndex = 230;
-            // 
             // NewGoodsRowForm
             // 
+            this.AllowDisplayRibbon = false;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 401);
@@ -644,6 +655,17 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Country.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UnitOfMeasure.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlacesCount.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Gross.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Net.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NetPerUnit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Sum.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Price.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Amount.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NameDecl.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NameInvoice.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
@@ -652,17 +674,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties.VistaTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.InvoiceDate.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Article.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NameInvoice.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NameDecl.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Amount.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Price.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Sum.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Gross.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Net.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NetPerUnit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PlacesCount.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UnitOfMeasure.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Country.Properties)).EndInit();
             this.ResumeLayout(false);
 
             }

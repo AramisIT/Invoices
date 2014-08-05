@@ -60,6 +60,7 @@ namespace SystemInvoice.Catalogs
         #endregion
 
         #region (string) InternationalCode Код международный
+        // Size must be 3, not 25. Natalia just afraid to change (Denis 5.08.2014)
         [DataField( Description = "Код международный", Size = 25, NotEmpty = true, UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true )]
         public string InternationalCode
             {

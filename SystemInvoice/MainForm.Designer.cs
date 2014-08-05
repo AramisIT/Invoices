@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ribbon = new DevExpress.XtraBars.Ribbon.RibbonControl();
+            this.applicationMenu2 = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
+            this.barButtonItem44 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem45 = new DevExpress.XtraBars.BarButtonItem();
             this.openCatalogsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.openDocumentsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
@@ -72,6 +75,7 @@
             this.UnitOfMeasureBtn = new DevExpress.XtraBars.BarButtonItem();
             this.btnSettings = new DevExpress.XtraBars.BarButtonItem();
             this.openMaterialTypesBtn = new DevExpress.XtraBars.BarButtonItem();
+            this.openMaterialsTypesMappings = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
             this.custsomsCodeBtn = new DevExpress.XtraBars.BarButtonItem();
             this.documentTypesBtn = new DevExpress.XtraBars.BarButtonItem();
@@ -83,6 +87,7 @@
             this.barButtonItem43 = new DevExpress.XtraBars.BarButtonItem();
             this.accessControlBtn = new DevExpress.XtraBars.BarButtonItem();
             this.loadNomenclatureBtn = new DevExpress.XtraBars.BarButtonItem();
+            this.starterFilesUpload = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.administratorPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -140,9 +145,8 @@
             this.barButtonItem40 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem41 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
-            this.openMaterialsTypesMappings = new DevExpress.XtraBars.BarButtonItem();
-            this.starterFilesUpload = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.largeImagesCollection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.smallImagesCollection)).BeginInit();
@@ -150,6 +154,7 @@
             // 
             // ribbon
             // 
+            this.ribbon.ApplicationButtonDropDownControl = this.applicationMenu2;
             this.ribbon.ApplicationIcon = global::SystemInvoice.Properties.Resources._1365181885_circle;
             this.ribbon.ExpandCollapseItem.Id = 0;
             this.ribbon.ExpandCollapseItem.Name = "";
@@ -208,9 +213,11 @@
             this.nomenclatureLoadBtn,
             this.openMaterialTypesBtn,
             this.openMaterialsTypesMappings,
-            this.starterFilesUpload});
+            this.starterFilesUpload,
+            this.barButtonItem44,
+            this.barButtonItem45});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 78;
+            this.ribbon.MaxItemId = 80;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -218,7 +225,29 @@
             this.ribbonPage2});
             this.ribbon.Size = new System.Drawing.Size(875, 147);
             this.ribbon.StatusBar = this.ribbonStatusBar;
-            this.ribbon.Click += new System.EventHandler(this.ribbon_Click);
+            // 
+            // applicationMenu2
+            // 
+            this.applicationMenu2.ItemLinks.Add(this.barButtonItem44);
+            this.applicationMenu2.ItemLinks.Add(this.barButtonItem45);
+            this.applicationMenu2.Name = "applicationMenu2";
+            this.applicationMenu2.Ribbon = this.ribbon;
+            // 
+            // barButtonItem44
+            // 
+            this.barButtonItem44.Caption = "Выход";
+            this.barButtonItem44.Glyph = global::SystemInvoice.Properties.Resources.exit;
+            this.barButtonItem44.Id = 78;
+            this.barButtonItem44.Name = "barButtonItem44";
+            this.barButtonItem44.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem44_ItemClick);
+            // 
+            // barButtonItem45
+            // 
+            this.barButtonItem45.Caption = "Перезагрузить систему";
+            this.barButtonItem45.Glyph = global::SystemInvoice.Properties.Resources.restart;
+            this.barButtonItem45.Id = 79;
+            this.barButtonItem45.Name = "barButtonItem45";
+            this.barButtonItem45.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem45_ItemClick);
             // 
             // openCatalogsListBtn
             // 
@@ -519,6 +548,13 @@
             this.openMaterialTypesBtn.Name = "openMaterialTypesBtn";
             this.openMaterialTypesBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.openMaterialTypesBtn_ItemClick);
             // 
+            // openMaterialsTypesMappings
+            // 
+            this.openMaterialsTypesMappings.Caption = "Соответствия типов материалов";
+            this.openMaterialsTypesMappings.Id = 76;
+            this.openMaterialsTypesMappings.Name = "openMaterialsTypesMappings";
+            this.openMaterialsTypesMappings.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.openMaterialsTypesMappings_ItemClick);
+            // 
             // barSubItem2
             // 
             this.barSubItem2.Caption = "Загрузка из Excel";
@@ -595,6 +631,13 @@
             // 
             this.loadNomenclatureBtn.Id = 74;
             this.loadNomenclatureBtn.Name = "loadNomenclatureBtn";
+            // 
+            // starterFilesUpload
+            // 
+            this.starterFilesUpload.Caption = "Загрузка файлов стартера";
+            this.starterFilesUpload.Id = 77;
+            this.starterFilesUpload.Name = "starterFilesUpload";
+            this.starterFilesUpload.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.starterFilesUpload_ItemClick);
             // 
             // ribbonPage1
             // 
@@ -964,20 +1007,6 @@
             this.barButtonItem42.Id = 19;
             this.barButtonItem42.Name = "barButtonItem42";
             // 
-            // openMaterialsTypesMappings
-            // 
-            this.openMaterialsTypesMappings.Caption = "Соответствия типов материалов";
-            this.openMaterialsTypesMappings.Id = 76;
-            this.openMaterialsTypesMappings.Name = "openMaterialsTypesMappings";
-            this.openMaterialsTypesMappings.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.openMaterialsTypesMappings_ItemClick);
-            // 
-            // starterFilesUpload
-            // 
-            this.starterFilesUpload.Caption = "Загрузка файлов стартера";
-            this.starterFilesUpload.Id = 77;
-            this.starterFilesUpload.Name = "starterFilesUpload";
-            this.starterFilesUpload.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.starterFilesUpload_ItemClick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -992,6 +1021,7 @@
             this.Text = "Система обработки документов инвойс";
             this.Load += new System.EventHandler(this.MainForm_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.largeImagesCollection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.smallImagesCollection)).EndInit();
@@ -1113,5 +1143,8 @@
         private DevExpress.XtraBars.BarButtonItem openMaterialTypesBtn;
         private DevExpress.XtraBars.BarButtonItem openMaterialsTypesMappings;
         private DevExpress.XtraBars.BarButtonItem starterFilesUpload;
+        private DevExpress.XtraBars.Ribbon.ApplicationMenu applicationMenu2;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem44;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem45;
         }
     }

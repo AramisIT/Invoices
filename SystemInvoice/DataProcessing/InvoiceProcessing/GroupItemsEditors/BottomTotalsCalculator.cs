@@ -200,6 +200,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
             visibleTotalGrossWeight = 0;
             foreach (DataRow row in editableRowsSource.DisplayingRows)
                 {
+                if (row.RowState == DataRowState.Detached) continue;
+
                 visibleTotalPrice += this.getNumericValue(row, "Sum");
                 visibleTotalCount += this.getNumericValue(row, "Count");
                 visibleTotalNumberOfPlaces += this.getNumericValue(row, "ItemNumberOfPlaces");

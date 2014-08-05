@@ -278,11 +278,6 @@ namespace SystemInvoice
             PlatformMethods.ObjectsPermissions();
             }
 
-        private void ribbon_Click(object sender, EventArgs e)
-            {
-
-            }
-
         private void MainForm_Load_1(object sender, EventArgs e)
             {
             CatalogUsers currentUser = SystemAramis.CurrentUser;
@@ -311,6 +306,16 @@ namespace SystemInvoice
         private void starterFilesUpload_ItemClick(object sender, ItemClickEventArgs e)
             {
             PlatformMethods.UploadLoaderFiles(true);
+            }
+
+        private void barButtonItem44_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            SystemAramis.SystemStop();
+            }
+
+        private void barButtonItem45_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            SystemAramis.SystemStop(true);
             }
 
         }
