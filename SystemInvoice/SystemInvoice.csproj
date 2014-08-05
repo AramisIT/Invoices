@@ -345,6 +345,7 @@
     <Compile Include="DataProcessing\InvoiceProcessing\Syncronizers\SummSyncronizer.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\UIInteraction\TotalsManager.cs" />
     <Compile Include="DataProcessing\TransactionManager.cs" />
+    <Compile Include="Enums\InvoiceColumnNames.cs" />
     <Compile Include="Excel\DataFormatting\ICustomExpressionHandler.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\MarksAndSpencerTranslateContentHandler.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\MarksAndSpenserGenderHandler.cs" />
