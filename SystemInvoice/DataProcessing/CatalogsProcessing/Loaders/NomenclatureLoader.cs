@@ -128,12 +128,12 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
             return contractor;
             }
 
-        private Manufacturer selectManufacturer(Row row)
+        private IManufacturer selectManufacturer(Row row)
             {
             string manufacturerName = row[manufacturerColumnIndex].Value.ToString().Trim();
             long manufacturerId = cachedData.ManufacturerCacheObjectsStore.GetManufcaturerId(manufacturerName, currentContractorId);
 
-            Manufacturer manufacturer = new Manufacturer();
+            IManufacturer manufacturer = A.New<IManufacturer>();
             manufacturer.Contractor = selectContractor(row);
             manufacturer.Id = manufacturerId;
             //создаем нового производителя если такого еще нету

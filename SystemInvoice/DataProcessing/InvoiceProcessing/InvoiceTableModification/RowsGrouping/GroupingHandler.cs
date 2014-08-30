@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.RowsGrouping
@@ -6,15 +7,22 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
     /// <summary>
     /// Группирует строки в табличной части инвойса, и суммирует значения колличества, суммы, общего веса нетто/брутто для сгрупированных строк
     /// </summary>
-    public class GroupingHandler 
+    public class GroupingHandler
         {
         GroupedRowsDataChecker groupingRowChecker = new GroupedRowsDataChecker();
+        private Func<bool> needGroupping;
 
+        public GroupingHandler(Func<bool> needGroupping)
+            {
+            this.needGroupping = needGroupping;
+            }
         /// <summary>
         /// Выполняет группировку строк в таблице
         /// </summary>
         public void MakeGrouping(DataTable tableToProcess)
             {
+            if (!needGroupping()) return;
+
             //Формируем набор обрабатываемых строк
             List<DataRow> rows = new List<DataRow>();
             foreach (DataRow row in tableToProcess.Rows)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Aramis.Core;
@@ -22,7 +23,7 @@ namespace SystemInvoice.Documents
         DateFieldDescription = "Дата создания", ShowResponsibleInList = true, ShowLastModifiedDateInList = true)]
     public class Invoice : DocumentTable, ITradeMarkContractorExcelLoadFormatSource
         {
-        public static Dictionary<string, string> InvoiceColumnNames; 
+        public static Dictionary<string, string> InvoiceColumnNames;
         public static Dictionary<string, string> InvoiceColumnNamesTranslated = new Dictionary<string, string>();
 
         static Invoice()
@@ -32,7 +33,7 @@ namespace SystemInvoice.Documents
         private static void fillInvoiceColumnNames()
             {
             var invoiceColumnNames = new Dictionary<string, string>();
-            
+
             invoiceColumnNames.Add("SubGroupOfGoods", "Подгруппа товара");
             invoiceColumnNames.Add("GroupOfGoods", "Группа товара");
             invoiceColumnNames.Add("GroupCode", "Код подгруппы");
@@ -135,7 +136,7 @@ namespace SystemInvoice.Documents
             invoiceColumnNames.Add("ZaraContent15EnName", "Имя состава англ. (Зара)_15");
 
             invoiceColumnNames.Add("MSKnitWovenColumnName", "Состав KnitWoven .(Marks & Spenser)");
-            invoiceColumnNames.Add("BNSInvoicePart", "BNS Номер поставки"); 
+            invoiceColumnNames.Add("BNSInvoicePart", "BNS Номер поставки");
             invoiceColumnNames.Add("Graf31FilterColumn", "ФильтрГрафы31");
             invoiceColumnNames.Add("SizeOriginal", "Размер исходный");
 
@@ -1335,7 +1336,7 @@ namespace SystemInvoice.Documents
 
         #endregion
 
-        #region Табличная часть Товары(часть полей) (для хранения части данных которые не помещаются в табличной части Товары)
+        #region Табличная часть Товары(часть полей) (для хранения части данных которые не помещаются в табличной части Товары max=4026 (max 8061 bytes including 7 bytes of internal overhead))
 
         [Table(Columns = "Graf31Saved,NameDeclSaved,NameInvSaved", AllowFiltering = true, AllowPopUpMenu = false)]
         [DataField(Description = "Товары(часть полей)")]
@@ -1377,6 +1378,24 @@ namespace SystemInvoice.Documents
             this.ValueOfObjectPropertyChanged += Invoice_ValueOfObjectPropertyChanged;
             this.OnRead += Invoice_OnRead;
             this.BeforeWriting += Invoice_BeforeWriting;
+            //var totalSize = 0;
+            //foreach (var kvp in this.SystemObjInfo.InfoSubTables["Goods"].SubtableFields)
+            //    {
+            //    var fieldName = kvp.Key;
+            //    var fieldInfo = kvp.Value;
+            //    if (fieldInfo.Attr.StorageType == StorageTypes.Local) continue;
+
+            //    if (fieldInfo.PropertyType == typeof(string))
+            //        {
+            //        totalSize += fieldInfo.Attr.Size;
+            //        }
+            //    else
+            //        {
+            //        Trace.WriteLine(fieldInfo.PropertyType);
+            //        }
+            //    }
+
+            //Trace.WriteLine(string.Format("Total row size: {0}", totalSize));
             }
 
         #region Синхронизация локальных колонок в таблице инвойса с колонками таблицы для хранения не помещающихся колонок

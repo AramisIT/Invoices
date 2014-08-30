@@ -56,11 +56,11 @@ namespace SystemInvoice.Catalogs
 
         #region (Contractor) Contractor Производитель
         [DataField( Description = "Производитель" )]
-        public Manufacturer Manufacturer
+        public IManufacturer Manufacturer
             {
             get
                 {
-                return (Manufacturer)GetValueForObjectProperty( "Manufacturer" );
+                return (IManufacturer)GetValueForObjectProperty( "Manufacturer" );
                 }
             set
                 {

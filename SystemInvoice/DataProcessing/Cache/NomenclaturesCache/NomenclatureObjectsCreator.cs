@@ -55,7 +55,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
             //вспомогательные объекты
             IContractor contractor = A.New<IContractor>();
             contractor.Id = cacheObject.ContractorId;
-            Manufacturer manufacturerN = new Manufacturer();
+            IManufacturer manufacturerN = A.New<IManufacturer>();
             manufacturerN.Id = cacheObject.ManufacturerId;
             manufacturerN.Contractor = contractor;
             ITradeMark tmark = A.New<ITradeMark>();

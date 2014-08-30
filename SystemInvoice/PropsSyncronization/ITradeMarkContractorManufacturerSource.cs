@@ -8,6 +8,6 @@ namespace SystemInvoice.PropsSyncronization
     {
     public interface ITradeMarkContractorManufacturerSource : ITradeMarkContractorSource
         {
-        Manufacturer Manufacturer { get; set; }
+        IManufacturer Manufacturer { get; set; }
         }
     }

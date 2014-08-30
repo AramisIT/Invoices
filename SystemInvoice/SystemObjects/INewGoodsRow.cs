@@ -18,11 +18,11 @@ namespace SystemInvoice.SystemObjects
         [DataField(NotEmpty = true, Description = "Дата")]
         DateTime InvoiceDate { get; set; }
 
-        [DataField(NotEmpty = true, Description = "Торговая марка")]
+        [DataField(NotEmpty = true, Description = "Торговая марка", SelectingType = TradeMarkListsGetter.TradeMarkListsTypes.FilteredByContractor)]
         ITradeMark TradeMark { get; set; }
 
-        [DataField(NotEmpty = true, Description = "Производитель")]
-        Manufacturer ItemProducer { get; set; }
+        [DataField(NotEmpty = true, Description = "Производитель", SelectingType = ManufacturerListsGetter.ManufacturerListsTypes.FilteredByContractor)]
+        IManufacturer ItemProducer { get; set; }
 
         [DataField(NotEmpty = true, Description = "УКТЗЕД")]
         CustomsCode InternalCode { get; set; }

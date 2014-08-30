@@ -2,31 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemInvoice.SystemObjects;
 using Aramis.Core;
 using Aramis.Attributes;
+using Aramis.DatabaseConnector;
 using Aramis.Enums;
+using Core;
 
 namespace SystemInvoice.Catalogs
     {
     /// <summary>
     /// Справочник хранит данные о заводе принадлежащем контрагенту
     /// </summary>
-    [Catalog( Description = "Производитель", GUID = "BE79F0CB-DDB4-4FC6-B8D8-F86A7D808959", DescriptionSize = 200, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false )]
-    public class Manufacturer : CatalogTable
+    [Catalog(Description = "Производитель", GUID = "BE79F0CB-DDB4-4FC6-B8D8-F86A7D808959", DescriptionSize = 200, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false)]
+    public interface IManufacturer : ICatalog
         {
-        #region (Contractor) Contractor Контрагент
-        [DataField( Description = "Контрагент", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true )]
-        public IContractor Contractor
+        [DataField(Description = "Контрагент", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true)]
+        IContractor Contractor { get; set; }
+        }
+
+    public class ManufacturerListsGetter : FixedListsCreator<IManufacturer>
+        {
+        public enum ManufacturerListsTypes
             {
-            get
+            FilteredByContractor
+            }
+
+        public override Query GetQuery(int listId, IAramisModel aramisObject)
+            {
+            var newGoodsRow = aramisObject as INewGoodsRow;
+            if (newGoodsRow == null) return null;
+
+            var listType = (ManufacturerListsTypes)listId;
+            switch (listType)
                 {
-                return (IContractor)GetValueForObjectProperty( "Contractor" );
-                }
-            set
-                {
-                SetValueForObjectProperty( "Contractor", value );
+                case ManufacturerListsTypes.FilteredByContractor:
+                    var q = DB.NewQuery(@"select rtrim(Description) [Description], Id 
+from Manufacturer
+where Contractor = @Contractor
+order by Description");
+                    q.AddInputParameter("Contractor", newGoodsRow.Contractor.Id);
+                    return q;
+
+                default:
+                    return null;
                 }
             }
-        #endregion
         }
     }

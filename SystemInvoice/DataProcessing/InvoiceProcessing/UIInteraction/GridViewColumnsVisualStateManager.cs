@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using SystemInvoice.Catalogs;
@@ -31,9 +32,9 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             {
             if (loadingFormat != null)
                 {
-                HashSet<string> visibleColumns = getVisibleColumns(loadingFormat);
-                List<GridColumn> gridColumnsList = getGridColumnsList();
-                setColumnsVisibleIfInSet(gridColumnsList, visibleColumns);
+                var visibleColumns = getVisibleColumns(loadingFormat);
+                List<GridColumn> gridColumnsList = getGridColumnsList(visibleColumns);
+                setColumnsVisibleIfInSet(gridColumnsList, visibleColumns, loadingFormat.OrderInvoiceColumns);
                 }
             }
 
@@ -42,7 +43,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
         /// </summary>
         /// <param name="gridColumnsList">Список всех колонок в таблице</param>
         /// <param name="visibleColumns">Список имен колонок которые нужно сделать видимыми</param>
-        private void setColumnsVisibleIfInSet(List<GridColumn> gridColumnsList, HashSet<string> visibleColumns)
+        private void setColumnsVisibleIfInSet(List<GridColumn> gridColumnsList, Dictionary<string, ColumnInfo> visibleColumns, bool orderInvoiceColumns)
             {
             List<GridColumn> newColumns = new List<GridColumn>();
             foreach (GridColumn gridColumn in gridColumnsList.OrderBy(col => col.AbsoluteIndex))
@@ -56,7 +57,12 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             foreach (GridColumn column in newColumns)
                 {
                 column.VisibleIndex = column.AbsoluteIndex;
-                column.Visible = visibleColumns.Contains(column.FieldName);
+                ColumnInfo columnInfo;
+                column.Visible = visibleColumns.TryGetValue(column.FieldName, out columnInfo);
+                if (column.Visible && !string.IsNullOrEmpty(columnInfo.Alias))
+                    {
+                    column.Caption = columnInfo.Alias;
+                    }
                 }
             foreach (GridColumn column in gridColumnsList.Except(newColumns).OrderByDescending(col => col.VisibleIndex))
                 {
@@ -64,36 +70,68 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
                     {
                     continue;
                     }
-                column.Visible = visibleColumns.Contains(column.FieldName);
+                ColumnInfo columnInfo;
+                column.Visible = visibleColumns.TryGetValue(column.FieldName, out columnInfo);
+                if (column.Visible && !string.IsNullOrEmpty(columnInfo.Alias))
+                    {
+                    column.Caption = columnInfo.Alias;
+                    }
+                }
+
+            if (orderInvoiceColumns)
+                {
+                var orderedNames = (from x in visibleColumns orderby x.Value.Order select x.Value.Column).ToList();
+                for (int index = orderedNames.Count - 1; index >= 0; index--)
+                    {
+                    var column = orderedNames[index];
+                    column.VisibleIndex = index + 1;
+                    }
                 }
             }
 
 
-        private List<GridColumn> getGridColumnsList()
+        private List<GridColumn> getGridColumnsList(Dictionary<string, ColumnInfo> dictionary)
             {
             List<GridColumn> gridColumnsList = new List<GridColumn>();
             foreach (GridColumn column in mainView.Columns)
                 {
                 gridColumnsList.Add(column);
+                ColumnInfo columnInfo;
+                if (dictionary.TryGetValue(column.Name, out columnInfo))
+                    {
+                    columnInfo.Column = column;
+                    }
                 }
             return gridColumnsList;
             }
 
-        private HashSet<string> getVisibleColumns(ExcelLoadingFormat loadingFormat)
+        class ColumnInfo
             {
-            HashSet<string> visibleColumns = new HashSet<string>();
+            public string Alias { get; set; }
+            public int Order { get; set; }
+
+            public GridColumn Column { get; set; }
+            }
+
+        private Dictionary<string, ColumnInfo> getVisibleColumns(ExcelLoadingFormat loadingFormat)
+            {
+            var visibleColumns = new Dictionary<string, ColumnInfo>();
             foreach (DataRow mappingRow in loadingFormat.ColumnsMappings.Rows)
                 {
                 object mapping = mappingRow[loadingFormat.ColumnName];
                 if (mapping is int)
                     {
-                    InvoiceColumnNames columnNameInv = (InvoiceColumnNames) ((int) mapping);
+                    var columnNameInv = (InvoiceColumnNames)((int)mapping);
                     string columnName = columnNameInv.ToString();
                     if (columnName.Equals(ProcessingConsts.ColumnNames.SIZE_ORIGINAL_COLUMN_NAME))
                         {
                         continue;
                         }
-                    visibleColumns.Add(columnName);
+                    visibleColumns.Add(columnName, new ColumnInfo()
+                        {
+                            Alias = mappingRow[loadingFormat.ColumnAlias] as string,
+                            Order = mappingRow["LineNumber"].ToInt32()
+                        });
                     }
                 }
             return visibleColumns;

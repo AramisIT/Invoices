@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SystemInvoice.Catalogs;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.Manufacturer
     {
@@ -30,7 +31,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.
                 {
                 throw new CannotWriteToDBException( string.Format( "Производитель {0} отсутствует в справочнике производителей.", InDocumentValue ) );
                 }
-            Catalogs.Manufacturer newManufacturer = new Catalogs.Manufacturer();
+            var newManufacturer = A.New<IManufacturer>();
             newManufacturer.Id = inDocumentsManufacturer;
             newManufacturer.Read();
             nomenclature.Manufacturer = newManufacturer;

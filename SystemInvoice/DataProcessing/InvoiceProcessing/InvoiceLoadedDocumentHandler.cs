@@ -49,7 +49,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.invoice = invoice;
             catalogsSearchHandler = new CatalogsSearchHandler(dbCache);
             approvalsSearcher = new ApprovalsSearcher(dbCache);
-            groupingHandler = new GroupingHandler();
+            groupingHandler = new GroupingHandler(() => !invoice.ExcelLoadingFormat.SaveOriginalRowsSet);
             grafCalculationHandler = new GrafCalcHandler(dbCache, invoice);
             groupOfGoodsCreationHandler = new GroupsOfGoodsCreationHandler(dbCache);
             bnsCreateHandler = new InvoiceNumberBNSHandler();

@@ -10,7 +10,7 @@ namespace SystemInvoice.DataProcessing.Cache.ManufacturersCache
     /// <summary>
     /// Создает новых производителей.
     /// </summary>
-    public class ManufacturersObjectsCreator : DbObjectCreator<Manufacturer, ManufacturerCacheObject>
+    public class ManufacturersObjectsCreator : DbObjectCreator<IManufacturer, ManufacturerCacheObject>
         {
         /// <summary>
         /// Кешированные производители
@@ -23,9 +23,9 @@ namespace SystemInvoice.DataProcessing.Cache.ManufacturersCache
             this.manufacturersStore = manufacturerCacheObjectsStore;
             }
 
-        protected override Manufacturer createDBObject(ManufacturerCacheObject cacheObject)
+        protected override IManufacturer createDBObject(ManufacturerCacheObject cacheObject)
             {
-            Manufacturer manufacturer = new Manufacturer();
+            IManufacturer manufacturer = A.New<IManufacturer>();
             manufacturer.Description = cacheObject.ManufacturerName;
             IContractor contractor = A.New<IContractor>();
             contractor.Id = cacheObject.ContractorId;
@@ -33,7 +33,7 @@ namespace SystemInvoice.DataProcessing.Cache.ManufacturersCache
             return manufacturer;
             }
 
-        protected override void deleteObject(Manufacturer objectToDelete)
+        protected override void deleteObject(IManufacturer objectToDelete)
             {
             long id = objectToDelete.Id;
             if (id == 0)

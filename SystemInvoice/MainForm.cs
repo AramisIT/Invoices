@@ -235,7 +235,7 @@ namespace SystemInvoice
 
         private void manufacturerBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
-            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.Manufacturer));
+            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.IManufacturer));
             }
 
         private void nomenclatureBtn_ItemClick(object sender, ItemClickEventArgs e)

@@ -122,11 +122,11 @@ namespace SystemInvoice.Catalogs
 
         #region (Manufacturer) Manufacturer Производитель
         [DataField(Description = "Производитель", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, NotEmpty = true)]
-        public Manufacturer Manufacturer
+        public IManufacturer Manufacturer
             {
             get
                 {
-                return (Manufacturer)GetValueForObjectProperty("Manufacturer");
+                return (IManufacturer)GetValueForObjectProperty("Manufacturer");
                 }
             set
                 {

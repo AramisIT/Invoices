@@ -38,7 +38,7 @@ namespace SystemInvoice.DataProcessing.Cache.SubGroupOfGoodsCache
             ITradeMark tm = A.New<ITradeMark>();
             tm.Id = cacheObject.TradeMark;
             tm.Contractor = contractor;
-            Manufacturer mf = new Manufacturer();
+            IManufacturer mf = A.New<IManufacturer>();
             mf.Id = cacheObject.Manufacturer;
             mf.Contractor = contractor;
             GroupOfGoods groupOfGoods = new GroupOfGoods();

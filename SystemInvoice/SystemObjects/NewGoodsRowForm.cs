@@ -99,7 +99,7 @@ namespace SystemInvoice.Catalogs.Forms
             Item.Price = Convert.ToDecimal(Item.Nomenclature.Price);
             Item.NameDecl = Item.Nomenclature.NameDecl;
             Item.NameInvoice = Item.Nomenclature.Description;
-            Item.ItemProducer = A.New<Manufacturer>(Item.Nomenclature.Manufacturer.Id);
+            Item.ItemProducer = A.New<IManufacturer>(Item.Nomenclature.Manufacturer.Id);
             Item.InternalCode = A.New<CustomsCode>(Item.Nomenclature.CustomsCodeInternal.Id);
             Item.TradeMark = A.New<ITradeMark>(Item.Nomenclature.TradeMark.Id);
             }
@@ -132,7 +132,7 @@ namespace SystemInvoice.Catalogs.Forms
                 Item.Nomenclature.TradeMark = A.New<ITradeMark>(Item.TradeMark.Id);
                 Item.Nomenclature.CustomsCodeInternal = A.New<CustomsCode>(Item.InternalCode.Id);
                 Item.Nomenclature.Contractor = A.New<IContractor>(Item.Contractor.Id);
-                Item.Nomenclature.Manufacturer = A.New<Manufacturer>(Item.ItemProducer.Id);
+                Item.Nomenclature.Manufacturer = A.New<IManufacturer>(Item.ItemProducer.Id);
                 Item.Nomenclature.NetWeightFrom = Convert.ToDouble(Item.NetPerUnit);
                 Item.Nomenclature.NetWeightTo = Item.Nomenclature.NetWeightFrom;
                 }

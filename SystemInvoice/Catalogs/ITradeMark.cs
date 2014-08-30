@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemInvoice.SystemObjects;
 using Aramis.Core;
 using Aramis.Attributes;
+using Aramis.DatabaseConnector;
 using Aramis.Enums;
+using Core;
 
 namespace SystemInvoice.Catalogs
     {
@@ -17,5 +20,34 @@ namespace SystemInvoice.Catalogs
         {
         [DataField(Description = "Контрагент", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true)]
         IContractor Contractor { get; set; }
+        }
+
+    public class TradeMarkListsGetter : FixedListsCreator<ITradeMark>
+        {
+        public enum TradeMarkListsTypes
+            {
+            FilteredByContractor
+            }
+
+        public override Query GetQuery(int listId, IAramisModel aramisObject)
+            {
+            var newGoodsRow = aramisObject as INewGoodsRow;
+            if (newGoodsRow == null) return null;
+
+            var listType = (TradeMarkListsTypes)listId;
+            switch (listType)
+                {
+                case TradeMarkListsTypes.FilteredByContractor:
+                    var q = DB.NewQuery(@"select rtrim(Description) [Description], Id 
+from TradeMark
+where Contractor = @Contractor
+order by Description");
+                    q.AddInputParameter("Contractor", newGoodsRow.Contractor.Id);
+                    return q;
+
+                default:
+                    return null;
+                }
+            }
         }
     }

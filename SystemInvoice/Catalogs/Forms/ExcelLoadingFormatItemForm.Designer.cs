@@ -29,6 +29,8 @@
         private void InitializeComponent()
             {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExcelLoadingFormatItemForm));
+            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
             this.ribbon = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.btnOk = new DevExpress.XtraBars.BarButtonItem();
             this.btnWrite = new DevExpress.XtraBars.BarButtonItem();
@@ -60,6 +62,8 @@
             this.ColumnIndexForGrafShoes = new DevExpress.XtraEditors.TextEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.UseMaxBordersWithNomenclatureCreating = new DevExpress.XtraEditors.CheckEdit();
+            this.OrderInvoiceColumns = new DevExpress.XtraEditors.CheckEdit();
+            this.SaveOriginalRowsSet = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SubGroupOfGoods.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -72,6 +76,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.GrafSwitchValue.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColumnIndexForGrafShoes.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UseMaxBordersWithNomenclatureCreating.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OrderInvoiceColumns.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SaveOriginalRowsSet.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -137,8 +143,6 @@
             // 
             // SubGroupOfGoods
             // 
-            this.SubGroupOfGoods.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.SubGroupOfGoods.BaseFilter = null;
             this.SubGroupOfGoods.Location = new System.Drawing.Point(154, 116);
             this.SubGroupOfGoods.MenuManager = this.ribbon;
@@ -151,6 +155,7 @@
             this.SubGroupOfGoods.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.SubGroupOfGoods.Properties.EditFormat.FormatString = "d";
             this.SubGroupOfGoods.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.SubGroupOfGoods.Properties.FirstPopUp = null;
             this.SubGroupOfGoods.Properties.NullText = "";
             this.SubGroupOfGoods.Size = new System.Drawing.Size(391, 20);
             this.SubGroupOfGoods.TabIndex = 179;
@@ -165,8 +170,6 @@
             // 
             // Contractor
             // 
-            this.Contractor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Contractor.BaseFilter = null;
             this.Contractor.Location = new System.Drawing.Point(154, 64);
             this.Contractor.MenuManager = this.ribbon;
@@ -179,6 +182,7 @@
             this.Contractor.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Contractor.Properties.EditFormat.FormatString = "d";
             this.Contractor.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Contractor.Properties.FirstPopUp = null;
             this.Contractor.Properties.NullText = "";
             this.Contractor.Size = new System.Drawing.Size(391, 20);
             this.Contractor.TabIndex = 177;
@@ -193,8 +197,6 @@
             // 
             // TradeMark
             // 
-            this.TradeMark.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.TradeMark.BaseFilter = null;
             this.TradeMark.Location = new System.Drawing.Point(154, 90);
             this.TradeMark.MenuManager = this.ribbon;
@@ -207,6 +209,7 @@
             this.TradeMark.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.TradeMark.Properties.EditFormat.FormatString = "d";
             this.TradeMark.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.TradeMark.Properties.FirstPopUp = null;
             this.TradeMark.Properties.NullText = "";
             this.TradeMark.Size = new System.Drawing.Size(391, 20);
             this.TradeMark.TabIndex = 175;
@@ -221,8 +224,6 @@
             // 
             // Description
             // 
-            this.Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Description.Location = new System.Drawing.Point(154, 142);
             this.Description.Name = "Description";
             this.Description.Size = new System.Drawing.Size(391, 20);
@@ -238,8 +239,6 @@
             // 
             // FirstRowNumber
             // 
-            this.FirstRowNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.FirstRowNumber.Location = new System.Drawing.Point(682, 117);
             this.FirstRowNumber.MenuManager = this.ribbon;
             this.FirstRowNumber.Name = "FirstRowNumber";
@@ -309,7 +308,6 @@
             // 
             // btnLoad
             // 
-            this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnLoad.Image")));
             this.btnLoad.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnLoad.Location = new System.Drawing.Point(750, 62);
@@ -320,7 +318,6 @@
             // 
             // btnUnload
             // 
-            this.btnUnload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUnload.Image = ((System.Drawing.Image)(resources.GetObject("btnUnload.Image")));
             this.btnUnload.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnUnload.Location = new System.Drawing.Point(750, 88);
@@ -331,7 +328,6 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl1.Location = new System.Drawing.Point(551, 67);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(93, 13);
@@ -340,7 +336,6 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControl2.Location = new System.Drawing.Point(551, 93);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(90, 13);
@@ -387,11 +382,36 @@
             this.UseMaxBordersWithNomenclatureCreating.Size = new System.Drawing.Size(383, 19);
             this.UseMaxBordersWithNomenclatureCreating.TabIndex = 232;
             // 
+            // OrderInvoiceColumns
+            // 
+            this.OrderInvoiceColumns.Location = new System.Drawing.Point(551, 169);
+            this.OrderInvoiceColumns.MenuManager = this.ribbon;
+            this.OrderInvoiceColumns.Name = "OrderInvoiceColumns";
+            this.OrderInvoiceColumns.Properties.AutoWidth = true;
+            this.OrderInvoiceColumns.Properties.Caption = "Упорядочивать столбцы в документе";
+            this.OrderInvoiceColumns.Size = new System.Drawing.Size(215, 19);
+            this.OrderInvoiceColumns.TabIndex = 236;
+            // 
+            // SaveOriginalRowsSet
+            // 
+            this.SaveOriginalRowsSet.Location = new System.Drawing.Point(551, 144);
+            this.SaveOriginalRowsSet.MenuManager = this.ribbon;
+            this.SaveOriginalRowsSet.Name = "SaveOriginalRowsSet";
+            this.SaveOriginalRowsSet.Properties.AutoWidth = true;
+            this.SaveOriginalRowsSet.Properties.Caption = "Сохранять начальный набор строк";
+            this.SaveOriginalRowsSet.Size = new System.Drawing.Size(201, 19);
+            toolTipTitleItem1.Text = "Не группировать и не изменять порядок исходных строк Excel";
+            superToolTip1.Items.Add(toolTipTitleItem1);
+            this.SaveOriginalRowsSet.SuperTip = superToolTip1;
+            this.SaveOriginalRowsSet.TabIndex = 240;
+            // 
             // ExcelLoadingFormatItemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 514);
+            this.Controls.Add(this.SaveOriginalRowsSet);
+            this.Controls.Add(this.OrderInvoiceColumns);
             this.Controls.Add(this.UseMaxBordersWithNomenclatureCreating);
             this.Controls.Add(this.ColumnIndexForGrafShoes);
             this.Controls.Add(this.labelControl3);
@@ -431,6 +451,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.GrafSwitchValue.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColumnIndexForGrafShoes.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UseMaxBordersWithNomenclatureCreating.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.OrderInvoiceColumns.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SaveOriginalRowsSet.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -469,5 +491,7 @@
         private DevExpress.XtraEditors.TextEdit ColumnIndexForGrafShoes;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.CheckEdit UseMaxBordersWithNomenclatureCreating;
+        private DevExpress.XtraEditors.CheckEdit OrderInvoiceColumns;
+        private DevExpress.XtraEditors.CheckEdit SaveOriginalRowsSet;
         }
     }

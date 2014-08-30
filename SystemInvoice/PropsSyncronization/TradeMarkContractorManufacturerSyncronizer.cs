@@ -12,7 +12,7 @@ namespace SystemInvoice.PropsSyncronization
         {
         private ITradeMarkContractorManufacturerSource manufacturerDataSource = null;
 
-        private Manufacturer Manufacturer
+        private IManufacturer Manufacturer
             {
             get
                 {
@@ -57,7 +57,7 @@ namespace SystemInvoice.PropsSyncronization
             base.onContractorChanged();
             if (this.Manufacturer.Contractor.Id != this.Contractor.Id)
                 {
-                this.Manufacturer = new Manufacturer();
+                this.Manufacturer = A.New<IManufacturer>();
                 }
             }
 
@@ -72,7 +72,7 @@ namespace SystemInvoice.PropsSyncronization
 
         private ListFilter manufacturerFilter()
             {
-            ListFilter result = new ListFilter(typeof(Manufacturer));
+            ListFilter result = new ListFilter(typeof(IManufacturer));
             if (this.Contractor.Id != 0)
                 {
                 result.Conditions["Contractor"].Active = true;
