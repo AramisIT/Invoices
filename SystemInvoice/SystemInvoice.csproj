@@ -151,6 +151,8 @@
     <Compile Include="DataProcessing\Cache\PropertyTypesCache\IPropertyTypeFullSearch.cs" />
     <Compile Include="DataProcessing\CatalogsProcessing\Loaders\CacheTradeMarkContractorSource.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\CatalogsLoader.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\ModelFromArticleHandler.cs" />
+    <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\TradeMarkFromArticleHandler.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\CustomExpressionsHandlers\Zepter\ZepterDeclarationHandler.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\NetWeightsInfo.cs" />
     <Compile Include="DataProcessing\InvoiceProcessing\GroupItemsEditors\NetWeightWithBoundaryCheckingCalculator.cs" />

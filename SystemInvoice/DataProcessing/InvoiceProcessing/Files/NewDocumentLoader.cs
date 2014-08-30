@@ -95,6 +95,9 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
             string nameFromGroupStr = "Наименование";
             string zepterDeclKey = "Цептер.Декл";
 
+            registerCustomHandler("Артикул.ТоргМарка", new TradeMarkFromArticleHandler(cachedData, () => invoice.Contractor));
+            registerCustomHandler("Артикул.Модель", new ModelFromArticleHandler(cachedData));
+
             registerCustomHandler(customsCodeFromArticleKey, new CustomsCodeFromArticleHandler(cachedData));
             registerCustomHandler(declarationNameFromArticleKey, new DeclarationNameFromArticleHandler(cachedData));
             registerCustomHandler(invoiceNameFromArticleKey, new InvoiceNameFromArticleHandler(cachedData));
@@ -120,7 +123,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
             registerCustomHandler(codeFromCountryRu, new CountryCodeFromRuNameHandler(cachedData));
             registerCustomHandler(summCalc, new SummCalculationHandler(cachedData));
             registerCustomHandler(bnsSubGroupOfGoods, new BNSSubGroupOfGoodsHandler(cachedData));//GenderTranslatehandler
-         //   registerCustomHandler(genderTranslate, new GenderTranslatehandler(cachedData));
+            //   registerCustomHandler(genderTranslate, new GenderTranslatehandler(cachedData));
             registerCustomHandler(bnsUnitOfMeasure, new BNSUnitOfMeasureCodeHandler(cachedData));
             registerCustomHandler(marginFromPercent, new MarginFromPercentageAndPrice(cachedData));
             registerCustomHandler(withMargin, new PriceWithMargin(cachedData));
@@ -231,7 +234,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
                 }
             return this.invoice.TradeMark.Id != 0;
             }
-        
+
         /// <summary>
         /// Формирует привязку колонок из входящего файла в табличную часть инвойса
         /// </summary>

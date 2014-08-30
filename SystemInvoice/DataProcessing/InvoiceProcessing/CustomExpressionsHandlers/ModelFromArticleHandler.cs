@@ -10,19 +10,18 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
     /// <summary>
     /// Получает контрагента из номенклатуры
     /// </summary>
-    public class ContractorNameFromArticleHandler : FromArticleHandlerBase
+    public class ModelFromArticleHandler : FromArticleHandlerBase
         {
-        public ContractorNameFromArticleHandler(SystemInvoiceDBCache cachedData)
+        public ModelFromArticleHandler(SystemInvoiceDBCache cachedData)
             : base(cachedData)
             {
             }
 
         protected override object ProcessExpression(NomenclatureCacheObject cacheObject)//Артикул.Контр[Артикул,Торговая марка]
             {
-            var manufacturerCachedObject = catalogsCachedData.ManufacturerCacheObjectsStore.GetCachedObject(cacheObject.ManufacturerId);
-            if (manufacturerCachedObject != null)
+            if (cacheObject != null)
                 {
-                return manufacturerCachedObject.ManufacturerName;
+                return cacheObject.Model;
                 }
             return string.Empty;
             }

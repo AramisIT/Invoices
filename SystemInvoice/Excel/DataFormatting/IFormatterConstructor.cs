@@ -17,6 +17,6 @@ namespace SystemInvoice.Excel.DataFormatting
         /// <param name="targetType">Тип данных объекта который должен возвращать преобразователь</param>
         /// <param name="formattersResolver">Делегат возвращающий вспомогательные преобразователи на основании ключей которые должна содержать карта преобоазования (ExcelMapper)</param>
         /// <returns>Преобразователь</returns>
-        IDataFormatter Create( string expression, Type targetType, Func<string, IDataFormatter> formattersResolver );
+        IDataFormatter Create(string expression, Type targetType, Func<string, IDataFormatter> formattersResolver);
         }
     }

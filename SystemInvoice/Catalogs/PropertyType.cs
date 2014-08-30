@@ -175,7 +175,7 @@ namespace SystemInvoice.Catalogs
         #endregion
 
         #region (string) GroupOfGoods Группа товара
-        [DataField(Description = "Группа товара", Size = 100, ReadOnly = true, ShowInList = false,ShowInForm =  false)]
+        [DataField(Description = "Группа товара", Size = 100, ReadOnly = true, ShowInList = false, ShowInForm = false)]
         public string GroupOfGoods
             {
             get
@@ -305,7 +305,7 @@ namespace SystemInvoice.Catalogs
             GroupCode = SubGroupOfGoods.GroupCode;
             Article = Nomenclature.Article;
             Description = PropertyOfGoods.Description;
-            if (!byGroupOfGoodsChanged && SubGroupOfGoods.Id!=0)
+            if (!byGroupOfGoodsChanged && SubGroupOfGoods.Id != 0)
                 {
                 GroupOfGoodsRef = SubGroupOfGoods.GroupOfGoods;
                 }

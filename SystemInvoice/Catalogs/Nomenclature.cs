@@ -105,6 +105,29 @@ namespace SystemInvoice.Catalogs
         private string z_BarCode = "";
         #endregion
 
+        public const int MODEL_SIZE = 20;
+
+        [DataField(Description = "Модель", Size = MODEL_SIZE)]
+        public string Model
+            {
+            get
+                {
+                return z_Model;
+                }
+            set
+                {
+                if (z_Model == value)
+                    {
+                    return;
+                    }
+
+                z_Model = value;
+                NotifyPropertyChanged("Model");
+                }
+            }
+        private string z_Model = "";
+       
+
         #region (Contractor) Contractor Производитель
         [DataField(Description = "Контрагент", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true, NotEmpty = true)]
         public IContractor Contractor

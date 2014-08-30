@@ -23,17 +23,17 @@ namespace SystemInvoice.Excel.DataFormatting
         /// <param name="contructor">Экземпляр конструкторв</param>
         /// <param name="overwrite">Перезаписывать конструктор</param>
         /// <returns>Результат (если такое ключевое слово уже зарезервировано, добавление невозможно)</returns>
-        public bool Register( string key, IFormatterConstructor contructor, bool overwrite )
+        public bool Register(string key, IFormatterConstructor contructor, bool overwrite)
             {
-            if (constructors.ContainsKey( key ))
+            if (constructors.ContainsKey(key))
                 {
                 if (!overwrite)
                     {
                     return false;
                     }
-                constructors.Remove( key );
+                constructors.Remove(key);
                 }
-            constructors.Add( key, contructor );
+            constructors.Add(key, contructor);
             return true;
             }
         /// <summary>
@@ -43,14 +43,14 @@ namespace SystemInvoice.Excel.DataFormatting
         /// <param name="dataType">Тип данных</param>
         /// <param name="formattersResolver">Делегат возвращающий вспомогательные преобразователи (не обязателен для большинства конструкторов)</param>
         /// <returns>Преобразователь</returns>
-        public IDataFormatter CreateFormatter( Expression expression, Type dataType, Func<string, IDataFormatter> formattersResolver )
+        public IDataFormatter CreateFormatter(Expression expression, Type dataType, Func<string, IDataFormatter> formattersResolver)
             {
-            if (!constructors.ContainsKey( expression.ExpressionType ))
+            if (!constructors.ContainsKey(expression.ExpressionType))
                 {
                 return null;
                 }
             IFormatterConstructor construrctor = constructors[expression.ExpressionType];
-            return construrctor.Create( expression.ExpressionBody, dataType, formattersResolver );
+            return construrctor.Create(expression.ExpressionBody, dataType, formattersResolver);
             }
         }
     }

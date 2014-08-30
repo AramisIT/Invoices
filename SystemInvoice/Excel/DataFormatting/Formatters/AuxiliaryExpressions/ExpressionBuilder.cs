@@ -7,70 +7,70 @@ namespace SystemInvoice.Excel.DataFormatting.Formatters.AuxiliaryExpressions
     {
     internal class ExpressionBuilder
         {
-        public AuxiliaryExpressionsCollection CreateExpressions( Type targetType, Func<string, IDataFormatter> formattersResolver, string[] expressionItems )
+        public AuxiliaryExpressionsCollection CreateExpressions(Type targetType, Func<string, IDataFormatter> formattersResolver, string[] expressionItems)
             {
             AuxiliaryExpressionsCollection expressions = new AuxiliaryExpressionsCollection();
-            foreach (string contentItem in expressionItems.Select( itm => itm.Trim() ))
+            foreach (string contentItem in expressionItems.Select(itm => itm.Trim()))
                 {
                 IExpression expression = null;
-                if (!tryCreateConstantExpression( contentItem, out expression ) &&
-                    !tryCreateIndexExpression( targetType, contentItem, out expression )
+                if (!tryCreateConstantExpression(contentItem, out expression) &&
+                    !tryCreateIndexExpression(targetType, contentItem, out expression)
                     )
                     {
-                    expression = createReferenceOrConstantExpression( formattersResolver, contentItem );
+                    expression = createReferenceOrConstantExpression(formattersResolver, contentItem);
                     }
-                expressions.Add( expression );
+                expressions.Add(expression);
                 continue;
                 }
             return expressions;
             }
 
-        private IExpression createReferenceOrConstantExpression( Func<string, IDataFormatter> formattersResolver, string parameterName )
+        private IExpression createReferenceOrConstantExpression(Func<string, IDataFormatter> formattersResolver, string parameterName)
             {
             IExpression expression = null;
             IDataFormatter additionalFormatter = null;
-            if (formattersResolver != null && (additionalFormatter = formattersResolver( parameterName )) != null)
+            if (formattersResolver != null && (additionalFormatter = formattersResolver(parameterName)) != null)
                 {
-                expression = new ReferenceExpression( additionalFormatter );
+                expression = new ReferenceExpression(additionalFormatter);
                 }
             else
                 {
-                expression = new ConstantExpression( parameterName );
+                expression = new ConstantExpression(parameterName);
                 }
             return expression;
             }
 
-        private bool tryCreateIndexExpression( Type targetType, string contentItem, out IExpression expression )
+        private bool tryCreateIndexExpression(Type targetType, string contentItem, out IExpression expression)
             {
             expression = null;
             int columnIndex = 0;
-            if (int.TryParse( contentItem, out columnIndex ))
+            if (int.TryParse(contentItem, out columnIndex))
                 {
-                if (targetType == typeof( DateTime ))
+                if (targetType == typeof(DateTime))
                     {
-                    expression = new DateIndexExprssion( columnIndex );
+                    expression = new DateIndexExprssion(columnIndex);
                     }
                 else
                     {
-                    expression = new IndexExpression( columnIndex );
+                    expression = new IndexExpression(columnIndex);
                     }
                 return true;
                 }
             return false;
             }
 
-        private bool tryCreateConstantExpression( string contentItem, out IExpression expression )
+        private bool tryCreateConstantExpression(string contentItem, out IExpression expression)
             {
             expression = null;
-            if (contentItem.StartsWith( @"""" ) && contentItem.EndsWith( @"""" ))
+            if (contentItem.StartsWith(@"""") && contentItem.EndsWith(@""""))
                 {
                 if (contentItem.Length <= 2)
                     {
-                    expression = new ConstantExpression( "" );
+                    expression = new ConstantExpression("");
                     return true;
                     }
-                string constStr = contentItem.Substring( 1, contentItem.Length - 2 );
-                expression = new ConstantExpression( constStr );
+                string constStr = contentItem.Substring(1, contentItem.Length - 2);
+                expression = new ConstantExpression(constStr);
                 return true;
                 }
             return false;

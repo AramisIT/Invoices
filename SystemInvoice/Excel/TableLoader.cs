@@ -25,13 +25,13 @@ namespace SystemInvoice.Excel
         /// </summary>
         protected bool replaceNullValues = false;
 
-        public TableLoader( bool replaceNullValues )
+        public TableLoader(bool replaceNullValues)
             {
             this.replaceNullValues = replaceNullValues;
             }
 
         public TableLoader()
-            : this( false )
+            : this(false)
             {
             }
 
@@ -43,10 +43,10 @@ namespace SystemInvoice.Excel
         /// <param name="startIndex">Начальный индекс обрабатываемой строки</param>
         /// <param name="successed">Была ли операция выполнена без ошибок</param>
         /// <returns>Результирующая таблица</returns>
-        public DataTable Transform( ExcelMapper mapper, string fileName, int startIndex, out bool successed )
+        public DataTable Transform(ExcelMapper mapper, string fileName, int startIndex, out bool successed)
             {
-            DataTable tableToFill = createMappingTable( mapper );
-            successed = TryFill( tableToFill, mapper, fileName, startIndex );
+            DataTable tableToFill = createMappingTable(mapper);
+            successed = TryFill(tableToFill, mapper, fileName, startIndex);
             return tableToFill;
             }
 
@@ -57,10 +57,10 @@ namespace SystemInvoice.Excel
         /// <param name="fileName">Путь к обрабатываемому файлу</param>
         /// <param name="startIndex">Начальный индекс обрабатываемой строки</param>
         /// <returns>Результирующая таблица</returns>
-        public DataTable Transform( ExcelMapper mapper, string fileName, int startIndex )
+        public DataTable Transform(ExcelMapper mapper, string fileName, int startIndex)
             {
             bool successed = false;
-            return Transform( mapper, fileName, startIndex, out successed );
+            return Transform(mapper, fileName, startIndex, out successed);
             }
 
         /// <summary>
@@ -70,28 +70,28 @@ namespace SystemInvoice.Excel
         /// <param name="mapper">Набор колонок с соответствующими преобразователями</param>
         /// <param name="fileName">Путь к обрабатываемому файлу</param>
         /// <param name="startIndex">Начальный индекс обрабатываемой строки</param>
-        public bool TryFill( DataTable tableToFill, ExcelMapper mapper, string fileName, int startIndex )
+        public bool TryFill(DataTable tableToFill, ExcelMapper mapper, string fileName, int startIndex)
             {
-            if (tableToFill == null || mapper == null || string.IsNullOrEmpty( fileName ) || !File.Exists( fileName ))
+            if (tableToFill == null || mapper == null || string.IsNullOrEmpty(fileName) || !File.Exists(fileName))
                 {
                 return false;
                 }
             currentTable = tableToFill;
-            return TryLoad( fileName, mapper, 0, startIndex, -1 );
+            return TryLoad(fileName, mapper, 0, startIndex, -1);
             }
 
-        protected override Type getFormatterType( string propertyName )
+        protected override Type getFormatterType(string propertyName)
             {
-            if (!isPropertyExists( propertyName ))
+            if (!isPropertyExists(propertyName))
                 {
                 return null;
                 }
             return currentTable.Columns[propertyName].DataType;
             }
 
-        protected override bool isPropertyExists( string propertyName )
+        protected override bool isPropertyExists(string propertyName)
             {
-            return currentTable == null ? false : currentTable.Columns.Contains( propertyName );
+            return currentTable == null ? false : currentTable.Columns.Contains(propertyName);
             }
 
         protected override void OnRowProcessingBegin()
@@ -109,25 +109,25 @@ namespace SystemInvoice.Excel
                     DataColumn column = currentTable.Columns[i];
                     if (items[i] == null || items[i] == DBNull.Value)
                         {
-                        if (column.DataType == typeof( string ))
+                        if (column.DataType == typeof(string))
                             {
                             items[i] = " ";
                             }
-                        if (column.DataType == typeof( long ))
+                        if (column.DataType == typeof(long))
                             {
                             items[i] = 0;
                             }
                         }
                     }
-                currentTable.Rows.Add( items );
+                currentTable.Rows.Add(items);
                 }
             else
                 {
-                currentTable.Rows.Add( currentRow );
+                currentTable.Rows.Add(currentRow);
                 }
             }
 
-        protected override void OnPropertySet( string propertyName, object value )
+        protected override void OnPropertySet(string propertyName, object value)
             {
             if (value != null)
                 {
@@ -142,12 +142,12 @@ namespace SystemInvoice.Excel
         /// <summary>
         /// Создает новый экземпляр таблицы на основании ключей набора выражений
         /// </summary>
-        private DataTable createMappingTable( ExcelMapper mapper )
+        private DataTable createMappingTable(ExcelMapper mapper)
             {
             DataTable table = new DataTable();
             foreach (string key in mapper.Keys)
                 {
-                table.Columns.Add( key, typeof( string ) );
+                table.Columns.Add(key, typeof(string));
                 }
             return table;
             }

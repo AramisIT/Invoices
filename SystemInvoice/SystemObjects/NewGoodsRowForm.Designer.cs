@@ -11,13 +11,13 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
             {
             if (disposing && (components != null))
                 {
                 components.Dispose();
                 }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
             }
 
         #region Windows Form Designer generated code
@@ -204,7 +204,7 @@
             // 
             // InternalCode
             // 
-            this.InternalCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.InternalCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.InternalCode.BaseFilter = null;
             this.InternalCode.Location = new System.Drawing.Point(288, 43);
@@ -233,7 +233,7 @@
             // 
             // InvoiceNumber
             // 
-            this.InvoiceNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.InvoiceNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.InvoiceNumber.Location = new System.Drawing.Point(80, 17);
             this.InvoiceNumber.Name = "InvoiceNumber";
@@ -290,7 +290,7 @@
             // 
             // Country
             // 
-            this.Country.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Country.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Country.BaseFilter = null;
             this.Country.Location = new System.Drawing.Point(499, 216);
@@ -311,7 +311,7 @@
             // 
             // UnitOfMeasure
             // 
-            this.UnitOfMeasure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.UnitOfMeasure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.UnitOfMeasure.BaseFilter = null;
             this.UnitOfMeasure.Location = new System.Drawing.Point(288, 216);
@@ -534,7 +534,7 @@
             // 
             // ItemProducer
             // 
-            this.ItemProducer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.ItemProducer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ItemProducer.BaseFilter = null;
             this.ItemProducer.Location = new System.Drawing.Point(499, 43);
@@ -563,7 +563,7 @@
             // 
             // TradeMark
             // 
-            this.TradeMark.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TradeMark.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TradeMark.BaseFilter = null;
             this.TradeMark.Location = new System.Drawing.Point(499, 17);
@@ -597,7 +597,7 @@
             // 
             // Article
             // 
-            this.Article.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Article.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Article.Location = new System.Drawing.Point(80, 43);
             this.Article.Name = "Article";

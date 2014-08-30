@@ -41,7 +41,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// Словарь - кеш по умолчанию, позволяет искать объект по другому объекту (в объекте - ключе могут быть заполнены только поля/свойстав для поиска, в объекте - значении - все поля из БД)
         /// </summary>
         private Dictionary<T, T> selfRefsDictionary = new Dictionary<T, T>();
-        
+
         #endregion
 
         #region Кастомные кэши, генерируемые на основании индексов
@@ -56,7 +56,7 @@ namespace SystemInvoice.DataProcessing.Cache
         private List<IEqualityComparer<T>> oneToManyIndexes = new List<IEqualityComparer<T>>();
         private Dictionary<IEqualityComparer<T>, Dictionary<T, IEnumerable<long>>> oneToManyindexedCaches = new Dictionary<IEqualityComparer<T>, Dictionary<T, IEnumerable<long>>>();
         private Dictionary<IEqualityComparer<T>, Dictionary<long, T>> oneToManyindexedCachesReversed = new Dictionary<IEqualityComparer<T>, Dictionary<long, T>>();
-        
+
         #endregion
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace SystemInvoice.DataProcessing.Cache
 
         private void fillOneToManyCaches(List<T> allObjects, List<long> allObjectsIds)
             {
-            foreach (KeyValuePair<IEqualityComparer<T>, Dictionary<T, IEnumerable<long>>> keyValuePair in this.oneToManyindexedCaches )
+            foreach (KeyValuePair<IEqualityComparer<T>, Dictionary<T, IEnumerable<long>>> keyValuePair in this.oneToManyindexedCaches)
                 {
                 IEqualityComparer<T> indexer = keyValuePair.Key;
                 Dictionary<T, IEnumerable<long>> cache = keyValuePair.Value;

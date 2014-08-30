@@ -30,13 +30,13 @@ namespace SystemInvoice.Excel
         /// </summary>
         /// <param name="propertyName">значение ключевого слова</param>
         /// <returns>Тип данных</returns>
-        protected abstract Type getFormatterType( string propertyName );
+        protected abstract Type getFormatterType(string propertyName);
         /// <summary>
         /// Возвращает - нужно ли выполнять обработку для данного ключевого слова (колонки таблицы, свойства ....)
         /// </summary>
         /// <param name="propertyName">значение</param>
         /// <returns>Результат проверки</returns>
-        protected abstract bool isPropertyExists( string propertyName );
+        protected abstract bool isPropertyExists(string propertyName);
         /// <summary>
         /// Выполняется перед началом вызовов OnPropertySet для каждй строки.
         /// </summary>
@@ -50,15 +50,15 @@ namespace SystemInvoice.Excel
         /// </summary>
         /// <param name="propertyName">Ключевое поле</param>
         /// <param name="value">Результат выполнения преобразователя данных</param>
-        protected abstract void OnPropertySet( string propertyName, object value );
+        protected abstract void OnPropertySet(string propertyName, object value);
 
         /// <summary>
         /// Создает новый экземпляр класса, регистрирует базовые типы выражений
         /// </summary>
         public AbstractLoader()
             {
-            RegisterFormatter( "index", new SimpleIndexFormatterConstructor() );
-            RegisterFormatter( "summ", new SumExpressionDataFormatterConstructor() );
+            RegisterFormatter("index", new SimpleIndexFormatterConstructor());
+            RegisterFormatter("summ", new SumExpressionDataFormatterConstructor());
             }
         /// <summary>
         /// Выполняет загрузку Excel - файла, и дальнейшую его обработку (которая реализуется в производных классах).
@@ -68,11 +68,11 @@ namespace SystemInvoice.Excel
         /// <param name="workSheetIndex">Номер страницы в Excel - файле</param>
         /// <param name="startRowIndex">Начальная строка с которой начинается обработка файла</param>
         /// <param name="finishRowIndex">конечная строка (-1 если все строки начиная с начальной)</param>
-        protected bool TryLoad( string fileName, ExcelMapper mapper, int workSheetIndex, int startRowIndex, int finishRowIndex )
+        protected bool TryLoad(string fileName, ExcelMapper mapper, int workSheetIndex, int startRowIndex, int finishRowIndex)
             {
-            List<FormattersStore> formatters = createColumnFormatters( mapper );
+            List<FormattersStore> formatters = createColumnFormatters(mapper);
             ExcelXlsWorkbook book = null;
-            if (!ExcelHelper.tryLoad( fileName, out book ))
+            if (!ExcelHelper.tryLoad(fileName, out book))
                 {
                 return false;
                 }
@@ -83,8 +83,8 @@ namespace SystemInvoice.Excel
                 OnRowProcessingBegin();
                 foreach (FormattersStore formatter in formatters)
                     {
-                    object formattedValue = formatter.Formatter.Format( sheet[i] ) ?? formatter.DefaultValue;
-                    OnPropertySet( formatter.PropertyName, formattedValue );
+                    object formattedValue = formatter.Formatter.Format(sheet[i]) ?? formatter.DefaultValue;
+                    OnPropertySet(formatter.PropertyName, formattedValue);
                     }
                 OnRowProcessingComplete();
                 }
@@ -100,12 +100,12 @@ namespace SystemInvoice.Excel
         /// <summary>
         /// Регистрирует класс создающий преобразователь данных на основании выражения преобразования
         /// </summary>
-        /// <param name="paramterKeyWord">ключ преобразователя</param>
+        /// <param name="parameterKeyWord">ключ преобразователя</param>
         /// <param name="formatterConstructor">экземпляр генератора преобразователя</param>
         /// <param name="overwrite">Перезаписывать конструктор</param>
-        public void RegisterFormatter( string paramterKeyWord, IFormatterConstructor formatterConstructor, bool overwrite = false )
+        public void RegisterFormatter(string parameterKeyWord, IFormatterConstructor formatterConstructor, bool overwrite = false)
             {
-            formattersGenerator.Register( paramterKeyWord, formatterConstructor, overwrite );
+            formattersGenerator.Register(parameterKeyWord, formatterConstructor, overwrite);
             }
 
         /// <summary>
@@ -113,20 +113,20 @@ namespace SystemInvoice.Excel
         /// </summary>
         /// <param name="mapper">Экземпляр класса описывающего привязку полей/... и преобразователей данных</param>
         /// <returns>Список преобразователей</returns>
-        private List<FormattersStore> createColumnFormatters( ExcelMapper mapper )
+        private List<FormattersStore> createColumnFormatters(ExcelMapper mapper)
             {
-            Resolver resolver = new Resolver( mapper, formattersGenerator, getFormatterType );
+            Resolver resolver = new Resolver(mapper, formattersGenerator, getFormatterType);
             List<FormattersStore> formatters = new List<FormattersStore>();
             foreach (KeyValuePair<string, Expression> pair in mapper)
                 {
                 IDataFormatter formatter = null;
                 string propertyName = pair.Key;
                 Expression expression = pair.Value;
-                if (!isPropertyExists( propertyName ) || (formatter = formattersGenerator.CreateFormatter( expression, getFormatterType( propertyName ), resolver.ResolveFormatter )) == null)
+                if (!isPropertyExists(propertyName) || (formatter = formattersGenerator.CreateFormatter(expression, getFormatterType(propertyName), resolver.ResolveFormatter)) == null)
                     {
                     continue;
                     }
-                formatters.Add( new FormattersStore() { PropertyName = propertyName, DefaultValue = expression.DefaultValue, Formatter = formatter } );
+                formatters.Add(new FormattersStore() { PropertyName = propertyName, DefaultValue = expression.DefaultValue, Formatter = formatter });
                 }
             return formatters;
             }
@@ -141,21 +141,21 @@ namespace SystemInvoice.Excel
             FormattersGenerator formattersGenerator;
             Func<string, Type> getFormatterTypeFunc = null;
 
-            public Resolver( ExcelMapper mapper, FormattersGenerator formattersGenerator, Func<string, Type> getFormatterTypeFunc )
+            public Resolver(ExcelMapper mapper, FormattersGenerator formattersGenerator, Func<string, Type> getFormatterTypeFunc)
                 {
                 this.mapper = mapper;
                 this.formattersGenerator = formattersGenerator;
                 this.getFormatterTypeFunc = getFormatterTypeFunc;
                 }
 
-            public IDataFormatter ResolveFormatter( string propertyName )
+            public IDataFormatter ResolveFormatter(string propertyName)
                 {
-                if (!mapper.ContainsKey( propertyName ))
+                if (!mapper.ContainsKey(propertyName))
                     {
                     return null;
                     }
                 Expression expression = mapper[propertyName];
-                return formattersGenerator.CreateFormatter( expression, getFormatterTypeFunc( propertyName ), ResolveFormatter );
+                return formattersGenerator.CreateFormatter(expression, getFormatterTypeFunc(propertyName), ResolveFormatter);
                 }
             }
         }

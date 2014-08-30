@@ -20,7 +20,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
         NomenclatureCacheObjectsStore nomenclatureStore = null;
         ManufacturerCacheObjectsStore manufacturersStore = null;
         TradeMarkCacheObjectsStore tradeMarksStore = null;
-       
+
         UnitOfMeasureCacheObjectsStore unitsOfMeasuresStore = null;
         CountryCahceObjectsStore countriesStore = null;
         /// <summary>
@@ -148,7 +148,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
                 string NameDecl = nameDecl;
                 //создаем объект - кеш, на основании которого потом мы создаем номенклатуру, и пытаемся его добавить в список для создания
                 NomenclatureCacheObject cacheObject = new NomenclatureCacheObject(Article, TradeMarkId, ContractorId, ManufacturerId, CustomsCodeId,
-                    InvoiceName, CountryId, UnitOfMeasureId, CustomsCodeExtern, BarCode, NetWeightFrom, NetWeightTo, GrossWeight, Price, NameOriginal, NameDecl, groupId, 0);
+                    InvoiceName, CountryId, UnitOfMeasureId, CustomsCodeExtern, BarCode, NetWeightFrom, NetWeightTo, GrossWeight, Price, NameOriginal, NameDecl, groupId, 0, string.Empty);
                 return base.TryAddToCreationList(cacheObject);
                 }
             catch (Exception e)

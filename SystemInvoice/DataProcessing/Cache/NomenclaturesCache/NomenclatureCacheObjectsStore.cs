@@ -106,7 +106,8 @@ nom.Country as countryId,
 cast(cast(nom.Price as numeric(14,2)) as float) as price,
 cast(cast(nom.NetWeightFrom as numeric(14,4)) as float) as netWeightFrom,
 cast(cast(nom.NetWeightTo as numeric(14,4)) as float) as netWeightTo,
-case when cont.IdDoc IS null then 0 else 1 end as hasContent
+case when cont.IdDoc IS null then 0 else 1 end as hasContent,
+rtrim(nom.Model) model
 from Nomenclature as nom
 left outer join SubNomenclatureSetContents as cont on cont.IdDoc = nom.Id
 where nom.MarkForDeleting = 0 and (nom.TradeMark = {0} or {0} = 0) and (nom.Contractor = {1} or {1} = 0);", tradeMarkId, contractorId);
@@ -140,12 +141,13 @@ where nom.MarkForDeleting = 0 and (nom.TradeMark = {0} or {0} = 0) and (nom.Cont
             string nameDecl = row.TrySafeGetColumnValue<string>("declName", "");
             long subGroupOfGoodsId = row.TrySafeGetColumnValue<long>("SubGroupOfGoodsId", 0);
             int hasContent = row.TryGetColumnValue<int>("hasContent", 0);
+            string model = row.TrySafeGetColumnValue<string>("model", string.Empty);
             if (article == null || tradeMarkId == -1 || contractorId == -1)
                 {
                 return null;
                 }
             var objectCreated = new NomenclatureCacheObject(article, tradeMarkId, contractorId, manufacturerId, customsCodeId, invoiceName, countryId, unitOfMeasureId, customsCodeExtern, barCode,
-                netWeightFrom, netWeightTo, grossWeight, price, nameOriginal, nameDecl, subGroupOfGoodsId, hasContent);
+                netWeightFrom, netWeightTo, grossWeight, price, nameOriginal, nameDecl, subGroupOfGoodsId, hasContent, model);
             return objectCreated;
             }
 

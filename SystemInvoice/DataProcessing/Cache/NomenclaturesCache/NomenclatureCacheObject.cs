@@ -31,6 +31,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
         public double NetWeightTo { get; private set; }
         public double GrossWeight { get; private set; }
         public double Price { get; private set; }
+        public string Model { get; private set; }
         public string NameOriginal { get; private set; }
         public string NameDecl { get; private set; }
         public long SubGroupId { get; private set; }
@@ -65,7 +66,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
 
         public NomenclatureCacheObject(string Article, long TradeMarkId, long ContractorId, long ManufacturerId, long CustomsCodeId, string InvoiceName,
             long CountryId, long UnitOfMeasureId, string CustomsCodeExtern, string BarCode, double NetWeightFrom, double NetWeightTo, double GrossWeight, double Price,
-            string NameOriginal, string NameDecl, long SubGroupId, int hasContent)
+            string NameOriginal, string NameDecl, long SubGroupId, int hasContent, string model)
             : this(Article, TradeMarkId, ContractorId, ManufacturerId, CustomsCodeId, InvoiceName, hasContent)
             {
             this.CountryId = CountryId;
@@ -79,6 +80,7 @@ namespace SystemInvoice.DataProcessing.Cache.NomenclaturesCache
             this.NameOriginal = NameOriginal;
             this.NameDecl = NameDecl;
             this.SubGroupId = SubGroupId;
+            this.Model = model;
             }
 
 

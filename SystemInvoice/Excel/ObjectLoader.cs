@@ -42,10 +42,10 @@ namespace SystemInvoice.Excel
         /// <param name="startIndex">Начальный индекс обрабатываемой строки</param>
         /// <param name="successed">Была ли операция выполнена без ошибок</param>
         /// <returns>Список сгенерированных объектов</returns>
-        public List<T> Transform( ExcelMapper mapper, string fileName, int startIndex, out bool successed )
+        public List<T> Transform(ExcelMapper mapper, string fileName, int startIndex, out bool successed)
             {
             currentItemsCollection = new List<T>();
-            successed = TryFill( currentItemsCollection, mapper, fileName, startIndex );
+            successed = TryFill(currentItemsCollection, mapper, fileName, startIndex);
             return currentItemsCollection;
             }
 
@@ -56,10 +56,10 @@ namespace SystemInvoice.Excel
         /// <param name="fileName">Путь к Ехеl - файлу</param>
         /// <param name="startIndex">Начальный индекс обрабатываемой строки</param>
         /// <returns>Список сгенерированных объектов</returns>
-        public List<T> Transform( ExcelMapper mapper, string fileName, int startIndex )
+        public List<T> Transform(ExcelMapper mapper, string fileName, int startIndex)
             {
             bool successed = false;
-            return Transform(mapper,fileName,startIndex,out successed);
+            return Transform(mapper, fileName, startIndex, out successed);
             }
 
         /// <summary>
@@ -69,36 +69,36 @@ namespace SystemInvoice.Excel
         /// <param name="mapper">Набор выражений, соответствующий свойствам объекта</param>
         /// <param name="fileName">Путь к Ехеl - файлу</param>
         /// <param name="startIndex">Начальный индекс обрабатываемой строки</param>
-        public bool TryFill( List<T> collectionToFill, ExcelMapper mapper, string fileName, int startIndex )
+        public bool TryFill(List<T> collectionToFill, ExcelMapper mapper, string fileName, int startIndex)
             {
-            if (collectionToFill == null || mapper == null || string.IsNullOrEmpty( fileName ) || !File.Exists( fileName ))
+            if (collectionToFill == null || mapper == null || string.IsNullOrEmpty(fileName) || !File.Exists(fileName))
                 {
                 return false;
                 }
             currentItemsCollection = collectionToFill;
-            return TryLoad( fileName, mapper, 0, startIndex, -1 );
+            return TryLoad(fileName, mapper, 0, startIndex, -1);
             }
 
         private void fillDescriptors()
             {
-            foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties( typeof( T ) ))
+            foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(typeof(T)))
                 {
-                propertyDescriptors.Add( propertyDescriptor.Name, propertyDescriptor );
+                propertyDescriptors.Add(propertyDescriptor.Name, propertyDescriptor);
                 }
             }
 
-        protected override Type getFormatterType( string propertyName )
+        protected override Type getFormatterType(string propertyName)
             {
-            if (isPropertyExists( propertyName ))
+            if (isPropertyExists(propertyName))
                 {
                 return propertyDescriptors[propertyName].PropertyType;
                 }
             return null;
             }
 
-        protected override bool isPropertyExists( string propertyName )
+        protected override bool isPropertyExists(string propertyName)
             {
-            return propertyDescriptors.ContainsKey( propertyName );
+            return propertyDescriptors.ContainsKey(propertyName);
             }
 
         protected override void OnRowProcessingBegin()
@@ -108,13 +108,13 @@ namespace SystemInvoice.Excel
 
         protected override void OnRowProcessingComplete()
             {
-            currentItemsCollection.Add( currentItem );
+            currentItemsCollection.Add(currentItem);
             }
 
-        protected override void OnPropertySet( string propertyName, object value )
+        protected override void OnPropertySet(string propertyName, object value)
             {
             PropertyDescriptor descriptor = propertyDescriptors[propertyName];
-            descriptor.SetValue( currentItem, value );
+            descriptor.SetValue(currentItem, value);
             }
         }
     }

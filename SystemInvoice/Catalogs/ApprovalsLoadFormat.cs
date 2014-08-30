@@ -10,7 +10,7 @@ using SystemInvoice.PropsSyncronization;
 
 namespace SystemInvoice.Catalogs
     {
-    [Catalog( Description = "Формат загрузки разрешительного документа", GUID = "A8592D01-0B9C-4FED-9BE7-1C54F920003F", DescriptionSize = 50, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false )]
+    [Catalog(Description = "Формат загрузки разрешительного документа", GUID = "A8592D01-0B9C-4FED-9BE7-1C54F920003F", DescriptionSize = 50, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false)]
     public class ApprovalsLoadFormat : CatalogTable, ITradeMarkContractorSource
         {
 
@@ -26,80 +26,80 @@ namespace SystemInvoice.Catalogs
 
         private static void fillApprovalsLoadFormatColumNames()
             {
-            ApprovalsLoadFormatColumnNames.Add( "FirstLoadRowIndex", "Номер первой строки" );
-            ApprovalsLoadFormatColumnNames.Add( "Article", "Артикул" );
-            ApprovalsLoadFormatColumnNames.Add( "OriginalName", "Наименование (исходное)" );
-            ApprovalsLoadFormatColumnNames.Add( "CustomsCodeExtern", "Таможенный код внутренний" );
-            ApprovalsLoadFormatColumnNames.Add( "CustomsCodeIntern", "Таможенный код внешний" );
-            ApprovalsLoadFormatColumnNames.Add( "DeclarationName", "Наименование декларации" );
-            ApprovalsLoadFormatColumnNames.Add( "Manufacturer", "Производитель" );
+            ApprovalsLoadFormatColumnNames.Add("FirstLoadRowIndex", "Номер первой строки");
+            ApprovalsLoadFormatColumnNames.Add("Article", "Артикул");
+            ApprovalsLoadFormatColumnNames.Add("OriginalName", "Наименование (исходное)");
+            ApprovalsLoadFormatColumnNames.Add("CustomsCodeExtern", "Таможенный код внутренний");
+            ApprovalsLoadFormatColumnNames.Add("CustomsCodeIntern", "Таможенный код внешний");
+            ApprovalsLoadFormatColumnNames.Add("DeclarationName", "Наименование декларации");
+            ApprovalsLoadFormatColumnNames.Add("Manufacturer", "Производитель");
             foreach (KeyValuePair<string, string> pair in ApprovalsLoadFormatColumnNames)
                 {
-                ApprovalsLoadFormatTranslated.Add( pair.Value, pair.Key );
+                ApprovalsLoadFormatTranslated.Add(pair.Value, pair.Key);
                 }
             }
 
         public ApprovalsLoadFormat()
             {
-            syncronizer = new TradeMarkContractorSyncronizer( this );
+            syncronizer = new TradeMarkContractorSyncronizer(this);
             }
 
         #region (Contractor) Contractor Контрагент
-        [DataField( Description = "Контрагент", NotEmpty = true )]
+        [DataField(Description = "Контрагент", NotEmpty = true)]
         public IContractor Contractor
             {
             get
                 {
-                return (IContractor)GetValueForObjectProperty( "Contractor" );
+                return (IContractor)GetValueForObjectProperty("Contractor");
                 }
             set
                 {
-                SetValueForObjectProperty( "Contractor", value );
+                SetValueForObjectProperty("Contractor", value);
                 }
             }
         #endregion
 
         #region (TradeMark) TradeMark Торговая Марка
-        [DataField( Description = "Торговая Марка", NotEmpty = true )]
+        [DataField(Description = "Торговая Марка", NotEmpty = true)]
         public ITradeMark TradeMark
             {
             get
                 {
-                return (ITradeMark)GetValueForObjectProperty( "TradeMark" );
+                return (ITradeMark)GetValueForObjectProperty("TradeMark");
                 }
             set
                 {
-                SetValueForObjectProperty( "TradeMark", value );
+                SetValueForObjectProperty("TradeMark", value);
                 }
             }
         #endregion
 
         #region Табличная часть ColumnsMappings (Колонки)
-        [Table( Columns = "ColumnName,ColumnNumberInExcel,Constant" )]
-        [DataField( Description = "Колонки" )]
+        [Table(Columns = "ColumnName,ColumnNumberInExcel,Constant")]
+        [DataField(Description = "Колонки")]
         public DataTable ColumnsMappings
             {
             get
                 {
-                return GetSubtable( "ColumnsMappings" );
+                return GetSubtable("ColumnsMappings");
                 }
             }
 
-        [SubTableField( Description = "Название колонки", PropertyType = typeof( ApprovalsLoadColumnNames ), NotEmpty = true, Size = 50 )]
+        [SubTableField(Description = "Название колонки", PropertyType = typeof(ApprovalsLoadColumnNames), NotEmpty = true, Size = 50)]
         public DataColumn ColumnName
             {
             get;
             set;
             }
 
-        [SubTableField( Description = "№ Загружаемой колонки из ЕХЕL", PropertyType = typeof( string ), NotEmpty = false, Size = 50 )]
+        [SubTableField(Description = "№ Загружаемой колонки из ЕХЕL", PropertyType = typeof(string), NotEmpty = false, Size = 50)]
         public DataColumn ColumnNumberInExcel
             {
             get;
             set;
             }
 
-        [SubTableField( Description = "Константа", PropertyType = typeof( string ), Size = 50 )]
+        [SubTableField(Description = "Константа", PropertyType = typeof(string), Size = 50)]
         public DataColumn Constant
             {
             get;
@@ -118,7 +118,7 @@ namespace SystemInvoice.Catalogs
                 columnsMappingRow[ColumnName] = lineNumber;
                 columnsMappingRow[ColumnNumberInExcel] = "";
                 columnsMappingRow[Constant] = "";
-                ColumnsMappings.Rows.Add( columnsMappingRow );
+                ColumnsMappings.Rows.Add(columnsMappingRow);
                 }
             }
 
@@ -138,16 +138,16 @@ namespace SystemInvoice.Catalogs
             {
             HashSet<int> columnOutputNumbers = new HashSet<int>();
             HashSet<ApprovalsLoadColumnNames> existingInvoice = new HashSet<ApprovalsLoadColumnNames>();
-            SortedDictionary<int, string> names = Aramis.Core.FastInput.GetCashedData( typeof( ApprovalsLoadColumnNames ) );
+            SortedDictionary<int, string> names = Aramis.Core.FastInput.GetCashedData(typeof(ApprovalsLoadColumnNames));
             foreach (DataRow row in ColumnsMappings.Rows)
                 {
                 ApprovalsLoadColumnNames name = (ApprovalsLoadColumnNames)row[ColumnName];
-                if (existingInvoice.Contains( name ))
+                if (existingInvoice.Contains(name))
                     {
-                    string.Format( @"Колонка ""{0}"" описана более одного раза.", names[(int)name] ).AlertBox();
+                    string.Format(@"Колонка ""{0}"" описана более одного раза.", names[(int)name]).AlertBox();
                     return false;
                     }
-                existingInvoice.Add( name );
+                existingInvoice.Add(name);
                 }
             string messageFail = "";
             foreach (int key in names.Keys)
@@ -156,16 +156,16 @@ namespace SystemInvoice.Catalogs
                     {
                     continue;
                     }
-                if (!existingInvoice.Contains( (ApprovalsLoadColumnNames)key ))
+                if (!existingInvoice.Contains((ApprovalsLoadColumnNames)key))
                     {
-                    if (string.IsNullOrEmpty( messageFail ))
+                    if (string.IsNullOrEmpty(messageFail))
                         {
-                        messageFail = string.Concat( "Отсутствуют следующие колонки: ", Environment.NewLine );
+                        messageFail = string.Concat("Отсутствуют следующие колонки: ", Environment.NewLine);
                         }
-                    messageFail += string.Concat( names[key], Environment.NewLine );
+                    messageFail += string.Concat(names[key], Environment.NewLine);
                     }
                 }
-            if (!string.IsNullOrEmpty( messageFail ))
+            if (!string.IsNullOrEmpty(messageFail))
                 {
                 messageFail.AlertBox();
                 return false;
@@ -175,27 +175,27 @@ namespace SystemInvoice.Catalogs
 
         public enum ApprovalsLoadColumnNames
             {
-            [DataField( Description = "Не заполнено" )]
+            [DataField(Description = "Не заполнено")]
             Empty,
-            [DataField( Description = "Номер первой строки" )]
+            [DataField(Description = "Номер первой строки")]
             FirstLoadRowIndex,
-            [DataField( Description = "Артикул" )]
+            [DataField(Description = "Артикул")]
             Article,
-            [DataField( Description = "Наименование (исходное)" )]
+            [DataField(Description = "Наименование (исходное)")]
             OriginalName,
-            [DataField( Description = "Таможенный код внутренний" )]
+            [DataField(Description = "Таможенный код внутренний")]
             CustomsCodeIntern,
-            [DataField( Description = "Таможенный код внешний" )]
+            [DataField(Description = "Таможенный код внешний")]
             CustomsCodeExtern,
-            [DataField( Description = "Наименование декларации" )]
+            [DataField(Description = "Наименование декларации")]
             DeclarationName,
-            [DataField( Description = "Производитель" )]
+            [DataField(Description = "Производитель")]
             Manufacturer
             }
 
-        public override GetListFilterDelegate GetFuncGetCustomFilter( string propertyName )
+        public override GetListFilterDelegate GetFuncGetCustomFilter(string propertyName)
             {
-            return syncronizer.GetFuncGetCustomFilter( propertyName );
+            return syncronizer.GetFuncGetCustomFilter(propertyName);
             }
 
         //#region Табличная часть формата загрузки

@@ -178,7 +178,7 @@ left join approvalsInfo on removingHistory.DocumentType = approvalsInfo.Document
             DateTime dateToCheck = row.TrySafeGetColumnValue<DateTime>("dateToCheck", DateTime.MinValue);
             long documentType = row.TrySafeGetColumnValue<long>("DocumentType", 0);
             long nomenclatureId = row.TrySafeGetColumnValue<long>("Nomenclature", 0);
-            NomenclatureRemovingHistoryCacheObject cached = new NomenclatureRemovingHistoryCacheObject(nomenclatureId, documentType,dateToCheck);
+            NomenclatureRemovingHistoryCacheObject cached = new NomenclatureRemovingHistoryCacheObject(nomenclatureId, documentType, dateToCheck);
             return cached;
             }
 
