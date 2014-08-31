@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using Aramis.Core;
 using Aramis.Attributes;
+using Aramis.Core.ReflectionUtils;
 using Aramis.Enums;
 using SystemInvoice.Catalogs;
 using System.Data;
 using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
 using Aramis.Platform;
+using Aramis.SystemConfigurations;
 using Catalogs;
 using AramisCatalogs = Catalogs;
 
@@ -23,7 +25,7 @@ namespace SystemInvoice.Documents
         DateFieldDescription = "Дата создания", ShowResponsibleInList = true, ShowLastModifiedDateInList = true)]
     public class Invoice : DocumentTable, ITradeMarkContractorExcelLoadFormatSource
         {
-        public static Dictionary<string, string> InvoiceColumnNames;
+        public static Dictionary<string, string> InvoiceColumnNames = new Dictionary<string, string>();
         public static Dictionary<string, string> InvoiceColumnNamesTranslated = new Dictionary<string, string>();
 
         static Invoice()
@@ -32,129 +34,18 @@ namespace SystemInvoice.Documents
             }
         private static void fillInvoiceColumnNames()
             {
-            var invoiceColumnNames = new Dictionary<string, string>();
-
-            invoiceColumnNames.Add("SubGroupOfGoods", "Подгруппа товара");
-            invoiceColumnNames.Add("GroupOfGoods", "Группа товара");
-            invoiceColumnNames.Add("GroupCode", "Код подгруппы");
-            invoiceColumnNames.Add("NomenclatureDeclaration", "Товар(Декларация)");
-            invoiceColumnNames.Add("OriginalName", "Наименование (исходное)");
-            invoiceColumnNames.Add("ItemTradeMark", "Торговая марка");
-            invoiceColumnNames.Add("ItemContractor", "Производитель");
-            invoiceColumnNames.Add("BarCode", "Штрих-код");
-            invoiceColumnNames.Add("Count", "Кол-во");
-            invoiceColumnNames.Add("Price", "Цена");
-            invoiceColumnNames.Add("Margin", "Наценка");
-            invoiceColumnNames.Add("PriceWithMargin", "Цена с наценкой");
-            invoiceColumnNames.Add("MarginPrecentage", "% Наценки");
-            invoiceColumnNames.Add("Sum", "Сумма");
-            invoiceColumnNames.Add("UnitWeight", "Вес ед. товара");
-            invoiceColumnNames.Add("CustomsCodeExtern", "Таможенный код внешний");
-            invoiceColumnNames.Add("CustomsCodeIntern", "Таможенный код внутренний");
-            invoiceColumnNames.Add("Article", "Артикул");
-            invoiceColumnNames.Add("NetWeight", "Вес нетто");
-            invoiceColumnNames.Add("ItemGrossWeight", "Вес брутто");
-            invoiceColumnNames.Add("Gender", "Пол");
-            invoiceColumnNames.Add("ItemNumberOfPlaces", "Места");
-            invoiceColumnNames.Add("UnitOfMeasureCode", "Ед.(Код)");
-            invoiceColumnNames.Add("UnitOfMeasure", "Ед. изм.");
-            invoiceColumnNames.Add("Country", "Страна");
-            invoiceColumnNames.Add("Size", "Размер");
-            invoiceColumnNames.Add("InsoleLength", "Длинна стельки");
-            invoiceColumnNames.Add("ContentBottom", "Состав низ");
-            invoiceColumnNames.Add("Content", "Состав");
-            invoiceColumnNames.Add("InvoiceCode", "Код инвойса");
-            invoiceColumnNames.Add("InvoiceNumber", "№ инвойса");
-            invoiceColumnNames.Add("InvoiceDate", "Дата инвойса");
-            invoiceColumnNames.Add("NomenclatureInvoice", "Товар (инвойс)");
-            invoiceColumnNames.Add("Graf31", "Графа 31");
-            invoiceColumnNames.Add("RDCode1", "РД код");
-            invoiceColumnNames.Add("RDNumber1", "РД №");
-            invoiceColumnNames.Add("RDFromDate1", "РД Дата выдачи");
-            invoiceColumnNames.Add("RDToDate1", "РД Годен до");
-            invoiceColumnNames.Add("RDCode2", "РД 2 код");
-            invoiceColumnNames.Add("RDNumber2", "РД 2 №");
-            invoiceColumnNames.Add("RDFromDate2", "РД 2 Дата выдачи");
-            invoiceColumnNames.Add("RDToDate2", "РД 2 Годен до");
-            invoiceColumnNames.Add("RDCode3", "РД 3 код");
-            invoiceColumnNames.Add("RDNumber3", "РД 3 №");
-            invoiceColumnNames.Add("RDFromDate3", "РД 3 Дата выдачи");
-            invoiceColumnNames.Add("RDToDate3", "РД 3 Годен до");
-            invoiceColumnNames.Add("RDCode4", "РД 4 код");
-            invoiceColumnNames.Add("RDNumber4", "РД 4 №");
-            invoiceColumnNames.Add("RDFromDate4", "РД 4 Дата выдачи");
-            invoiceColumnNames.Add("RDToDate4", "РД 4 Годен до");
-            invoiceColumnNames.Add("RDCode5", "РД 5 код");
-            invoiceColumnNames.Add("RDNumber5", "РД 5 №");
-            invoiceColumnNames.Add("RDFromDate5", "РД 5 Дата выдачи");
-            invoiceColumnNames.Add("RDToDate5", "РД 5 Годен до");
-            invoiceColumnNames.Add("Model", "Модель");
-
-            invoiceColumnNames.Add("RD1BaseNumber", "РД 1 основание");
-            invoiceColumnNames.Add("RD2BaseNumber", "РД 2 основание");
-            invoiceColumnNames.Add("RD3BaseNumber", "РД 3 основание");
-            invoiceColumnNames.Add("RD4BaseNumber", "РД 4 основание");
-            invoiceColumnNames.Add("RD5BaseNumber", "РД 5 основание");
-          
-            //Колонки для настройки проверки
-            invoiceColumnNames.Add("ZaraContent1Code", "Код состава (Зара)_1");
-            invoiceColumnNames.Add("ZaraContent1UkrName", "Имя состава укр. (Зара)_1");
-            invoiceColumnNames.Add("ZaraContent1EnName", "Имя состава англ. (Зара)_1");
-            invoiceColumnNames.Add("ZaraContent2Code", "Код состава (Зара)_2");
-            invoiceColumnNames.Add("ZaraContent2UkrName", "Имя состава укр. (Зара)_2");
-            invoiceColumnNames.Add("ZaraContent2EnName", "Имя состава англ. (Зара)_2");
-            invoiceColumnNames.Add("ZaraContent3Code", "Код состава (Зара)_3");
-            invoiceColumnNames.Add("ZaraContent3UkrName", "Имя состава укр. (Зара)_3");
-            invoiceColumnNames.Add("ZaraContent3EnName", "Имя состава англ. (Зара)_3");
-            invoiceColumnNames.Add("ZaraContent4Code", "Код состава (Зара)_4");
-            invoiceColumnNames.Add("ZaraContent4UkrName", "Имя состава укр. (Зара)_4");
-            invoiceColumnNames.Add("ZaraContent4EnName", "Имя состава англ. (Зара)_4");
-            invoiceColumnNames.Add("ZaraContent5Code", "Код состава (Зара)_5");
-            invoiceColumnNames.Add("ZaraContent5UkrName", "Имя состава укр. (Зара)_5");
-            invoiceColumnNames.Add("ZaraContent5EnName", "Имя состава англ. (Зара)_5");
-            invoiceColumnNames.Add("ZaraContent6Code", "Код состава (Зара)_6");
-            invoiceColumnNames.Add("ZaraContent6UkrName", "Имя состава укр. (Зара)_6");
-            invoiceColumnNames.Add("ZaraContent6EnName", "Имя состава англ. (Зара)_6");
-            invoiceColumnNames.Add("ZaraContent7Code", "Код состава (Зара)_7");
-            invoiceColumnNames.Add("ZaraContent7UkrName", "Имя состава укр. (Зара)_7");
-            invoiceColumnNames.Add("ZaraContent7EnName", "Имя состава англ. (Зара)_7");
-            invoiceColumnNames.Add("ZaraContent8Code", "Код состава (Зара)_8");
-            invoiceColumnNames.Add("ZaraContent8UkrName", "Имя состава укр. (Зара)_8");
-            invoiceColumnNames.Add("ZaraContent8EnName", "Имя состава англ. (Зара)_8");
-            invoiceColumnNames.Add("ZaraContent9Code", "Код состава (Зара)_9");
-            invoiceColumnNames.Add("ZaraContent9UkrName", "Имя состава укр. (Зара)_9");
-            invoiceColumnNames.Add("ZaraContent9EnName", "Имя состава англ. (Зара)_9");
-            invoiceColumnNames.Add("ZaraContent10Code", "Код состава (Зара)_10");
-            invoiceColumnNames.Add("ZaraContent10UkrName", "Имя состава укр. (Зара)_10");
-            invoiceColumnNames.Add("ZaraContent10EnName", "Имя состава англ. (Зара)_10");
-            invoiceColumnNames.Add("ZaraContent11Code", "Код состава (Зара)_11");
-            invoiceColumnNames.Add("ZaraContent11UkrName", "Имя состава укр. (Зара)_11");
-            invoiceColumnNames.Add("ZaraContent11EnName", "Имя состава англ. (Зара)_11");
-            invoiceColumnNames.Add("ZaraContent12Code", "Код состава (Зара)_12");
-            invoiceColumnNames.Add("ZaraContent12UkrName", "Имя состава укр. (Зара)_12");
-            invoiceColumnNames.Add("ZaraContent12EnName", "Имя состава англ. (Зара)_12");
-            invoiceColumnNames.Add("ZaraContent13Code", "Код состава (Зара)_13");
-            invoiceColumnNames.Add("ZaraContent13UkrName", "Имя состава укр. (Зара)_13");
-            invoiceColumnNames.Add("ZaraContent13EnName", "Имя состава англ. (Зара)_13");
-            invoiceColumnNames.Add("ZaraContent14Code", "Код состава (Зара)_14");
-            invoiceColumnNames.Add("ZaraContent14UkrName", "Имя состава укр. (Зара)_14");
-            invoiceColumnNames.Add("ZaraContent14EnName", "Имя состава англ. (Зара)_14");
-            invoiceColumnNames.Add("ZaraContent15Code", "Код состава (Зара)_15");
-            invoiceColumnNames.Add("ZaraContent15UkrName", "Имя состава укр. (Зара)_15");
-            invoiceColumnNames.Add("ZaraContent15EnName", "Имя состава англ. (Зара)_15");
-
-            invoiceColumnNames.Add("MSKnitWovenColumnName", "Состав KnitWoven .(Marks & Spenser)");
-            invoiceColumnNames.Add("BNSInvoicePart", "BNS Номер поставки");
-            invoiceColumnNames.Add("Graf31FilterColumn", "ФильтрГрафы31");
-            invoiceColumnNames.Add("SizeOriginal", "Размер исходный");
-
-
-            foreach (KeyValuePair<string, string> pair in invoiceColumnNames)
+            var itemDescription = EnumReflector.ReflectEnumDescriptions(typeof(Documents.InvoiceColumnNames));
+            foreach (var enumInfo in itemDescription)
+                {
+                InvoiceColumnNames.Add(enumInfo.ItemName, enumInfo.ItemDescription);
+                }
+            InvoiceColumnNames.Remove(Documents.InvoiceColumnNames.Empty.ToString());
+            InvoiceColumnNames.Add("Graf31FilterColumn", "ФильтрГрафы31");
+            
+            foreach (KeyValuePair<string, string> pair in InvoiceColumnNames)
                 {
                 InvoiceColumnNamesTranslated.Add(pair.Value, pair.Key);
                 }
-
-            InvoiceColumnNames = invoiceColumnNames;
             }
 
         private TradeMarkContractorExcelLoadingFormatSyncronizer syncronizer = null;
