@@ -24,6 +24,7 @@ namespace SystemInvoice.Documents
         DateFieldDescription = "Дата создания", ShowCreationDate = false, ShowLastModifiedDate = false)]
     public class Approvals : DocumentTable, ITradeMarkContractorApprovalsLoadFormatSource
         {
+        public const int NUMBER_MAX_LENGTH = 30;
         private Color errorColor = Color.White;
         private const string DATE_TO_COLUMN_NAME = "DateTo";
         private HashSet<long> whenLoadDocumentNomenclatures = new HashSet<long>();
@@ -70,7 +71,7 @@ namespace SystemInvoice.Documents
         #endregion
 
         #region (string) DocumentNumber Номер документа
-        [DataField(Description = "Номер документа", NotEmpty = true, Size = 30, ShowInList = true)]
+        [DataField(Description = "Номер документа", NotEmpty = true, Size = NUMBER_MAX_LENGTH, ShowInList = true)]
         public string DocumentNumber
             {
             get
@@ -179,6 +180,20 @@ namespace SystemInvoice.Documents
                 }
             }
         #endregion
+
+        [DataField(Description = "Основание")]
+        public Approvals BaseApproval
+            {
+            get
+                {
+                return (Approvals)GetValueForObjectProperty("BaseApproval");
+                }
+            set
+                {
+                SetValueForObjectProperty("BaseApproval", value);
+                }
+            }
+
 
         #endregion
 

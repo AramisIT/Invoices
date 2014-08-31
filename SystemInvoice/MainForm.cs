@@ -318,5 +318,10 @@ namespace SystemInvoice
             SystemAramis.SystemStop(true);
             }
 
+        private void barButtonItem46_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            PlatformMethods.UpdateDB(false);
+            }
+
         }
     }

@@ -15,6 +15,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
         {
         public long ApprovalsId { get; private set; }
         public long NomenclatureId { get; private set; }
+        public string DocumentBaseNumber { get; set; }
         public string DocumentNumber { get; private set; }
         public string DocumentTypeName { get; private set; }
         public string DocumentCodeName { get; private set; }
@@ -27,8 +28,9 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
         public DateTime DateTo { get; private set; }
         public DateTime SearchedDate { get; private set; }
 
-        public ApprovalsCacheObject(string DocumentNumber, string DocumentTypeName, string DocumentCodeName, string ContractorName, string TradeMarkName, long DocumentTypeId, long ContractorId, long TradeMarkId, DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long approvalsId, long nomenclatureId)
+        public ApprovalsCacheObject(string DocumentNumber, string DocumentTypeName, string DocumentCodeName, string ContractorName, string TradeMarkName, long DocumentTypeId, long ContractorId, long TradeMarkId, DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long approvalsId, long nomenclatureId, string documentBaseNumber)
             {
+            this.DocumentBaseNumber = documentBaseNumber;
             this.DocumentNumber = DocumentNumber;
             this.DocumentTypeName = DocumentTypeName;
             this.DocumentCodeName = DocumentCodeName;
@@ -45,7 +47,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
             }
 
         public ApprovalsCacheObject(string DocumentNumber, string documetCodeName, long DocumentTypeId, long ContractorId, long TradeMarkId, DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long nomenclatureId)
-            : this(DocumentNumber, string.Empty, documetCodeName, string.Empty, string.Empty, DocumentTypeId, ContractorId, TradeMarkId, DateFrom, DateTo, searchedDate, 0, nomenclatureId)
+            : this(DocumentNumber, string.Empty, documetCodeName, string.Empty, string.Empty, DocumentTypeId, ContractorId, TradeMarkId, DateFrom, DateTo, searchedDate, 0, nomenclatureId, string.Empty)
             {
             }
 

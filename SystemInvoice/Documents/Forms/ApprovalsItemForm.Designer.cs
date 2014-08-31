@@ -63,6 +63,8 @@
             this.DocumentNumber = new DevExpress.XtraEditors.TextEdit();
             this.ApprovalsLoadFormat = new Aramis.AramisSearchLookUpEdit();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
+            this.BaseApproval = new Aramis.AramisSearchLookUpEdit();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DocumentType.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TradeMark.Properties)).BeginInit();
@@ -78,6 +80,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.excelOpenPath.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DocumentNumber.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ApprovalsLoadFormat.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BaseApproval.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -143,8 +146,6 @@
             // 
             // DocumentType
             // 
-            this.DocumentType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.DocumentType.BaseFilter = null;
             this.DocumentType.Location = new System.Drawing.Point(112, 96);
             this.DocumentType.MenuManager = this.ribbon;
@@ -157,6 +158,7 @@
             this.DocumentType.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.DocumentType.Properties.EditFormat.FormatString = "d";
             this.DocumentType.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.DocumentType.Properties.FirstPopUp = null;
             this.DocumentType.Properties.NullText = "";
             this.DocumentType.Size = new System.Drawing.Size(329, 20);
             this.DocumentType.TabIndex = 177;
@@ -165,14 +167,12 @@
             // 
             this.labelControl5.Location = new System.Drawing.Point(6, 99);
             this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(76, 13);
+            this.labelControl5.Size = new System.Drawing.Size(75, 13);
             this.labelControl5.TabIndex = 176;
             this.labelControl5.Text = "Тип документа";
             // 
             // TradeMark
             // 
-            this.TradeMark.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.TradeMark.BaseFilter = null;
             this.TradeMark.Location = new System.Drawing.Point(112, 226);
             this.TradeMark.MenuManager = this.ribbon;
@@ -185,6 +185,7 @@
             this.TradeMark.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.TradeMark.Properties.EditFormat.FormatString = "d";
             this.TradeMark.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.TradeMark.Properties.FirstPopUp = null;
             this.TradeMark.Properties.NullText = "";
             this.TradeMark.Size = new System.Drawing.Size(329, 20);
             this.TradeMark.TabIndex = 175;
@@ -199,8 +200,6 @@
             // 
             // DocumentCode
             // 
-            this.DocumentCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.DocumentCode.Location = new System.Drawing.Point(112, 122);
             this.DocumentCode.Name = "DocumentCode";
             this.DocumentCode.Size = new System.Drawing.Size(127, 20);
@@ -218,7 +217,7 @@
             // 
             this.labelControl13.Location = new System.Drawing.Point(7, 151);
             this.labelControl13.Name = "labelControl13";
-            this.labelControl13.Size = new System.Drawing.Size(89, 13);
+            this.labelControl13.Size = new System.Drawing.Size(88, 13);
             this.labelControl13.TabIndex = 188;
             this.labelControl13.Text = "Номер документа";
             // 
@@ -277,14 +276,12 @@
             // 
             this.labelControl1.Location = new System.Drawing.Point(6, 280);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(231, 13);
+            this.labelControl1.Size = new System.Drawing.Size(229, 13);
             this.labelControl1.TabIndex = 195;
             this.labelControl1.Text = "Партия товара на которую выдан документ:";
             // 
             // Contractor
             // 
-            this.Contractor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Contractor.BaseFilter = null;
             this.Contractor.Location = new System.Drawing.Point(112, 200);
             this.Contractor.MenuManager = this.ribbon;
@@ -297,6 +294,7 @@
             this.Contractor.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Contractor.Properties.EditFormat.FormatString = "d";
             this.Contractor.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Contractor.Properties.FirstPopUp = null;
             this.Contractor.Properties.NullText = "";
             this.Contractor.Size = new System.Drawing.Size(329, 20);
             this.Contractor.TabIndex = 197;
@@ -326,7 +324,7 @@
             this.labelControl6.Appearance.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelControl6.Location = new System.Drawing.Point(6, 177);
             this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(94, 14);
+            this.labelControl6.Size = new System.Drawing.Size(92, 14);
             this.labelControl6.TabIndex = 198;
             this.labelControl6.Text = "Срок действия с";
             // 
@@ -355,7 +353,7 @@
             // 
             this.labelControl7.Location = new System.Drawing.Point(7, 257);
             this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(99, 13);
+            this.labelControl7.Size = new System.Drawing.Size(98, 13);
             this.labelControl7.TabIndex = 202;
             this.labelControl7.Text = "Загрузить из EXCEL";
             // 
@@ -396,8 +394,6 @@
             // 
             // DocumentNumber
             // 
-            this.DocumentNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.DocumentNumber.Location = new System.Drawing.Point(112, 148);
             this.DocumentNumber.Name = "DocumentNumber";
             this.DocumentNumber.Size = new System.Drawing.Size(329, 20);
@@ -405,8 +401,6 @@
             // 
             // ApprovalsLoadFormat
             // 
-            this.ApprovalsLoadFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.ApprovalsLoadFormat.BaseFilter = null;
             this.ApprovalsLoadFormat.Location = new System.Drawing.Point(112, 70);
             this.ApprovalsLoadFormat.MenuManager = this.ribbon;
@@ -419,6 +413,7 @@
             this.ApprovalsLoadFormat.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.ApprovalsLoadFormat.Properties.EditFormat.FormatString = "d";
             this.ApprovalsLoadFormat.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.ApprovalsLoadFormat.Properties.FirstPopUp = null;
             this.ApprovalsLoadFormat.Properties.NullText = "";
             this.ApprovalsLoadFormat.Size = new System.Drawing.Size(329, 20);
             this.ApprovalsLoadFormat.TabIndex = 212;
@@ -427,15 +422,44 @@
             // 
             this.labelControl8.Location = new System.Drawing.Point(6, 73);
             this.labelControl8.Name = "labelControl8";
-            this.labelControl8.Size = new System.Drawing.Size(86, 13);
+            this.labelControl8.Size = new System.Drawing.Size(85, 13);
             this.labelControl8.TabIndex = 211;
             this.labelControl8.Text = "Формат загрузки";
+            // 
+            // BaseApproval
+            // 
+            this.BaseApproval.BaseFilter = null;
+            this.BaseApproval.Location = new System.Drawing.Point(513, 70);
+            this.BaseApproval.MenuManager = this.ribbon;
+            this.BaseApproval.Name = "BaseApproval";
+            this.BaseApproval.Properties.BaseFilter = null;
+            this.BaseApproval.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.BaseApproval.Properties.CloseUpKey = new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None);
+            this.BaseApproval.Properties.DisplayFormat.FormatString = "d";
+            this.BaseApproval.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.BaseApproval.Properties.EditFormat.FormatString = "d";
+            this.BaseApproval.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.BaseApproval.Properties.FirstPopUp = null;
+            this.BaseApproval.Properties.NullText = "";
+            this.BaseApproval.Size = new System.Drawing.Size(196, 20);
+            this.BaseApproval.TabIndex = 217;
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(452, 73);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(55, 13);
+            this.labelControl9.TabIndex = 216;
+            this.labelControl9.Text = "Основание";
             // 
             // ApprovalsItemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(721, 591);
+            this.Controls.Add(this.BaseApproval);
+            this.Controls.Add(this.labelControl9);
             this.Controls.Add(this.ApprovalsLoadFormat);
             this.Controls.Add(this.labelControl8);
             this.Controls.Add(this.DocumentNumber);
@@ -481,6 +505,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.excelOpenPath.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DocumentNumber.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ApprovalsLoadFormat.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BaseApproval.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -522,5 +547,7 @@
         private DevExpress.XtraEditors.TextEdit DocumentNumber;
         private Aramis.AramisSearchLookUpEdit ApprovalsLoadFormat;
         private DevExpress.XtraEditors.LabelControl labelControl8;
+        private Aramis.AramisSearchLookUpEdit BaseApproval;
+        private DevExpress.XtraEditors.LabelControl labelControl9;
         }
     }

@@ -145,6 +145,7 @@
             this.barButtonItem40 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem41 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem46 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).BeginInit();
@@ -215,9 +216,10 @@
             this.openMaterialsTypesMappings,
             this.starterFilesUpload,
             this.barButtonItem44,
-            this.barButtonItem45});
+            this.barButtonItem45,
+            this.barButtonItem46});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 80;
+            this.ribbon.MaxItemId = 81;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -672,6 +674,7 @@
             this.ribbonPageGroup2.ItemLinks.Add(this.updateSolutionBtn);
             this.ribbonPageGroup2.ItemLinks.Add(this.updateDBBtn);
             this.ribbonPageGroup2.ItemLinks.Add(this.starterFilesUpload);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem46);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "Обновление";
             // 
@@ -1007,6 +1010,13 @@
             this.barButtonItem42.Id = 19;
             this.barButtonItem42.Name = "barButtonItem42";
             // 
+            // barButtonItem46
+            // 
+            this.barButtonItem46.Caption = "Быстрое обновление";
+            this.barButtonItem46.Id = 80;
+            this.barButtonItem46.Name = "barButtonItem46";
+            this.barButtonItem46.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem46_ItemClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1146,5 +1156,6 @@
         private DevExpress.XtraBars.Ribbon.ApplicationMenu applicationMenu2;
         private DevExpress.XtraBars.BarButtonItem barButtonItem44;
         private DevExpress.XtraBars.BarButtonItem barButtonItem45;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem46;
         }
     }

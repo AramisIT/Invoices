@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SystemInvoice.DataProcessing.Cache;
 using System.Data;
 using SystemInvoice.DataProcessing.Cache.ApprovalsCache;
+using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.RDChecking;
 using SystemInvoice.Documents;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification
@@ -18,6 +19,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
         private List<string> RDDocTypeCodeColumnNames = new List<string>();
         private List<string> RDDateFromColumnNames = new List<string>();
         private List<string> RDDateToColumnNames = new List<string>();
+        private List<string> RDBaseNumberToColumnNames = new List<string>();
         private List<string> RDDocNumberColumnNames = new List<string>();
         private SystemInvoiceDBCache dbCache = null;
 
@@ -30,29 +32,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
 
         private void initColumnNames()
             {
-            RDDocTypeCodeColumnNames.Clear();
-            RDDateFromColumnNames.Clear();
-            RDDateToColumnNames.Clear();
-            RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode1.ToString());
-            RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode2.ToString());
-            RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode3.ToString());
-            RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode4.ToString());
-            RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode5.ToString());
-            RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate1.ToString());
-            RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate2.ToString());
-            RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate3.ToString());
-            RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate4.ToString());
-            RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate5.ToString());
-            RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate1.ToString());
-            RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate2.ToString());
-            RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate3.ToString());
-            RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate4.ToString());
-            RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate5.ToString());
-            RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber1.ToString());
-            RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber2.ToString());
-            RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber3.ToString());
-            RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber4.ToString());
-            RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber5.ToString());
+            RDChecker.InitColumnsNames(RDDocTypeCodeColumnNames, RDDateFromColumnNames, RDDateToColumnNames, RDDocNumberColumnNames, RDBaseNumberToColumnNames);
             }
 
         public void FindApprovals(DataTable tableToProcess)
@@ -146,6 +126,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     dataRow[currentDateToColumnName] = foundedApproval.DateTo == DateTime.MinValue ? "" : foundedApproval.DateTo.ToString("yyyy.MM.dd");
                     dataRow[currentDocNumberColumnName] = foundedApproval.DocumentNumber;
                     dataRow[foundedApprovalColumnName] = foundedApproval.ApprovalsId;
+                    dataRow[RDBaseNumberToColumnNames[i]] = foundedApproval.DocumentBaseNumber;
                     }
                 for (; i < ProcessingConsts.CHECKING_APPROVALS_COUNT; i++)
                     {

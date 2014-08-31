@@ -88,6 +88,14 @@ namespace SystemInvoice.Documents
             invoiceColumnNames.Add("RDNumber5", "РД 5 №");
             invoiceColumnNames.Add("RDFromDate5", "РД 5 Дата выдачи");
             invoiceColumnNames.Add("RDToDate5", "РД 5 Годен до");
+            invoiceColumnNames.Add("Model", "Модель");
+
+            invoiceColumnNames.Add("RD1BaseNumber", "РД 1 основание");
+            invoiceColumnNames.Add("RD2BaseNumber", "РД 2 основание");
+            invoiceColumnNames.Add("RD3BaseNumber", "РД 3 основание");
+            invoiceColumnNames.Add("RD4BaseNumber", "РД 4 основание");
+            invoiceColumnNames.Add("RD5BaseNumber", "РД 5 основание");
+          
             //Колонки для настройки проверки
             invoiceColumnNames.Add("ZaraContent1Code", "Код состава (Зара)_1");
             invoiceColumnNames.Add("ZaraContent1UkrName", "Имя состава укр. (Зара)_1");
@@ -500,7 +508,7 @@ namespace SystemInvoice.Documents
             "ZaraContent7Code,ZaraContent7UkrName,ZaraContent7EnName,ZaraContent8Code,ZaraContent8UkrName,ZaraContent8EnName,ZaraContent9Code,ZaraContent9UkrName,ZaraContent9EnName," +
             "ZaraContent10Code,ZaraContent10UkrName,ZaraContent10EnName,ZaraContent11Code,ZaraContent11UkrName,ZaraContent11EnName,ZaraContent12Code,ZaraContent12UkrName,ZaraContent12EnName," +
             "ZaraContent13Code,ZaraContent13UkrName,ZaraContent13EnName,ZaraContent14Code,ZaraContent14UkrName,ZaraContent14EnName,ZaraContent15Code,ZaraContent15UkrName,ZaraContent15EnName," +
-            "MSKnitWovenColumnName, ShowRow,BNSInvoicePart,Graf31FilterColumn,TempFilterColumn", AllowFiltering = true, AllowPopUpMenu = false, AllowCopyRow = false, ConfirmRowDeletion = true)]
+            "MSKnitWovenColumnName, ShowRow,BNSInvoicePart,Graf31FilterColumn,TempFilterColumn,Model,RD1BaseNumber,RD2BaseNumber,RD3BaseNumber,RD4BaseNumber,RD5BaseNumber", AllowFiltering = true, AllowPopUpMenu = false, AllowCopyRow = false, ConfirmRowDeletion = true)]
         [DataField(Description = "Товары")]
         public DataTable Goods
             {
@@ -948,6 +956,49 @@ namespace SystemInvoice.Documents
             get;
             set;
             }
+
+        [SubTableField(Description = "Модель", PropertyType = typeof(string), Size = Nomenclature.MODEL_SIZE)]
+        public DataColumn Model
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 1 основание", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn RD1BaseNumber
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 2 основание", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn RD2BaseNumber
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 3 основание", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn RD3BaseNumber
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 4 основание", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn RD4BaseNumber
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 5 основание", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn RD5BaseNumber
+            {
+            get;
+            set;
+            }
+
         #endregion
 
 

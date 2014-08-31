@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SystemInvoice.DataProcessing.Cache;
 using System.Data;
 using SystemInvoice.DataProcessing.Cache.ApprovalsCache;
+using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.RDChecking;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification
     {
@@ -19,6 +20,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
         private List<string> RDDateFromColumnNames = new List<string>();
         private List<string> RDDateToColumnNames = new List<string>();
         private List<string> RDDocNumberColumnNames = new List<string>();
+        private List<string> RDBaseNumberToColumnNames = new List<string>();
 
         public ApprovalsFromInvoiceCreator(SystemInvoiceDBCache dbCache)
             {
@@ -29,29 +31,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
 
         private void initColumnNames()
             {
-            RDDocTypeCodeColumnNames.Clear();
-            RDDateFromColumnNames.Clear();
-            RDDateToColumnNames.Clear();
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode1.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode2.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode3.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode4.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode5.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate1.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate2.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate3.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate4.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate5.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate1.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate2.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate3.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate4.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate5.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber1.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber2.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber3.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber4.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber5.ToString());
+            RDChecker.InitColumnsNames(RDDocTypeCodeColumnNames, RDDateFromColumnNames, RDDateToColumnNames, RDDocNumberColumnNames, RDBaseNumberToColumnNames);
             }
 
         public void ModifyApprovalsCatalog(DataTable tableToProcess)
@@ -145,10 +125,12 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 long documentTypeId = this.getDocumentType(dataRow, i);
                 DateTime from = this.getFromDate(dataRow, i);
                 DateTime to = this.getToDate(dataRow, i);
+
                 string codeName = this.getDocumentCodeName(dataRow, i);
                 if ((!string.IsNullOrEmpty(codeName) || !string.IsNullOrEmpty(documentNumber)) && (invoiceDate >= from && (invoiceDate <= to) || to == DateTime.MinValue))
                     {
                     ApprovalsCacheObject approvalsRow = new ApprovalsCacheObject(documentNumber, codeName, documentTypeId, contractorId, tradeMarkId, from, to, invoiceDate, nomenclatureId);
+                    approvalsRow.DocumentBaseNumber = dataRow[RDBaseNumberToColumnNames[i]] as string;
                     approvalsList.Add(approvalsRow);
                     }
                 }

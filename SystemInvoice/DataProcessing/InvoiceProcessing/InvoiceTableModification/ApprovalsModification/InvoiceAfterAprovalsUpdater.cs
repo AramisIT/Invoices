@@ -125,6 +125,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             string rdDateToColumnName = getRDDateToColumnName(index);
             string approvalIdColumnName = getFoundedApprovalColumnName(index);
             row[rdCodeColumnName] = replaceStr;
+            row[getRDBaseNumberFromColumnName(index)] = replaceStr;
             row[rdNumberColumnName] = replaceStr;
             row[rdDateFromColumnName] = replaceStr;
             row[rdDateToColumnName] = replaceStr;
@@ -144,6 +145,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
         private string getRDDateFromColumnName(int i)
             {
             return string.Concat("RDFromDate", i);
+            }
+
+        private string getRDBaseNumberFromColumnName(int i)
+            {
+            return string.Format("RD{0}BaseNumber", i);
             }
 
         private string getRDDateToColumnName(int i)

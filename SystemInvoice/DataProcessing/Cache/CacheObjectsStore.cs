@@ -333,26 +333,16 @@ namespace SystemInvoice.DataProcessing.Cache
 
         private DataTable createCacheTable()
             {
-            if (string.IsNullOrEmpty(SelectQuery))
+            var queryText = SelectQuery;
+
+            if (!string.IsNullOrEmpty(queryText))
                 {
-                return null;
+                Query query = DB.NewQuery(SelectQuery);
+                DataTable table = query.SelectToTable();
+                return table;
                 }
-            Query query = DB.NewQuery(SelectQuery);
-            DataTable table = query.SelectToTable();
-            //DataTable table = new DataTable();
-            //using (SqlConnection connection = new SqlConnection( "Data Source=localhost;Initial Catalog=SystemInvoice;User Id=sa; Password=123;" ))
-            //    {
-            //    connection.Open();
-            //    using (SqlCommand command = new SqlCommand( SelectQuery, connection ))
-            //        {
-            //        using (SqlDataAdapter adapter = new SqlDataAdapter( command ))
-            //            {
-            //            adapter.Fill( table );
-            //            }
-            //        }
-            //    connection.Close();
-            //    }
-            return table;
+
+            return null;
             }
 
         /// <summary>

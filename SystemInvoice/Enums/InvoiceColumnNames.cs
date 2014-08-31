@@ -215,6 +215,20 @@ namespace SystemInvoice.Documents
         [DataField(Description = "% Наценки")]
         MarginPrecentage,
         [DataField(Description = "Размер исходный")]
-        SizeOriginal
+        SizeOriginal,
+
+        [DataField(Description = "Модель")]
+        Model,
+
+        [DataField(Description = "РД 1 основание")]
+        RD1BaseNumber,
+        [DataField(Description = "РД 2 основание")]
+        RD2BaseNumber,
+        [DataField(Description = "РД 3 основание")]
+        RD3BaseNumber,
+        [DataField(Description = "РД 4 основание")]
+        RD4BaseNumber,
+        [DataField(Description = "РД 5 основание")]
+        RD5BaseNumber
         }
     }

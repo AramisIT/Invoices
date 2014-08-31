@@ -43,6 +43,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
         private const string NOMENCLATURE_ID_COLUMN_NAME = "nomenclatureId";
         private const string DOCUMENT_NUMBER_COLUMN_NAME = "documentNumber";
         private const string DATE_FOR_COLUMN_NAME = "dateFor";
+        private const string DOCUMENT_BASE_NUMBER_COLUMN_NAME = "documentBaseNumber";
 
         #endregion
         /// <summary>
@@ -58,8 +59,10 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 string selectColumnsPart = string.Format(@"select appr.Id as {0},dates.dateToCheck as {14},LTRIM(RTRIM(appr.DocumentNumber)) as {13},LTRIM(RTRIM(dt.QualifierCodeName)) as {1},LTRIM(RTRIM(dt.Description)) as {2},
 LTRIM(RTRIM(contr.Description)) as {3},LTRIM(RTRIM(coalesce(tm.Description,'')))  as {4},
 dt.Id as {5},coalesce(tm.Id,0) as {6},contr.Id as {7},appr.DateFrom as {8},appr.DateTo as {9}
-,coalesce(nom.ItemNomenclature,-1) as {10},ROW_NUMBER() over(order by appr.Id,nom.LineNumber) as Id
+,coalesce(nom.ItemNomenclature,-1) as {10},ROW_NUMBER() over(order by appr.Id,nom.LineNumber) as Id,
+isnull(LTRIM(RTRIM(ApprovalsBase.DocumentNumber)), '') as {15}
 from Approvals as appr
+left join Approvals ApprovalsBase on ApprovalsBase.Id = appr.BaseApproval
 join Contractor as contr on contr.Id = appr.Contractor
 left outer join TradeMark as tm on tm.Id = appr.TradeMark
 join DocumentType as dt on dt.Id = appr.DocumentType
@@ -69,7 +72,7 @@ or (CAST(appr.DateTo as Date) = '0001.01.01' and (DATEPART(YEAR,dates.dateToChec
 where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (appr.Contractor = {12} or {12} = 0);", APPROVALS_ID_COLUMN_NAME, DOCUMENT_TYPE_CODE_COLUMN_NAME, DOCUMENT_TYPE_NAME_COLUMN_NAME, CONTRACTOR_NAME_COLUMN_NAME,
                                 TRADEMARK_NAME_COLUMN_NAME, DOCUMENT_TYPE_ID_COLUMN_NAME,
                                 TRADE_MARK_ID_COLUMN_NAME, CONTRACTOR_ID_COLUMN_NAME, DATE_FROM_COLUMN_NAME, DATE_TO_COLUMN_NAME, NOMENCLATURE_ID_COLUMN_NAME,
-                                 currentTradeMark, currentContractor, DOCUMENT_NUMBER_COLUMN_NAME, DATE_FOR_COLUMN_NAME);
+                                 currentTradeMark, currentContractor, DOCUMENT_NUMBER_COLUMN_NAME, DATE_FOR_COLUMN_NAME, DOCUMENT_BASE_NUMBER_COLUMN_NAME);
                 string constructedQuery = string.Concat(joinedPart, selectColumnsPart);
                 return constructedQuery;
                 }
@@ -149,6 +152,7 @@ where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (app
             {
             long approvalsId = row.TrySafeGetColumnValue<long>(APPROVALS_ID_COLUMN_NAME, 0);
             string documentNumber = row.TrySafeGetColumnValue<string>(DOCUMENT_NUMBER_COLUMN_NAME, string.Empty);
+            string documentBaseNumber = row.TrySafeGetColumnValue<string>(DOCUMENT_BASE_NUMBER_COLUMN_NAME, string.Empty);
             string documentTypeName = row.TrySafeGetColumnValue<string>(DOCUMENT_TYPE_NAME_COLUMN_NAME, string.Empty);
             string documentCodeName = row.TrySafeGetColumnValue<string>(DOCUMENT_TYPE_CODE_COLUMN_NAME, string.Empty);
             string contractorName = row.TrySafeGetColumnValue<string>(CONTRACTOR_NAME_COLUMN_NAME, string.Empty);
@@ -160,9 +164,10 @@ where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (app
             DateTime dateTo = row.TrySafeGetColumnValue<DateTime>(DATE_TO_COLUMN_NAME, errorReadDateTimeTo);
             DateTime searchedDate = row.TrySafeGetColumnValue<DateTime>(DATE_FOR_COLUMN_NAME, DateTime.MinValue);
             long nomenclatureId = row.TrySafeGetColumnValue<long>(NOMENCLATURE_ID_COLUMN_NAME, -1);
-            ApprovalsCacheObject createdObject =
-                new ApprovalsCacheObject(documentNumber, documentTypeName, documentCodeName, contractorName, trademarkName, doctypeID, contractorID, tradeMarkID,
-                    dateFrom, dateTo, searchedDate, approvalsId, nomenclatureId);
+
+            var createdObject = new ApprovalsCacheObject(documentNumber, documentTypeName, documentCodeName, contractorName, trademarkName, doctypeID, contractorID, tradeMarkID,
+                    dateFrom, dateTo, searchedDate, approvalsId, nomenclatureId, documentBaseNumber);
+
             return createdObject;
             }
 
@@ -186,23 +191,23 @@ where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (app
         public bool ContainsApprovals(ApprovalsCacheObject approvalsSearchObject)
             {
             return ContainsApprovals(approvalsSearchObject.DocumentNumber, approvalsSearchObject.DocumentTypeId, approvalsSearchObject.TradeMarkId,
-                approvalsSearchObject.ContractorId, approvalsSearchObject.DateFrom, approvalsSearchObject.DateTo, approvalsSearchObject.NomenclatureId);
+                approvalsSearchObject.ContractorId, approvalsSearchObject.DateFrom, approvalsSearchObject.DateTo, approvalsSearchObject.NomenclatureId, approvalsSearchObject.DocumentBaseNumber);
             }
 
         /// <summary>
         /// Проверяет существует ли строка табличной части РД (поиск осуществляется для шапки и номенклатуры в табличной части)
         /// </summary>
         /// <returns>Присутствует ли номенклатура в РД</returns>
-        public bool ContainsApprovals(string documentNumber, long docType, long tradeMark, long contractor, DateTime from, DateTime to, long nomenclatureId)
+        public bool ContainsApprovals(string documentNumber, long docType, long tradeMark, long contractor, DateTime from, DateTime to, long nomenclatureId, string baseDocumentNumber)
             {
             long founded = 0;
             ApprovalsCacheObject withTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty,
-                docType, contractor, tradeMark, from, to, DateTime.MinValue, 0, nomenclatureId);
+                docType, contractor, tradeMark, from, to, DateTime.MinValue, 0, nomenclatureId, baseDocumentNumber);
             if ((founded = GetCachedObjectId(withTmSearchObject)) != 0)
                 {
                 return true;
                 }
-            ApprovalsCacheObject withoutTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty, docType, contractor, 0, from, to, DateTime.MinValue, 0, nomenclatureId);
+            ApprovalsCacheObject withoutTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty, docType, contractor, 0, from, to, DateTime.MinValue, 0, nomenclatureId, baseDocumentNumber);
 
             return GetCachedObjectId(withoutTmSearchObject) > 0;
             }
@@ -215,23 +220,23 @@ where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (app
         public long GetApprovalsFakeId(ApprovalsCacheObject approvalsSearchObject)
             {
             return GetApprovalsFakeId(approvalsSearchObject.DocumentNumber, approvalsSearchObject.DocumentTypeId, approvalsSearchObject.TradeMarkId,
-                approvalsSearchObject.ContractorId, approvalsSearchObject.DateFrom, approvalsSearchObject.DateTo);
+                approvalsSearchObject.ContractorId, approvalsSearchObject.DateFrom, approvalsSearchObject.DateTo, approvalsSearchObject.DocumentBaseNumber);
             }
 
         /// <summary>
         /// Возвращает кешированный "ID" для РД, поиск которого осуществляется данными из шапки РД
         /// </summary>
         /// <returns>Псевдо Id см. описание SelectQuery</returns>
-        public long GetApprovalsFakeId(string documentNumber, long docType, long tradeMark, long contractor, DateTime from, DateTime to)
+        public long GetApprovalsFakeId(string documentNumber, long docType, long tradeMark, long contractor, DateTime from, DateTime to, string baseDocumentNumber)
             {
             long founded = 0;
             ApprovalsCacheObject withTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty,
-                docType, contractor, tradeMark, from, to, DateTime.MinValue, 0, 0);
+                docType, contractor, tradeMark, from, to, DateTime.MinValue, 0, 0, baseDocumentNumber);
             if ((founded = GetCachedObjectId(this.searchForUpdateApprovalsIndex, withTmSearchObject)) != 0)
                 {
                 return founded;
                 }
-            ApprovalsCacheObject withoutTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty, docType, contractor, 0, from, to, DateTime.MinValue, 0, 0);
+            ApprovalsCacheObject withoutTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty, docType, contractor, 0, from, to, DateTime.MinValue, 0, 0, baseDocumentNumber);
             return GetCachedObjectId(this.searchForUpdateApprovalsIndex, withoutTmSearchObject);
             }
 

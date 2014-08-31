@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SystemInvoice.DataProcessing.Cache;
 using System.Data;
+using SystemInvoice.Documents;
 using SystemInvoice.Excel;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.RDChecking
@@ -23,32 +24,49 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.
         private List<string> RDDateFromColumnNames = new List<string>();
         private List<string> RDDateToColumnNames = new List<string>();
         private List<string> RDDocNumberColumnNames = new List<string>();
+        private List<string> RDBaseNumberToColumnNames = new List<string>();
 
+        public static void InitColumnsNames(List<string> _RDDocTypeCodeColumnNames, List<string> _RDDateFromColumnNames,
+            List<string> _RDDateToColumnNames, List<string> _RDDocNumberColumnNames, List<string> _RDBaseNumberToColumnNames)
+            {
+            _RDDocTypeCodeColumnNames.Clear();
+            _RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode1.ToString());
+            _RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode2.ToString());
+            _RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode3.ToString());
+            _RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode4.ToString());
+            _RDDocTypeCodeColumnNames.Add(InvoiceColumnNames.RDCode5.ToString());
+
+            _RDDateFromColumnNames.Clear();
+            _RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate1.ToString());
+            _RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate2.ToString());
+            _RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate3.ToString());
+            _RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate4.ToString());
+            _RDDateFromColumnNames.Add(InvoiceColumnNames.RDFromDate5.ToString());
+
+            _RDDateToColumnNames.Clear();
+            _RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate1.ToString());
+            _RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate2.ToString());
+            _RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate3.ToString());
+            _RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate4.ToString());
+            _RDDateToColumnNames.Add(InvoiceColumnNames.RDToDate5.ToString());
+
+            _RDDocNumberColumnNames.Clear();
+            _RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber1.ToString());
+            _RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber2.ToString());
+            _RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber3.ToString());
+            _RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber4.ToString());
+            _RDDocNumberColumnNames.Add(InvoiceColumnNames.RDNumber5.ToString());
+
+            _RDBaseNumberToColumnNames.Clear();
+            _RDBaseNumberToColumnNames.Add(InvoiceColumnNames.RD1BaseNumber.ToString());
+            _RDBaseNumberToColumnNames.Add(InvoiceColumnNames.RD2BaseNumber.ToString());
+            _RDBaseNumberToColumnNames.Add(InvoiceColumnNames.RD3BaseNumber.ToString());
+            _RDBaseNumberToColumnNames.Add(InvoiceColumnNames.RD4BaseNumber.ToString());
+            _RDBaseNumberToColumnNames.Add(InvoiceColumnNames.RD5BaseNumber.ToString());
+            }
         private void initColumnNames()
             {
-            RDDocTypeCodeColumnNames.Clear();
-            RDDateFromColumnNames.Clear();
-            RDDateToColumnNames.Clear();
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode1.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode2.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode3.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode4.ToString());
-            RDDocTypeCodeColumnNames.Add(Documents.InvoiceColumnNames.RDCode5.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate1.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate2.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate3.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate4.ToString());
-            RDDateFromColumnNames.Add(Documents.InvoiceColumnNames.RDFromDate5.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate1.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate2.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate3.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate4.ToString());
-            RDDateToColumnNames.Add(Documents.InvoiceColumnNames.RDToDate5.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber1.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber2.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber3.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber4.ToString());
-            RDDocNumberColumnNames.Add(Documents.InvoiceColumnNames.RDNumber5.ToString());
+            RDChecker.InitColumnsNames(RDDocTypeCodeColumnNames, RDDateFromColumnNames, RDDateToColumnNames, RDDocNumberColumnNames, RDBaseNumberToColumnNames);
             }
 
         public RDChecker(SystemInvoiceDBCache dbCache)
@@ -84,6 +102,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.
         private void addErrorToApprovalsColumns(RDCheckError currentError, int approvalErrorsIndex)
             {
             this.AddError(RDDateFromColumnNames[approvalErrorsIndex], currentError);
+            this.AddError(RDBaseNumberToColumnNames[approvalErrorsIndex], currentError);
             this.AddError(RDDateToColumnNames[approvalErrorsIndex], currentError);
             this.AddError(RDDocNumberColumnNames[approvalErrorsIndex], currentError);
             this.AddError(RDDocTypeCodeColumnNames[approvalErrorsIndex], currentError);
