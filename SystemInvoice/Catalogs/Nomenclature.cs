@@ -126,7 +126,7 @@ namespace SystemInvoice.Catalogs
                 }
             }
         private string z_Model = "";
-       
+
 
         #region (Contractor) Contractor Производитель
         [DataField(Description = "Контрагент", UseForFastInput = UseFieldForFastInput.LoadButNotDisplay, ShowInList = true, NotEmpty = true)]
@@ -221,7 +221,7 @@ namespace SystemInvoice.Catalogs
                 NotifyPropertyChanged("GroupOfGoods");
                 }
             }
-        private string z_GroupOfGoods;
+        private string z_GroupOfGoods = "";
         #endregion
 
         #region (UnitOfMeasure) UnitOfMeasure Единица измерения

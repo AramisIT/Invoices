@@ -8,7 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SystemInvoice.Catalogs.Forms;
 using SystemInvoice.DataProcessing.CatalogsProcessing;
+using SystemInvoice.SystemObjects;
 using Aramis.CommonForms;
 using Aramis.Core;
 using Aramis.DatabaseConnector;
@@ -321,6 +323,14 @@ namespace SystemInvoice
         private void barButtonItem46_ItemClick(object sender, ItemClickEventArgs e)
             {
             PlatformMethods.UpdateDB(false);
+            }
+
+        private void barButtonItem47_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            var loadingEurolux = A.New<ILoadingEurolux>();
+            
+            var view = new LoadingEuroluxForm() { Item = loadingEurolux };
+            UserInterface.Current.ShowSystemObject(loadingEurolux, view);
             }
 
         }
