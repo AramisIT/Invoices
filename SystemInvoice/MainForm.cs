@@ -327,10 +327,27 @@ namespace SystemInvoice
 
         private void barButtonItem47_ItemClick(object sender, ItemClickEventArgs e)
             {
+            loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase);
+            }
+
+        private static void loadElectrolux(ElectroluxLoadingTypes loadingType)
+            {
             var loadingEurolux = A.New<ILoadingEurolux>();
-            
+            loadingEurolux.LoadingType = loadingType;
+
+
             var view = new LoadingEuroluxForm() { Item = loadingEurolux };
             UserInterface.Current.ShowSystemObject(loadingEurolux, view);
+            }
+
+        private void barButtonItem48_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            loadElectrolux(ElectroluxLoadingTypes.Approvals);
+            }
+
+        private void barButtonItem49_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            loadElectrolux(ElectroluxLoadingTypes.Nomenclature);
             }
 
         }

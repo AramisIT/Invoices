@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification;
 using SystemInvoice.Excel;
 using Aramis.Attributes;
@@ -13,7 +17,9 @@ using System;
 using SystemInvoice.Catalogs;
 using SystemInvoice.Documents;
 using Aramis.SystemConfigurations;
+using Aramis.UI.WinFormsDevXpress;
 using AramisWpfComponents.Excel;
+using Excel;
 using NPOI.HSSF.Record.Formula.Functions;
 using NPOI.SS.UserModel;
 using TableViewInterfaces;
@@ -22,12 +28,31 @@ using Row = AramisWpfComponents.Excel.Row;
 
 namespace SystemInvoice.SystemObjects
     {
+    public enum ElectroluxLoadingTypes
+        {
+        [DataField(Description = "Новые модели")]
+        Nomenclature,
+
+        [DataField(Description = "Разрешительные документы")]
+        Approvals,
+
+        [DataField(Description = "База моделей и разрешительных документов")]
+        NomenclatureDatabase
+        }
+
     public interface ILoadingEurolux : IAramisModel
         {
+        ElectroluxLoadingTypes LoadingType { get; set; }
+
         [DataField(Description = "Контрагент", ReadOnly = true)]
         IContractor Contractor { get; set; }
 
+        [DataField(Size = 1000)]
+        string FindArticleAndModelRegEx { get; set; }
+
         Table<ILoadingEuroluxRow> Rows { get; }
+
+        Table<ILoadingEuroluxWareFile> Files { get; }
         }
 
     public interface ILoadingEuroluxRow : ITableRow
@@ -59,6 +84,24 @@ namespace SystemInvoice.SystemObjects
         double GrossOfOne { get; set; }
         }
 
+    public interface ILoadingEuroluxWareFile : ITableRow
+        {
+        [DataField(Size = 1000, ShowInForm = false)]
+        string FullFileName { get; set; }
+
+        [DataField(Description = "Файл", Size = 1000, ReadOnly = true)]
+        string ShortFileName { get; set; }
+
+        [DataField(Description = "Папка", Size = 1000, ReadOnly = true)]
+        string DirName { get; set; }
+
+        [DataField(Description = "Ошибка", Size = 1000, ReadOnly = true)]
+        string ErrorDescription { get; set; }
+
+        [DataField(Description = "Значение Excel", Size = 1000, ReadOnly = true)]
+        string ErrorHelpData { get; set; }
+        }
+
     public class LoadingEuroluxBehaviour : Behaviour<ILoadingEurolux>
         {
         class ApprovalDocumentInfo
@@ -68,6 +111,13 @@ namespace SystemInvoice.SystemObjects
             public string DocumentNumber { get; set; }
 
             public Approvals ApprovalsDocument { get; set; }
+
+            internal void AddWare(long wareId)
+                {
+                var dataRow = ApprovalsDocument.Nomenclatures.GetNewRow(ApprovalsDocument);
+                dataRow[ApprovalsDocument.ItemNomenclature] = wareId;
+                dataRow.AddRowToTable(ApprovalsDocument);
+                }
             }
 
         private StringCacheDictionary customsCodes;
@@ -140,8 +190,11 @@ namespace SystemInvoice.SystemObjects
             public Sheet Sheet;
             }
 
-        internal void LoadExcelFile(string fileName, Action<double> notifyProgress)
+        internal void LoadWaresDatabaseFromExcel(string fileName, Action<double> notifyProgress)
             {
+            warnings = new StringBuilder();
+            warnings.AppendLine();
+
             O.Rows.Clear();
 
             ExcelXlsWorkbook book = null;
@@ -166,7 +219,7 @@ namespace SystemInvoice.SystemObjects
             for (int sheetIndex = 0; sheetIndex < book.SheetCount; sheetIndex++)
                 {
                 Worksheet sheet = book[sheetIndex];
-                for (int rowIndex = sheet.RowCount - 1; rowIndex > 0; rowIndex--)
+                for (int rowIndex = 1; rowIndex < sheet.RowCount; rowIndex++)
                     {
                     current++;
                     Row row = sheet[rowIndex];
@@ -199,11 +252,10 @@ namespace SystemInvoice.SystemObjects
                     }
                 }
 
+            book.Dispose();
             //  await Task.Factory.StartNew(() => 
             loadData(waresDictionary.Values.ToList(), notifyProgress);//);
             }
-
-        List<ExcelRow> skippedRows = new List<ExcelRow>();
 
         private void loadData(List<ExcelRow> list, Action<double> notifyProgress)
             {
@@ -226,6 +278,7 @@ namespace SystemInvoice.SystemObjects
             newDocumentItems = new List<IDocument>();
             approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
 
+
             for (int i = 0; i < list.Count; i++)
                 {
                 var row = list[i];
@@ -234,8 +287,30 @@ namespace SystemInvoice.SystemObjects
                 docRow.Model = row.Model;
                 docRow.Article = row.Article;
 
-                docRow.NameDecl = row.Row[nameDeclIndex].Value.ToString();
-                docRow.NameInvoice = row.Row[nameInvoiceIndex].Value.ToString();
+                docRow.NameDecl = row.Row[nameDeclIndex].Value.ToString().Trim();
+                docRow.NameInvoice = row.Row[nameInvoiceIndex].Value.ToString().Trim();
+
+                if (string.IsNullOrEmpty(docRow.NameDecl))
+                    {
+                    addWarning("Не заполненно наименование декларации!", row);
+                    docRow.RemoveFromTable();
+                    continue;
+                    }
+                else if (string.IsNullOrEmpty(docRow.NameInvoice))
+                    {
+                    addWarning("Не заполненно наименование инвойс!", row);
+                    docRow.RemoveFromTable();
+                    continue;
+                    }
+
+                docRow.CodeInternal.Id = getId(row.Row[customsCodeIndex].Value, customsCodes, "УКТЗЕД", false);
+
+                if (docRow.CodeInternal.Id == 0)
+                    {
+                    addWarning("Не найден УКТЗЕД!", row);
+                    docRow.RemoveFromTable();
+                    continue;
+                    }
 
                 try
                     {
@@ -255,14 +330,14 @@ namespace SystemInvoice.SystemObjects
                         docRow.GrossOfOne = 0.0;
                         }
 
-                    //docRow.CodeInternal.Id = getId(row, customsCodeIndex, customsCodes, "УКТЗЕД");
-                    docRow.Country.Id = getId(row, countryIndex, countries, "Страна");
-                    docRow.MeasureUnit.Id = getId(row, unitMeasureIndex, unitMeasures, "Един. изм.");
+                    docRow.Country.Id = getId(row.Row[countryIndex].Value, countries, "Страна");
+                    docRow.MeasureUnit.Id = getId(row.Row[unitMeasureIndex].Value, unitMeasures, "Един. изм.");
 
                     var producer = row.Row[producerIndex].Value.ToString().TrimEnd();
                     if (string.IsNullOrEmpty(producer))
                         {
-                        skippedRows.Add(row);
+                        addWarning("Не заполненно производитель!", row);
+                        docRow.RemoveFromTable();
                         continue;
                         }
 
@@ -285,7 +360,7 @@ namespace SystemInvoice.SystemObjects
                 var currentColumnOffset = approvalsIndexOffset;
                 while (true)
                     {
-                    var docType = getId(row, currentColumnOffset, approvalsTypes, "Типы док-в", false);
+                    var docType = getId(row.Row[currentColumnOffset].Value, approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         break;
@@ -306,11 +381,11 @@ namespace SystemInvoice.SystemObjects
                         }
 
                     currentColumnOffset += 3;
-                    docType = getId(row, currentColumnOffset, approvalsTypes, "Типы док-в", false);
+                    docType = getId(row.Row[currentColumnOffset].Value, approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         currentColumnOffset++;
-                        docType = getId(row, currentColumnOffset, approvalsTypes, "Типы док-в", false);
+                        docType = getId(row.Row[currentColumnOffset].Value, approvalsTypes, "Типы док-в", false);
                         if (docType > 0)
                             {
                             Trace.WriteLine("Long string");
@@ -348,6 +423,11 @@ namespace SystemInvoice.SystemObjects
                 }
 
             writeToDatabase(notifyProgress);
+            }
+
+        private void addWarning(string message, ExcelRow row)
+            {
+            warnings.AppendLine(string.Format("{0} Страница - {1} № стр. - {2}", message.PadRight(40), row.Sheet.SheetName.PadRight(25), row.RowNumber));
             }
 
         private Approvals getApprovalsDocument(ApprovalDocumentInfo docInfo)
@@ -424,17 +504,56 @@ namespace SystemInvoice.SystemObjects
                 ware.NameDecl = row.NameDecl;
                 ware.NameInvoice = row.NameInvoice;
 
+                var newWare = ware.IsNew;
+
                 var writtenResult = ware.Write();
                 if (writtenResult != WritingResult.Success)
                     {
-                    ("Не удалось записать товар: " + ware.Description).WarningBox();
+                    string.Format("Не удалось записать товар: {0}\r\n{1}", ware.Description, ware.LastWrittingError).WarningBox();
                     return;
+                    }
+
+                foreach (var approvalDoc in approvalsDocuments[row.LineNumber])
+                    {
+                    if (newWare)
+                        {
+                        approvalDoc.AddWare(ware.Id);
+                        }
+                    else
+                        {
+                        var docContainsWare = false;
+                        foreach (DataRow docRow in approvalDoc.ApprovalsDocument.Nomenclatures.Rows)
+                            {
+                            if (ware.Id.Equals(docRow[approvalDoc.ApprovalsDocument.ItemNomenclature]))
+                                {
+                                docContainsWare = true;
+                                break;
+                                }
+                            }
+                        if (!docContainsWare)
+                            {
+                            approvalDoc.AddWare(ware.Id);
+                            }
+                        }
+
+                    writtenResult = approvalDoc.ApprovalsDocument.Write();
+                    if (writtenResult != WritingResult.Success)
+                        {
+                        ("Не удалось записать разреш. документ: " + approvalDoc.ToString()).WarningBox();
+                        return;
+                        }
                     }
 
                 notifyProgress((double)itemIndex / (double)rowsCount);
                 }
 
             "Данные загружены в базу!".NotifyToUser();
+
+            if (warnings.Length > 0)
+                {
+                Clipboard.SetText(warnings.ToString());
+                "Обнаруженные ошибки в буфере обмена!".NotifyToUser(MessagesToUserTypes.Error);
+                }
             }
 
         private Nomenclature getWare(string article, string model)
@@ -456,6 +575,7 @@ namespace SystemInvoice.SystemObjects
         private List<ICatalog> newCatalogItems;
         private List<IDocument> newDocumentItems;
         private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments;
+        private StringBuilder warnings;
 
         private T getItem<T>(string strValue, Dictionary<string, T> cache) where T : ICatalog
             {
@@ -481,9 +601,9 @@ namespace SystemInvoice.SystemObjects
                     SystemConfiguration.DBConfigurationTree[typeof(T).GetTableName()].Description));
             }
 
-        private long getId(ExcelRow row, int fieldIndex, StringCacheDictionary cache, string fieldName, bool throwException = true)
+        private long getId(object value, StringCacheDictionary cache, string fieldName, bool throwException = true)
             {
-            var strValue = row.Row[fieldIndex].Value.ToString();
+            var strValue = value.ToString();
             if (string.IsNullOrEmpty(strValue))
                 {
                 return 0;
@@ -530,6 +650,276 @@ namespace SystemInvoice.SystemObjects
                     }
                 }
 
+            return true;
+            }
+
+        private Regex findArticleAndModelRegEx;
+
+        internal void LoadNewWares(List<string> files, Action<double> notifyProgress)
+            {
+            findArticleAndModelRegEx = new Regex(O.FindArticleAndModelRegEx);
+
+            O.Files.Clear();
+            notifyProgress(0.0);
+
+            for (int fileIndex = 0; fileIndex < files.Count; fileIndex++)
+                {
+                var fileName = files[fileIndex];
+                string errorDescription;
+                string errorHelpData;
+                if (!tryLoadNewWaresFromExcelFile(fileName, out errorDescription, out errorHelpData))
+                    {
+                    var errorFileRow = O.Files.Add();
+                    errorFileRow.ErrorDescription = errorDescription;
+                    errorFileRow.ErrorHelpData = errorHelpData;
+                    errorFileRow.FullFileName = fileName;
+                    errorFileRow.ShortFileName = Path.GetFileName(fileName);
+                    errorFileRow.DirName = Path.GetDirectoryName(fileName);
+                    }
+
+                notifyProgress((1.0 + fileIndex) / files.Count);
+                }
+            }
+
+        class InternalCodesInfo
+            {
+            public long InternalCodeId { get; set; }
+
+            public string Model { get; set; }
+
+            public string Article { get; set; }
+
+            public InternalCodesInfo Clone()
+                {
+                return new InternalCodesInfo() { InternalCodeId = InternalCodeId, Model = Model, Article = Article };
+                }
+            }
+
+        private bool tryLoadNewWaresFromExcelFile(string fileName, out string errorDescription, out string errorHelpData)
+            {
+            errorHelpData = null;
+
+            DataTable firstSheet = null;
+            DataTable secondSheet = null;
+            try
+                {
+                using (var stream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+                    {
+                    IExcelDataReader excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
+
+                    DataSet result = excelReader.AsDataSet();
+                    firstSheet = result.Tables[0];
+                    secondSheet = result.Tables[1];
+                    }
+                }
+            catch
+                {
+                errorDescription = "Не удалось открыть Excel файл!";
+                return false;
+                }
+
+            Dictionary<string, InternalCodesInfo> internalCodesDictionary;
+            if (!loadInternalCodes(firstSheet, out internalCodesDictionary, out errorDescription, out errorHelpData)) return false;
+
+            return loadWares(secondSheet, internalCodesDictionary, out errorDescription, out errorHelpData);
+            }
+
+        private bool loadWares(DataTable table, Dictionary<string, InternalCodesInfo> internalCodesDictionary,
+            out string errorDescription, out string errorHelpData)
+            {
+            errorHelpData = null;
+            O.Rows.Clear();
+
+            for (int rowIndex = 3; rowIndex < table.Rows.Count; rowIndex++)
+                {
+                var row = table.Rows[rowIndex];
+
+                const int COUNTRY_INDEX = 5;
+                const int TRADE_MARK_INDEX = 7;
+
+                var countryId = getId(row[COUNTRY_INDEX], countries, "страна", false);
+                var tradeMarkName = row[TRADE_MARK_INDEX].ToString();
+
+                if (countryId == 0)
+                    {
+                    if (string.IsNullOrEmpty(tradeMarkName))
+                        {
+                        // empty row, just skipping
+                        continue;
+                        }
+                    else
+                        {
+                        errorDescription = string.Format("Не найдена страна! Стр. № {0}", (rowIndex + 1));
+                        errorHelpData = row[COUNTRY_INDEX].ToString();
+                        return false;
+                        }
+                    }
+
+                if (string.IsNullOrEmpty(tradeMarkName))
+                    {
+                    errorDescription = string.Format("Пустая торговая марка. Стр. № {0}", (rowIndex + 1));
+                    return false;
+                    }
+
+                const int PRODUCER_INDEX = 6;
+                var producerName = row[PRODUCER_INDEX].ToString();
+
+                if (string.IsNullOrEmpty(producerName))
+                    {
+                    errorDescription = string.Format("Пустой производитель. Стр. № {0}", (rowIndex + 1));
+                    return false;
+                    }
+
+                const int INVOICE_NAME_INDEX = 3;
+                var invoiceName = row[INVOICE_NAME_INDEX].ToString();
+
+                const int DECLARATION_NAME_INDEX = 4;
+                var declarationName = row[DECLARATION_NAME_INDEX].ToString();
+
+                if (string.IsNullOrEmpty(invoiceName)
+                    && string.IsNullOrEmpty(declarationName))
+                    {
+                    errorDescription = string.Format("Не указано ни название инвойса ни название декларации. Стр. № {0}", (rowIndex + 1));
+                    return false;
+                    }
+
+                if (string.IsNullOrEmpty(invoiceName))
+                    {
+                    invoiceName = declarationName;
+                    }
+                else if (string.IsNullOrEmpty(declarationName))
+                    {
+                    declarationName = invoiceName;
+                    }
+
+                const int PRICE_INDEX = 11;
+                const int GROSS_INDEX = 8;
+                const int NET_INDEX = 9;
+                const int COUNT_INDEX = 13;
+                var docRow = O.Rows.Add();
+                try
+                    {
+                    docRow.Price = row[PRICE_INDEX].ToString().ConvertToDouble();
+                    docRow.NetOfOne = row[NET_INDEX].ToString().ConvertToDouble();
+                    docRow.GrossOfOne = row[GROSS_INDEX].ToString().ConvertToDouble();
+                    var count = row[COUNT_INDEX].ToString().ConvertToDouble();
+
+                    if (count > 0.0)
+                        {
+                        docRow.NetOfOne /= count;
+                        docRow.GrossOfOne /= count;
+                        docRow.Price /= count;
+                        }
+                    else
+                        {
+                        docRow.NetOfOne = 0.0;
+                        docRow.GrossOfOne = 0.0;
+                        docRow.Price = 0.0;
+                        }
+
+                    //docRow.Country.Id = getId(row.Row, countryIndex, countries, "Страна");
+                    //docRow.MeasureUnit.Id = getId(row.Row, unitMeasureIndex, unitMeasures, "Един. изм.");
+
+                    //var producer = row.Row[producerIndex].Value.ToString().TrimEnd();
+                    //if (string.IsNullOrEmpty(producer))
+                    //    {
+                    //    addWarning("Не заполненно производитель!", row);
+                    //    docRow.RemoveFromTable();
+                    //    continue;
+                    //    }
+
+                    //docRow.Producer.Item = getItem<IManufacturer>(producer, producers);
+                    //docRow.TradeMark.Item = getItem<ITradeMark>(row.Row[tradeMarkIndex].Value.ToString().TrimEnd(), tradeMarks);
+                    }
+                catch (Exception exp)
+                    {
+                    errorDescription = string.Format("Ошибка в строке № {0}, на странице спецификация.\r\n{1}", (rowIndex + 1), exp.Message);
+                    return false;
+                    }
+
+                const int ID_INDEX = 1;
+                var idValue = row[ID_INDEX].ToString();
+
+                InternalCodesInfo internalCodesInfo;
+                if (!internalCodesDictionary.TryGetValue(idValue, out internalCodesInfo))
+                    {
+                    errorDescription = string.Format("Не найден связывающий артикул. Стр. № {0}", (rowIndex + 1));
+                    errorHelpData = idValue;
+                    return false;
+                    }
+                }
+
+            errorDescription = null;
+            return true;
+            }
+
+        private bool loadInternalCodes(DataTable internalCodesTable, out Dictionary<string, InternalCodesInfo> internalCodesDictionary,
+            out string errorDescription, out string errorHelpData)
+            {
+            errorHelpData = null;
+            internalCodesDictionary = new Dictionary<string, InternalCodesInfo>();
+
+            var rowsCount = internalCodesTable.Rows.Count;
+            for (int rowIndex = 3; rowIndex < rowsCount; rowIndex++)
+                {
+                var row = internalCodesTable.Rows[rowIndex];
+                var inputString = row[3].ToString();
+
+                const int customsCodeIndex = 1;
+                var codeId = getId(row[customsCodeIndex], customsCodes, "УКТЗЕД", false);
+
+                if (codeId == 0)
+                    {
+                    var internalCodeValue = row[customsCodeIndex].ToString();
+                    if (string.IsNullOrEmpty(internalCodeValue))
+                        {
+                        continue;
+                        }
+                    errorDescription = string.Format("Стр. № {0}. Не найден УКТЗЕД", (rowIndex + 1));
+                    errorHelpData = row[customsCodeIndex].ToString();
+                    return false;
+                    }
+
+                var matches = findArticleAndModelRegEx.Matches(inputString);
+                foreach (System.Text.RegularExpressions.Match match in matches)
+                    {
+                    var info = new InternalCodesInfo()
+                    {
+                        Model = match.Groups["Model"].Value,
+                        Article = match.Groups["Article"].Value.Replace(" ", ""),
+                        InternalCodeId = codeId
+                    };
+
+                    if (string.IsNullOrEmpty(info.Article))
+                        {
+                        errorDescription = string.Format("Стр. № {0}. Не найден артикул", (rowIndex + 1));
+                        return false;
+                        }
+
+                    if (string.IsNullOrEmpty(info.Model))
+                        {
+                        errorDescription = string.Format("Стр. № {0}. Не найдена модель", (rowIndex + 1));
+                        return false;
+                        }
+
+                    if (internalCodesDictionary.ContainsKey(info.Article))
+                        {
+                        errorDescription = string.Format("Стр. № {0}. Повтор артикула", (rowIndex + 1));
+                        return false;
+                        }
+
+                    if (internalCodesDictionary.ContainsKey(info.Model))
+                        {
+                        errorDescription = string.Format("Стр. № {0}. Повтор модели", (rowIndex + 1));
+                        return false;
+                        }
+
+                    internalCodesDictionary.Add(info.Article, info);
+                    internalCodesDictionary.Add(info.Model, info);
+                    }
+                }
+
+            errorDescription = null;
             return true;
             }
         }

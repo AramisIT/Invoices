@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using SystemInvoice.SystemObjects;
@@ -16,16 +18,27 @@ using Aramis.UI.WinFormsDevXpress;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
+using Excel;
 
 namespace SystemInvoice.Catalogs.Forms
     {
     public partial class LoadingEuroluxForm : DevExpress.XtraBars.Ribbon.RibbonForm
         {
-        public ILoadingEurolux Item { get; set; }
+        private ILoadingEurolux item;
 
         private LoadingEuroluxBehaviour itemBehaviour
             {
             get { return Item.GetBehaviour<LoadingEuroluxBehaviour>(); }
+            }
+
+        public ILoadingEurolux Item
+            {
+            get { return item; }
+            set
+                {
+                item = value;
+                Text = string.Format("Загрузка Excel ({0})", item.LoadingType.GetEnumDescription());
+                }
             }
 
         public LoadingEuroluxForm()
@@ -50,12 +63,38 @@ namespace SystemInvoice.Catalogs.Forms
 
         private void file_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
             {
-            string fileName;
-            if (!AramisIO.ChooseExcel97_2003File(out fileName)) return;
+            switch (Item.LoadingType)
+                {
+                case ElectroluxLoadingTypes.NomenclatureDatabase:
+                    string fileName;
+                    if (!AramisIO.ChooseExcel97_2003File(out fileName)) return;
 
-            progressBar.Position = 0;
-            (sender as ButtonEdit).Text = fileName;
-            itemBehaviour.LoadExcelFile(fileName, notifyPercentChanged);
+                    progressBar.Position = 0;
+                    (sender as ButtonEdit).Text = fileName;
+                    itemBehaviour.LoadWaresDatabaseFromExcel(fileName, notifyPercentChanged);
+                    break;
+
+                case ElectroluxLoadingTypes.Nomenclature:
+                    if (string.IsNullOrEmpty(Item.FindArticleAndModelRegEx))
+                        {
+                        Item.FindArticleAndModelRegEx =
+                            @"(?i)(?x)       м\s?о\s?д\s?е\s?л\s?ь[\s]+  (?<Model>    [^\s]+)               (   .*? (   арт \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
+                        }
+                    AramisIO.OpenFileFolderDialogResult selectingResult;
+                    if (!AramisIO.ChooseFilesOrFolder(AramisIO.FilesTypesFilters.Excel_97_2003, out selectingResult)) return;
+                    var files = selectingResult.GetAllFiles();
+                    if (selectingResult.SelectedFolder && files.Count == 0)
+                        {
+                        "В папке не найдено ни одного подходящего файла (*.xls)".NotifyToUser(MessagesToUserTypes.Error);
+                        return;
+                        }
+
+                    (sender as ButtonEdit).Text = selectingResult.SelectedFolder ? Path.GetDirectoryName(selectingResult.FolderName) :
+                        (selectingResult.SelectedOneFile ? Path.GetDirectoryName(selectingResult.FileName) : string.Empty);
+
+                    itemBehaviour.LoadNewWares(files, notifyPercentChanged);
+                    break;
+                }
             }
 
         private void notifyPercentChanged(double percent)
@@ -70,6 +109,32 @@ namespace SystemInvoice.Catalogs.Forms
                 progressBar.Position = currentValue;
                 progressBar.Update();
                 }
+            }
+
+        private void Files_DoubleClick(object sender, EventArgs e)
+            {
+            var hitInfo = Files.GetHitInfo();
+            if (hitInfo.RowHandle < 0) return;
+            var row = Item.Files[filesGridView.GetDataSourceRowIndex(hitInfo.RowHandle)];
+            if (row == null) return;
+
+            try
+                {
+                Process.Start(row.FullFileName);
+                }
+            catch (Exception exp)
+                {
+                string.Format("На данном компьютере не удается автоматически открыть сохраненный файл:\r\n{0}", exp.Message).NotifyToUser(MessagesToUserTypes.Error);
+                }
+            }
+
+        private void barButtonItem1_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            var sourceRowIndex = filesGridView.GetFocusedDataSourceRowIndex();
+            if (sourceRowIndex < 0) return;
+            var dataSource = Item.Files[sourceRowIndex];
+            file.Text = dataSource.FullFileName;
+            itemBehaviour.LoadNewWares(new List<string>() { dataSource.FullFileName }, notifyPercentChanged);
             }
 
 

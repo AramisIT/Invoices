@@ -80,6 +80,9 @@
     <Reference Include="DevExpress.XtraEditors.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraGrid.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v12.1, Version=12.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Excel">
+      <HintPath>..\packages\ExcelDataReader\Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Extensions">
       <HintPath>..\..\Aramis.NET\Aramis\bin\Release\Extensions.dll</HintPath>
     </Reference>

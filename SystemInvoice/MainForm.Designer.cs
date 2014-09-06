@@ -89,11 +89,14 @@
             this.loadNomenclatureBtn = new DevExpress.XtraBars.BarButtonItem();
             this.starterFilesUpload = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem46 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem3 = new DevExpress.XtraBars.BarSubItem();
+            this.barButtonItem47 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.administratorPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup9 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -146,9 +149,8 @@
             this.barButtonItem40 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem41 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonPageGroup9 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.barSubItem3 = new DevExpress.XtraBars.BarSubItem();
-            this.barButtonItem47 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem48 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem49 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).BeginInit();
@@ -222,9 +224,11 @@
             this.barButtonItem45,
             this.barButtonItem46,
             this.barSubItem3,
-            this.barButtonItem47});
+            this.barButtonItem47,
+            this.barButtonItem48,
+            this.barButtonItem49});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 83;
+            this.ribbon.MaxItemId = 85;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -473,7 +477,7 @@
             // 
             // excelLoadingFormatBtn
             // 
-            this.excelLoadingFormatBtn.Caption = "Форматы загрузки Инвойсв";
+            this.excelLoadingFormatBtn.Caption = "Форматы загрузки Инвойсов";
             this.excelLoadingFormatBtn.Id = 57;
             this.excelLoadingFormatBtn.Name = "excelLoadingFormatBtn";
             this.excelLoadingFormatBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.excelLoadingFormatBtn_ItemClick);
@@ -653,6 +657,23 @@
             this.barButtonItem46.Name = "barButtonItem46";
             this.barButtonItem46.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem46_ItemClick);
             // 
+            // barSubItem3
+            // 
+            this.barSubItem3.Caption = "Электролюкс";
+            this.barSubItem3.Id = 81;
+            this.barSubItem3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem47),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem48),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem49)});
+            this.barSubItem3.Name = "barSubItem3";
+            // 
+            // barButtonItem47
+            // 
+            this.barButtonItem47.Caption = "Загрузка базы товаров";
+            this.barButtonItem47.Id = 82;
+            this.barButtonItem47.Name = "barButtonItem47";
+            this.barButtonItem47.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem47_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -690,6 +711,12 @@
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem46);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "Обновление";
+            // 
+            // ribbonPageGroup9
+            // 
+            this.ribbonPageGroup9.ItemLinks.Add(this.barSubItem3);
+            this.ribbonPageGroup9.Name = "ribbonPageGroup9";
+            this.ribbonPageGroup9.Text = "Загрузка Excel";
             // 
             // ribbonPage2
             // 
@@ -1023,26 +1050,19 @@
             this.barButtonItem42.Id = 19;
             this.barButtonItem42.Name = "barButtonItem42";
             // 
-            // ribbonPageGroup9
+            // barButtonItem48
             // 
-            this.ribbonPageGroup9.ItemLinks.Add(this.barSubItem3);
-            this.ribbonPageGroup9.Name = "ribbonPageGroup9";
-            this.ribbonPageGroup9.Text = "Загрузка Excel";
+            this.barButtonItem48.Caption = "Загрузка базу разреш. документов";
+            this.barButtonItem48.Id = 83;
+            this.barButtonItem48.Name = "barButtonItem48";
+            this.barButtonItem48.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem48_ItemClick);
             // 
-            // barSubItem3
+            // barButtonItem49
             // 
-            this.barSubItem3.Caption = "Электролюкс";
-            this.barSubItem3.Id = 81;
-            this.barSubItem3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem47)});
-            this.barSubItem3.Name = "barSubItem3";
-            // 
-            // barButtonItem47
-            // 
-            this.barButtonItem47.Caption = "Загрузка базы товаров";
-            this.barButtonItem47.Id = 82;
-            this.barButtonItem47.Name = "barButtonItem47";
-            this.barButtonItem47.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem47_ItemClick);
+            this.barButtonItem49.Caption = "Загрузка новых моделей ";
+            this.barButtonItem49.Id = 84;
+            this.barButtonItem49.Name = "barButtonItem49";
+            this.barButtonItem49.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem49_ItemClick);
             // 
             // MainForm
             // 
@@ -1187,5 +1207,7 @@
         private DevExpress.XtraBars.BarSubItem barSubItem3;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup9;
         private DevExpress.XtraBars.BarButtonItem barButtonItem47;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem48;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem49;
         }
     }
