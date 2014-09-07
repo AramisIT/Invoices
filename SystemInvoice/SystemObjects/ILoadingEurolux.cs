@@ -133,16 +133,26 @@ namespace SystemInvoice.SystemObjects
             : base(item)
             {
             O.Contractor = CatalogTable.FindByDescription(typeof(IContractor).GetTableName(), "Electrolux") as IContractor;
+            }
+
+        private bool loaderIsInitiated;
+
+        private void initLoader()
+            {
+            if (loaderIsInitiated) return;
 
             customsCodes = new CatalogCacheCreator<CustomsCode>().GetDescriptionIdCache();
             countries = new CatalogCacheCreator<Country>().GetDescriptionIdCache(descriptionFieldName: "InternationalCode");
             unitMeasures = new CatalogCacheCreator<UnitOfMeasure>().GetDescriptionIdCache(descriptionFieldName: "ShortName");
-            approvalsTypes = new CatalogCacheCreator<DocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
+            approvalsTypes =
+                new CatalogCacheCreator<DocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
 
             producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
             tradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
 
             approvalsCache = getApprovalCache();
+
+            loaderIsInitiated = true;
             }
 
         private Dictionary<DateTime, Dictionary<string, Approvals>> getApprovalCache()
@@ -192,6 +202,8 @@ namespace SystemInvoice.SystemObjects
 
         internal void LoadWaresDatabaseFromExcel(string fileName, Action<double> notifyProgress)
             {
+            initLoader();
+
             warnings = new StringBuilder();
             warnings.AppendLine();
 
@@ -274,9 +286,9 @@ namespace SystemInvoice.SystemObjects
             const int netIndex = 11;
             const int grossIndex = 12;
 
-            newCatalogItems = new List<ICatalog>();
-            newDocumentItems = new List<IDocument>();
-            approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
+            newCatalogItems.Clear();
+            newDocumentItems.Clear();
+            approvalsDocuments.Clear();
 
 
             for (int i = 0; i < list.Count; i++)
@@ -422,7 +434,11 @@ namespace SystemInvoice.SystemObjects
                 if (!newItemsMessage.ToString().Ask()) return;
                 }
 
-            writeToDatabase(notifyProgress);
+            string errorDescription;
+            if (!writeToDatabase(notifyProgress, out errorDescription))
+                {
+                errorDescription.WarningBox();
+                }
             }
 
         private void addWarning(string message, ExcelRow row)
@@ -459,15 +475,15 @@ namespace SystemInvoice.SystemObjects
             return doc;
             }
 
-        private void writeToDatabase(Action<double> notifyProgress)
+        private bool writeToDatabase(Action<double> notifyProgress, out string errorDescription)
             {
             foreach (var item in newCatalogItems)
                 {
                 var writtenResult = item.Write();
                 if (writtenResult != WritingResult.Success)
                     {
-                    ("Не удалось записать элемент: " + item.Description).WarningBox();
-                    return;
+                    errorDescription = "Не удалось записать элемент: " + item.Description;
+                    return false;
                     }
                 }
 
@@ -476,8 +492,8 @@ namespace SystemInvoice.SystemObjects
                 var writtenResult = item.Write();
                 if (writtenResult != WritingResult.Success)
                     {
-                    ("Не удалось записать элемент: " + item.ToString()).WarningBox();
-                    return;
+                    errorDescription = "Не удалось записать элемент: " + item;
+                    return false;
                     }
                 }
 
@@ -509,51 +525,56 @@ namespace SystemInvoice.SystemObjects
                 var writtenResult = ware.Write();
                 if (writtenResult != WritingResult.Success)
                     {
-                    string.Format("Не удалось записать товар: {0}\r\n{1}", ware.Description, ware.LastWrittingError).WarningBox();
-                    return;
+                    errorDescription = string.Format("Не удалось записать товар: {0}\r\n{1}", ware.Description, ware.LastWrittingError);
+                    return false;
                     }
 
-                foreach (var approvalDoc in approvalsDocuments[row.LineNumber])
+                if (approvalsDocuments.Count > 0)
                     {
-                    if (newWare)
+                    foreach (var approvalDoc in approvalsDocuments[row.LineNumber])
                         {
-                        approvalDoc.AddWare(ware.Id);
-                        }
-                    else
-                        {
-                        var docContainsWare = false;
-                        foreach (DataRow docRow in approvalDoc.ApprovalsDocument.Nomenclatures.Rows)
-                            {
-                            if (ware.Id.Equals(docRow[approvalDoc.ApprovalsDocument.ItemNomenclature]))
-                                {
-                                docContainsWare = true;
-                                break;
-                                }
-                            }
-                        if (!docContainsWare)
+                        if (newWare)
                             {
                             approvalDoc.AddWare(ware.Id);
                             }
-                        }
+                        else
+                            {
+                            var docContainsWare = false;
+                            foreach (DataRow docRow in approvalDoc.ApprovalsDocument.Nomenclatures.Rows)
+                                {
+                                if (ware.Id.Equals(docRow[approvalDoc.ApprovalsDocument.ItemNomenclature]))
+                                    {
+                                    docContainsWare = true;
+                                    break;
+                                    }
+                                }
+                            if (!docContainsWare)
+                                {
+                                approvalDoc.AddWare(ware.Id);
+                                }
+                            }
 
-                    writtenResult = approvalDoc.ApprovalsDocument.Write();
-                    if (writtenResult != WritingResult.Success)
-                        {
-                        ("Не удалось записать разреш. документ: " + approvalDoc.ToString()).WarningBox();
-                        return;
+                        writtenResult = approvalDoc.ApprovalsDocument.Write();
+                        if (writtenResult != WritingResult.Success)
+                            {
+                            errorDescription = "Не удалось записать разреш. документ: " + approvalDoc.ToString();
+                            return false;
+                            }
                         }
                     }
-
                 notifyProgress((double)itemIndex / (double)rowsCount);
                 }
 
-            "Данные загружены в базу!".NotifyToUser();
-
-            if (warnings.Length > 0)
+            if (warnings != null && warnings.Length > 0)
                 {
+                "Данные загружены в базу!".NotifyToUser();
+
                 Clipboard.SetText(warnings.ToString());
                 "Обнаруженные ошибки в буфере обмена!".NotifyToUser(MessagesToUserTypes.Error);
                 }
+
+            errorDescription = string.Empty;
+            return true;
             }
 
         private Nomenclature getWare(string article, string model)
@@ -572,9 +593,9 @@ namespace SystemInvoice.SystemObjects
             return result;
             }
 
-        private List<ICatalog> newCatalogItems;
-        private List<IDocument> newDocumentItems;
-        private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments;
+        private List<ICatalog> newCatalogItems = new List<ICatalog>();
+        private List<IDocument> newDocumentItems = new List<IDocument>();
+        private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
         private StringBuilder warnings;
 
         private T getItem<T>(string strValue, Dictionary<string, T> cache) where T : ICatalog
@@ -657,6 +678,8 @@ namespace SystemInvoice.SystemObjects
 
         internal void LoadNewWares(List<string> files, Action<double> notifyProgress)
             {
+            initLoader();
+
             findArticleAndModelRegEx = new Regex(O.FindArticleAndModelRegEx);
 
             O.Files.Clear();
@@ -727,6 +750,7 @@ namespace SystemInvoice.SystemObjects
         private bool loadWares(DataTable table, Dictionary<string, InternalCodesInfo> internalCodesDictionary,
             out string errorDescription, out string errorHelpData)
             {
+            newCatalogItems.Clear();
             errorHelpData = null;
             O.Rows.Clear();
 
@@ -738,7 +762,7 @@ namespace SystemInvoice.SystemObjects
                 const int TRADE_MARK_INDEX = 7;
 
                 var countryId = getId(row[COUNTRY_INDEX], countries, "страна", false);
-                var tradeMarkName = row[TRADE_MARK_INDEX].ToString();
+                var tradeMarkName = row[TRADE_MARK_INDEX].ToString().Trim();
 
                 if (countryId == 0)
                     {
@@ -762,7 +786,7 @@ namespace SystemInvoice.SystemObjects
                     }
 
                 const int PRODUCER_INDEX = 6;
-                var producerName = row[PRODUCER_INDEX].ToString();
+                var producerName = row[PRODUCER_INDEX].ToString().Trim();
 
                 if (string.IsNullOrEmpty(producerName))
                     {
@@ -792,11 +816,15 @@ namespace SystemInvoice.SystemObjects
                     declarationName = invoiceName;
                     }
 
-                const int PRICE_INDEX = 11;
+                const int PRICE_INDEX = 10;
                 const int GROSS_INDEX = 8;
                 const int NET_INDEX = 9;
                 const int COUNT_INDEX = 13;
                 var docRow = O.Rows.Add();
+
+                docRow.NameInvoice = invoiceName;
+                docRow.NameDecl = invoiceName;
+
                 try
                     {
                     docRow.Price = row[PRICE_INDEX].ToString().ConvertToDouble();
@@ -817,19 +845,11 @@ namespace SystemInvoice.SystemObjects
                         docRow.Price = 0.0;
                         }
 
-                    //docRow.Country.Id = getId(row.Row, countryIndex, countries, "Страна");
-                    //docRow.MeasureUnit.Id = getId(row.Row, unitMeasureIndex, unitMeasures, "Един. изм.");
+                    docRow.Country.Id = countryId;
+                    docRow.MeasureUnit.Id = getDefaultMeasureUnitId();
 
-                    //var producer = row.Row[producerIndex].Value.ToString().TrimEnd();
-                    //if (string.IsNullOrEmpty(producer))
-                    //    {
-                    //    addWarning("Не заполненно производитель!", row);
-                    //    docRow.RemoveFromTable();
-                    //    continue;
-                    //    }
-
-                    //docRow.Producer.Item = getItem<IManufacturer>(producer, producers);
-                    //docRow.TradeMark.Item = getItem<ITradeMark>(row.Row[tradeMarkIndex].Value.ToString().TrimEnd(), tradeMarks);
+                    docRow.Producer.Item = getItem<IManufacturer>(producerName, producers);
+                    docRow.TradeMark.Item = getItem<ITradeMark>(tradeMarkName, tradeMarks);
                     }
                 catch (Exception exp)
                     {
@@ -847,10 +867,26 @@ namespace SystemInvoice.SystemObjects
                     errorHelpData = idValue;
                     return false;
                     }
+
+                docRow.CodeInternal.Id = internalCodesInfo.InternalCodeId;
+                docRow.Article = internalCodesInfo.Article;
+                docRow.Model = internalCodesInfo.Model;
                 }
 
             errorDescription = null;
-            return true;
+            var result = true ||
+                writeToDatabase((progress) => { }, out errorDescription);
+            return result;
+            }
+
+        private long defaultMeasureUnitId;
+        private long getDefaultMeasureUnitId()
+            {
+            if (defaultMeasureUnitId == 0)
+                {
+                defaultMeasureUnitId = getId("шт", unitMeasures, "Един. изм.");
+                }
+            return defaultMeasureUnitId;
             }
 
         private bool loadInternalCodes(DataTable internalCodesTable, out Dictionary<string, InternalCodesInfo> internalCodesDictionary,

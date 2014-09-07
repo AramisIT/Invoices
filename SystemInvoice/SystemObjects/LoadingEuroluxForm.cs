@@ -78,7 +78,7 @@ namespace SystemInvoice.Catalogs.Forms
                     if (string.IsNullOrEmpty(Item.FindArticleAndModelRegEx))
                         {
                         Item.FindArticleAndModelRegEx =
-                            @"(?i)(?x)       м\s?о\s?д\s?е\s?л\s?ь[\s]+  (?<Model>    [^\s]+)               (   .*? (   арт \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
+                            @"(?i)(?x)       м\s*о\s*д\s*е\s*л\s*ь[\s-]+  (?<Model>    [^\s\p{P}]+)               (   .*?     (   а\s*р\s*т \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
                         }
                     AramisIO.OpenFileFolderDialogResult selectingResult;
                     if (!AramisIO.ChooseFilesOrFolder(AramisIO.FilesTypesFilters.Excel_97_2003, out selectingResult)) return;
