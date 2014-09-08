@@ -5,11 +5,15 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SystemInvoice.Documents;
+using Aramis.UI;
 using DevExpress.XtraBars;
 using Aramis.Attributes;
 using Aramis.Core;
 using Aramis.Enums;
 using Aramis.UI.WinFormsDevXpress;
+using DevExpress.XtraEditors;
+using DevExpress.XtraGrid;
 
 namespace SystemInvoice.Catalogs.Forms
     {
@@ -27,18 +31,18 @@ namespace SystemInvoice.Catalogs.Forms
             set;
             }
 
-        private void CancelBtn_ItemClick( object sender, ItemClickEventArgs e )
+        private void CancelBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             Close();
             }
 
-        private void okBtn_ItemClick( object sender, ItemClickEventArgs e )
+        private void okBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             Item.Write();
             Close();
             }
 
-        private void WriteBtn_ItemClick( object sender, ItemClickEventArgs e )
+        private void WriteBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             WritingResult result = Item.Write();
             if (result == WritingResult.Success)
@@ -52,8 +56,18 @@ namespace SystemInvoice.Catalogs.Forms
             Nomenclature nom = Item as Nomenclature;
             if (nom != null)
                 {
-               // nom.FillApprovals();
+                // nom.FillApprovals();
                 }
+            }
+
+        private void ApprovalsControl_DoubleClick(object sender, EventArgs e)
+            {
+            var hitInfo = (sender as GridControl).GetHitInfo();
+            if (hitInfo.RowHandle < 0) return;
+
+            var nom = Item as Nomenclature;
+            var row = nom.Approvals.Rows[approvalsGridView.GetDataSourceRowIndex(hitInfo.RowHandle)];
+            UserInterface.Current.ShowItem(typeof(Approvals).GetTableName(), (long)row[nom.ApprovalId]);
             }
         }
     }

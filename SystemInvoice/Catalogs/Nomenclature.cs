@@ -473,7 +473,7 @@ namespace SystemInvoice.Catalogs
                 }
             }
 
-        [SubTableField(Description = "Дата с", PropertyType = typeof(string))]
+        [SubTableField(Description = "Дата с", PropertyType = typeof(string), ReadOnly = true)]
         public DataColumn DateFrom
             {
             get;
@@ -481,7 +481,7 @@ namespace SystemInvoice.Catalogs
             }
 
 
-        [SubTableField(Description = "Дата по", PropertyType = typeof(string))]
+        [SubTableField(Description = "Дата по", PropertyType = typeof(string), ReadOnly = true)]
         public DataColumn DateTo
             {
             get;
@@ -489,14 +489,14 @@ namespace SystemInvoice.Catalogs
             }
 
 
-        [SubTableField(Description = "Номер документа", PropertyType = typeof(string))]
+        [SubTableField(Description = "Номер документа", PropertyType = typeof(string), ReadOnly = true)]
         public DataColumn DocumentNumber
             {
             get;
             set;
             }
 
-        [SubTableField(Description = "Тип документа", PropertyType = typeof(string))]
+        [SubTableField(Description = "Тип документа", PropertyType = typeof(string), ReadOnly = true)]
         public DataColumn DocumentType
             {
             get;
@@ -510,7 +510,7 @@ namespace SystemInvoice.Catalogs
             set;
             }
 
-        [SubTableField(Description = "Код типа документа", PropertyType = typeof(string))]
+        [SubTableField(Description = "Код типа документа", PropertyType = typeof(string), ReadOnly = true)]
         public DataColumn DocumentCode
             {
             get;
