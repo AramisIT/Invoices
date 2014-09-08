@@ -222,7 +222,7 @@ namespace SystemInvoice
 
         private void documentTypeBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
-            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.DocumentType));
+            UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.IDocumentType));
             }
 
         private void excelLoadingFormatBtn_ItemClick(object sender, ItemClickEventArgs e)

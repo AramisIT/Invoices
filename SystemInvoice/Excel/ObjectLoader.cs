@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.IO;
+using Aramis.Core;
 
 namespace SystemInvoice.Excel
     {
@@ -11,7 +12,7 @@ namespace SystemInvoice.Excel
     /// Загружает Ехеl в список объектов
     /// </summary>
     /// <typeparam name="T">Тип объекта в экземпляры которого загружаются результаты обработки строк Ехеl - таблицы</typeparam>
-    public class ObjectLoader<T> : AbstractLoader where T : class, new()
+    public class ObjectLoader<T> : AbstractLoader where T : IDatabaseObject
         {
         /// <summary>
         /// Текущая коллекция в которую добавляются новые объекты в процессе обработки
@@ -20,7 +21,7 @@ namespace SystemInvoice.Excel
         /// <summary>
         /// Текущий экземпляр объекта свойствам которого присваиваются результаты обработки Ехеl - таблицы
         /// </summary>
-        T currentItem = null;
+        T currentItem = default(T);
         /// <summary>
         /// Словарь имя поля объекта - дескриптор свойства, используемый для присваивания свойствам объекта значения
         /// </summary>
@@ -103,7 +104,7 @@ namespace SystemInvoice.Excel
 
         protected override void OnRowProcessingBegin()
             {
-            currentItem = new T();
+            currentItem = A.New<T>();
             }
 
         protected override void OnRowProcessingComplete()

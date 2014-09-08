@@ -16,7 +16,7 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
     /// Базовый клас для загрузки справочника из ексель - файла. 
     /// </summary>
     /// <typeparam name="T">Тип справочника который мы загружаем в систему</typeparam>
-    public abstract class FromExcelToDataBaseObjectsLoaderBase<T> where T : DatabaseObject, new()
+    public abstract class FromExcelToDataBaseObjectsLoaderBase<T> where T : IDatabaseObject
         {
         ExcelMapper mapper = new ExcelMapper();
         ObjectLoader<T> loader = new ObjectLoader<T>();

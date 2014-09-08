@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemInvoice.Catalogs;
 
 namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
     {
@@ -63,7 +64,7 @@ dt.Id as {5},coalesce(tm.Id,0) as {6},contr.Id as {7},appr.DateFrom as {8},appr.
 isnull(LTRIM(RTRIM(ApprovalsBase.DocumentNumber)), '') as {15}
 from Approvals as appr
 left join Approvals ApprovalsBase on ApprovalsBase.Id = appr.BaseApproval
-join Contractor as contr on contr.Id = appr.Contractor
+join Contractor as contr on contr.Id = appr.Contractor and (contr.Don_tLoadCertToInvoice = 0 or appr.DocumentType <> {16})
 left outer join TradeMark as tm on tm.Id = appr.TradeMark
 join DocumentType as dt on dt.Id = appr.DocumentType
 left outer join SubApprovalsNomenclatures as nom on nom.IdDoc = appr.Id
@@ -72,7 +73,7 @@ or (CAST(appr.DateTo as Date) = '0001.01.01' and (DATEPART(YEAR,dates.dateToChec
 where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (appr.Contractor = {12} or {12} = 0);", APPROVALS_ID_COLUMN_NAME, DOCUMENT_TYPE_CODE_COLUMN_NAME, DOCUMENT_TYPE_NAME_COLUMN_NAME, CONTRACTOR_NAME_COLUMN_NAME,
                                 TRADEMARK_NAME_COLUMN_NAME, DOCUMENT_TYPE_ID_COLUMN_NAME,
                                 TRADE_MARK_ID_COLUMN_NAME, CONTRACTOR_ID_COLUMN_NAME, DATE_FROM_COLUMN_NAME, DATE_TO_COLUMN_NAME, NOMENCLATURE_ID_COLUMN_NAME,
-                                 currentTradeMark, currentContractor, DOCUMENT_NUMBER_COLUMN_NAME, DATE_FOR_COLUMN_NAME, DOCUMENT_BASE_NUMBER_COLUMN_NAME);
+                                 currentTradeMark, currentContractor, DOCUMENT_NUMBER_COLUMN_NAME, DATE_FOR_COLUMN_NAME, DOCUMENT_BASE_NUMBER_COLUMN_NAME, DocumentTypeHelper.GetCertificateType().Id);
                 string constructedQuery = string.Concat(joinedPart, selectColumnsPart);
                 return constructedQuery;
                 }

@@ -57,7 +57,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 {
                 IContractor contractor = A.New<IContractor>();
                 contractor.Id = cacheObject.ContractorId;
-                DocumentType docType = new DocumentType();
+                var docType = A.New<IDocumentType>();
                 docType.Id = cacheObject.DocumentTypeId;
                 approvals.Contractor = contractor;
                 approvals.DocumentType = docType;

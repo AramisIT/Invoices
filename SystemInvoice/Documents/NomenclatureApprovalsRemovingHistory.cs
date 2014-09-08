@@ -54,11 +54,11 @@ namespace SystemInvoice.Documents
 
         #region (DocumentType) DocumentType Тип документа
         [DataField(Description = "Тип документа")]
-        public DocumentType DocumentType
+        public IDocumentType DocumentType
             {
             get
                 {
-                return (DocumentType)GetValueForObjectProperty("DocumentType");
+                return (IDocumentType)GetValueForObjectProperty("DocumentType");
                 }
             set
                 {

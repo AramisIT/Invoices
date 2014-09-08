@@ -337,7 +337,7 @@ namespace SystemInvoice.DataProcessing.Cache
 
             if (!string.IsNullOrEmpty(queryText))
                 {
-                Query query = DB.NewQuery(SelectQuery);
+                Query query = DB.NewQuery(queryText);
                 DataTable table = query.SelectToTable();
                 return table;
                 }

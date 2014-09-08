@@ -231,9 +231,12 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.GroupItemsEditors
         private double getNumericValue(DataRow row, string columnName)
             {
             string strValue = row.TryGetColumnValue<string>(columnName, "0");
-            double doubleVal = 0;
-            double.TryParse(strValue, out doubleVal);
-            return doubleVal;
+            double doubleVal;
+            if (strValue.TryConvertToDouble(out doubleVal))
+                {
+                return doubleVal;
+                }
+            return 0.0;
             }
         }
     }

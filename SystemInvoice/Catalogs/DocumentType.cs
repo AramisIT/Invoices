@@ -5,57 +5,35 @@ using System.Text;
 using Aramis.Core;
 using Aramis.Attributes;
 using Aramis.Enums;
+using Aramis.DatabaseConnector;
 
 namespace SystemInvoice.Catalogs
     {
     /// <summary>
     /// Справочник. Представляет собой описание и код документа
     /// </summary>
-    [Catalog( Description = "Типы документов", GUID = "AAB49F34-FDD3-43C9-853F-E44568DAD9F2", DescriptionSize = 450, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false )]
-    public class DocumentType : CatalogTable
+    [Catalog(Description = "Типы документов", GUID = "AAB49F34-FDD3-43C9-853F-E44568DAD9F2", DescriptionSize = 450, HierarchicType = HierarchicTypes.None, ShowCodeFieldInForm = false)]
+    public interface IDocumentType : ICatalog
         {
-        #region (string) QualifierCodeName Код документа по классификатору
-        [DataField( Description = "Код документа по классификатору", Size = 100, NotEmpty = true, ShowInList = true )]
-        public string QualifierCodeName
-            {
-            get
-                {
-                return z_QualifierCodeName;
-                }
-            set
-                {
-                if (z_QualifierCodeName == value)
-                    {
-                    return;
-                    }
+        [DataField(Description = "Код документа по классификатору", Size = 100, NotEmpty = true, ShowInList = true)]
+        string QualifierCodeName { get; set; }
 
-                z_QualifierCodeName = value;
-                NotifyPropertyChanged( "QualifierCodeName" );
-                }
-            }
-        private string z_QualifierCodeName = "";
-        #endregion
-
-        #region (bool) DeleteApproval Удалять разрешительные при изменении номенклатуры
         [DataField(Description = "Удалять разрешительные при изменении номенклатуры")]
-        public bool DeleteApproval
-            {
-            get
-                {
-                return z_DeleteApproval;
-                }
-            set
-                {
-                if (z_DeleteApproval == value)
-                    {
-                    return;
-                    }
+        bool DeleteApproval { get; set; }
+        }
 
-                z_DeleteApproval = value;
-                NotifyPropertyChanged("DeleteApproval");
+    public class DocumentTypeHelper
+        {
+        private static IDocumentType certificateType;
+
+        public static IDocumentType GetCertificateType()
+            {
+            if (certificateType == null)
+                {
+                var certificateTypeIdList = DB.NewQuery("select cap.Id from DocumentType cap where cap.QualifierCodeName = 5111 and cap.MarkForDeleting = 0").SelectToList<long>();
+                certificateType = A.New<IDocumentType>(certificateTypeIdList.Count == 1 ? certificateTypeIdList.First() : 0);
                 }
+            return certificateType;
             }
-        private bool z_DeleteApproval = false;
-        #endregion
         }
     }

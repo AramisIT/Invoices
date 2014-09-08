@@ -111,24 +111,24 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
                 return;
                 }
             GridColumnSummaryItem item = e.Item as GridColumnSummaryItem;
-            GridView view = sender as GridView;
+
             if (Equals("Places", item.Tag))
                 {
                 setTotalPlaces(e);
                 }
-            if (Equals("TotalSumm", item.Tag))
+            else if (Equals("TotalSumm", item.Tag))
                 {
                 setTotalSumm(e);
                 }
-            if (Equals("GrossWeight", item.Tag))
+            else if (Equals("GrossWeight", item.Tag))
                 {
                 setTotalGrossWeight(e);
                 }
-            if (Equals("NetWeight", item.Tag))
+            else if (Equals("NetWeight", item.Tag))
                 {
                 setTotalNetWeight(e);
                 }
-            if (Equals("Count", item.Tag))
+            else if (Equals("Count", item.Tag))
                 {
                 setTotalCount(e);
                 }
@@ -218,7 +218,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
             {
             bottomTotalsCalculator.RefreshTotals();
             this.mainView.UpdateTotalSummary();
-           // mainView.GridControl.
+            // mainView.GridControl.
             }
         }
     }

@@ -120,6 +120,8 @@ namespace SystemInvoice.SystemObjects
                 }
             }
 
+        private StringCacheDictionary nomnclatureCache;
+
         private StringCacheDictionary customsCodes;
         private StringCacheDictionary approvalsTypes;
         private StringCacheDictionary countries;
@@ -127,6 +129,9 @@ namespace SystemInvoice.SystemObjects
 
         private Dictionary<string, IManufacturer> producers;
         private Dictionary<string, ITradeMark> tradeMarks;
+
+        private Dictionary<string, Approvals> certificatesCache;
+
         private Dictionary<DateTime, Dictionary<string, Approvals>> approvalsCache;
 
         public LoadingEuroluxBehaviour(ILoadingEurolux item)
@@ -141,16 +146,43 @@ namespace SystemInvoice.SystemObjects
             {
             if (loaderIsInitiated) return;
 
-            customsCodes = new CatalogCacheCreator<CustomsCode>().GetDescriptionIdCache();
-            countries = new CatalogCacheCreator<Country>().GetDescriptionIdCache(descriptionFieldName: "InternationalCode");
-            unitMeasures = new CatalogCacheCreator<UnitOfMeasure>().GetDescriptionIdCache(descriptionFieldName: "ShortName");
-            approvalsTypes =
-                new CatalogCacheCreator<DocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
+            if (O.LoadingType != ElectroluxLoadingTypes.Approvals)
+                {
+                customsCodes = new CatalogCacheCreator<CustomsCode>().GetDescriptionIdCache();
+                countries = new CatalogCacheCreator<Country>().GetDescriptionIdCache(descriptionFieldName: "InternationalCode");
+                unitMeasures = new CatalogCacheCreator<UnitOfMeasure>().GetDescriptionIdCache(descriptionFieldName: "ShortName");
+                approvalsTypes = new CatalogCacheCreator<IDocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
 
-            producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
-            tradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
+                producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
+                tradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
 
-            approvalsCache = getApprovalCache();
+                if (O.LoadingType != ElectroluxLoadingTypes.NomenclatureDatabase)
+                    {
+                    approvalsCache = getApprovalCache();
+                    }
+                else if (O.LoadingType == ElectroluxLoadingTypes.Nomenclature)
+                    {
+                    if (string.IsNullOrEmpty(O.FindArticleAndModelRegEx))
+                        {
+                        O.FindArticleAndModelRegEx =
+                            @"(?i)(?x)       м\s*о\s*д\s*е\s*л\s*ь[\s-]+  (?<Model>    [^\s\p{P}]+)               (   .*?     (   а\s*р\s*т \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
+                        }
+
+                    findArticleAndModelRegEx = new Regex(O.FindArticleAndModelRegEx);
+                    }
+                }
+            else
+                {
+                var declarationIdList = DB.NewQuery("select cap.Id from DocumentType cap where cap.QualifierCodeName = 5112 and cap.MarkForDeleting = 0").SelectToList<long>();
+                declarationType = A.New<IDocumentType>(declarationIdList.Count == 1 ? declarationIdList.First() : 0);
+
+                var certificateTypeIdList = DB.NewQuery("select cap.Id from DocumentType cap where cap.QualifierCodeName = 5111 and cap.MarkForDeleting = 0").SelectToList<long>();
+                certificateType = DocumentTypeHelper.GetCertificateType();
+
+                nomnclatureCache = new CatalogCacheCreator<Nomenclature>().GetDescriptionIdCache(new { Contractor = O.Contractor }, "Model");
+                certificatesCache = new CatalogCacheCreator<Approvals>().GetDescriptionItemCache(new { Contractor = O.Contractor, DocumentType = certificateType }, "DocumentNumber");
+                declarationsCache = new CatalogCacheCreator<Approvals>().GetDescriptionItemCacheIncludeRepeatedItems(new { Contractor = O.Contractor, DocumentType = declarationType }, "DocumentNumber");
+                }
 
             loaderIsInitiated = true;
             }
@@ -598,7 +630,7 @@ namespace SystemInvoice.SystemObjects
         private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
         private StringBuilder warnings;
 
-        private T getItem<T>(string strValue, Dictionary<string, T> cache) where T : ICatalog
+        private T getItem<T>(string strValue, Dictionary<string, T> cache) where T : IDatabaseObject
             {
             if (!string.IsNullOrEmpty(strValue))
                 {
@@ -611,8 +643,15 @@ namespace SystemInvoice.SystemObjects
                     {
                     item = A.New<T>();
                     item.SetRef("Contractor", O.Contractor.Id);
-                    item.Description = strValue;
-                    newCatalogItems.Add(item);
+                    if (item is ICatalog)
+                        {
+                        ((ICatalog)item).Description = strValue;
+                        newCatalogItems.Add((ICatalog)item);
+                        }
+                    else
+                        {
+                        newDocumentItems.Add((IDocument)item);
+                        }
                     cache.Add(strValue, item);
                     return item;
                     }
@@ -676,11 +715,9 @@ namespace SystemInvoice.SystemObjects
 
         private Regex findArticleAndModelRegEx;
 
-        internal void LoadNewWares(List<string> files, Action<double> notifyProgress)
+        internal void LoadExcelFiles(List<string> files, Action<double> notifyProgress)
             {
             initLoader();
-
-            findArticleAndModelRegEx = new Regex(O.FindArticleAndModelRegEx);
 
             O.Files.Clear();
             notifyProgress(0.0);
@@ -690,7 +727,8 @@ namespace SystemInvoice.SystemObjects
                 var fileName = files[fileIndex];
                 string errorDescription;
                 string errorHelpData;
-                if (!tryLoadNewWaresFromExcelFile(fileName, out errorDescription, out errorHelpData))
+
+                if (!tryLoadDataFromExcelFile(fileName, notifyProgress, out errorDescription, out errorHelpData))
                     {
                     var errorFileRow = O.Files.Add();
                     errorFileRow.ErrorDescription = errorDescription;
@@ -718,33 +756,44 @@ namespace SystemInvoice.SystemObjects
                 }
             }
 
-        private bool tryLoadNewWaresFromExcelFile(string fileName, out string errorDescription, out string errorHelpData)
-            {
-            errorHelpData = null;
+        private delegate bool TryLoadExcelDataFromExcelFileDelegate(DataSet dataSet, Action<double> notifyProgress, out string errorDescription, out string errorHelpData);
 
-            DataTable firstSheet = null;
-            DataTable secondSheet = null;
+        private bool tryLoadDataFromExcelFile(string fileName, Action<double> notifyProgress, out string errorDescription, out string errorHelpData)
+            {
+            DataSet fileData = null;
+
             try
                 {
                 using (var stream = File.Open(fileName, FileMode.Open, FileAccess.Read))
                     {
-                    IExcelDataReader excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
+                    var openXmlFileType = fileName.EndsWith(".xlsx", StringComparison.InvariantCultureIgnoreCase);
+                    IExcelDataReader excelReader = openXmlFileType ?
+                        ExcelReaderFactory.CreateOpenXmlReader(stream) :
+                        ExcelReaderFactory.CreateBinaryReader(stream);
 
-                    DataSet result = excelReader.AsDataSet();
-                    firstSheet = result.Tables[0];
-                    secondSheet = result.Tables[1];
+                    fileData = excelReader.AsDataSet();
                     }
                 }
-            catch
+            catch (Exception e)
                 {
                 errorDescription = "Не удалось открыть Excel файл!";
+                errorHelpData = e.Message;
                 return false;
                 }
 
-            Dictionary<string, InternalCodesInfo> internalCodesDictionary;
-            if (!loadInternalCodes(firstSheet, out internalCodesDictionary, out errorDescription, out errorHelpData)) return false;
+            var fileLoadingHandler = O.LoadingType == ElectroluxLoadingTypes.Nomenclature
+              ? new TryLoadExcelDataFromExcelFileDelegate(tryLoadNewWaresFromExcelFile) :
+              new TryLoadExcelDataFromExcelFileDelegate(tryLoadApprovalsFromExcelFile);
 
-            return loadWares(secondSheet, internalCodesDictionary, out errorDescription, out errorHelpData);
+            return fileLoadingHandler(fileData, notifyProgress, out errorDescription, out errorHelpData);
+            }
+
+        private bool tryLoadNewWaresFromExcelFile(DataSet dataSet, Action<double> notifyProgress, out string errorDescription, out string errorHelpData)
+            {
+            Dictionary<string, InternalCodesInfo> internalCodesDictionary;
+            if (!loadInternalCodes(dataSet.Tables[0], out internalCodesDictionary, out errorDescription, out errorHelpData)) return false;
+
+            return loadWares(dataSet.Tables[1], internalCodesDictionary, out errorDescription, out errorHelpData);
             }
 
         private bool loadWares(DataTable table, Dictionary<string, InternalCodesInfo> internalCodesDictionary,
@@ -880,6 +929,11 @@ namespace SystemInvoice.SystemObjects
             }
 
         private long defaultMeasureUnitId;
+        private IDocumentType declarationType;
+        private IDocumentType certificateType;
+        private Dictionary<string, List<Approvals>> declarationsCache;
+        private DateTime defaultStartDate = new DateTime(2010, 1, 1);
+
         private long getDefaultMeasureUnitId()
             {
             if (defaultMeasureUnitId == 0)
@@ -957,6 +1011,184 @@ namespace SystemInvoice.SystemObjects
 
             errorDescription = null;
             return true;
+            }
+
+        private bool tryLoadApprovalsFromExcelFile(DataSet dataSet, Action<double> notifyProgress, out string errorDescription, out string errorHelpData)
+            {
+            errorHelpData = null;
+
+            if (declarationType.IsNew)
+                {
+                errorDescription = "Вид декларации не найден (справ. Типы документов), возможно есть несколько элементов с одним и тем же кодом в документе!";
+                return false;
+                }
+
+            if (certificateType.IsNew)
+                {
+                errorDescription = "Вид сертификата не найден (справ. Типы документов), возможно есть несколько элементов с одним и тем же кодом в документе!";
+                return false;
+                }
+
+            newCatalogItems.Clear();
+            newDocumentItems.Clear();
+
+            DataTable sheet = dataSet.Tables[0];
+            var totalRowsCount = (double)sheet.Rows.Count;
+            notifyProgress(0.0);
+
+            for (int rowIndex = 1; rowIndex < sheet.Rows.Count; rowIndex++)
+                {
+                var row = sheet.Rows[rowIndex];
+                var wareId = getId(row[0], nomnclatureCache, "ware", false);
+                if (wareId == 0) continue;
+
+                var declaration1Number = row[1].ToString().Trim();
+                var declaration2Number = row[2].ToString().Trim();
+                var certificateNumber = row[3].ToString().Trim();
+
+                if (string.IsNullOrEmpty(declaration1Number) &&
+                    string.IsNullOrEmpty(declaration2Number) &&
+                    string.IsNullOrEmpty(certificateNumber))
+                    {
+                    continue;
+                    }
+
+                Approvals certificate;
+                if (string.IsNullOrEmpty(certificateNumber))
+                    {
+                    certificate = A.New<Approvals>();
+                    }
+                else
+                    {
+                    certificate = getItem<Approvals>(certificateNumber, certificatesCache);
+                    if (certificate.IsNew)
+                        {
+                        certificate.DocumentNumber = certificateNumber;
+                        certificate.SetRef("DocumentType", certificateType.Id);
+                        certificate.DocumentCode = certificateType.QualifierCodeName;
+                        certificate.DateFrom = defaultStartDate;
+                        certificate.DateTo = DateTime.Now.AddYears(2);
+                        }
+                    else
+                        {
+                        // need to update
+                        newDocumentItems.Add(certificate);
+                        }
+
+                    certificate.AddWareId(wareId);
+                    }
+
+                if (!string.IsNullOrEmpty(declaration1Number)
+                    && declaration1Number.Equals(declaration2Number))
+                    {
+                    List<Approvals> itemsList;
+                    if (!declarationsCache.TryGetValue(declaration1Number, out itemsList))
+                        {
+                        itemsList = new List<Approvals>();
+                        declarationsCache.Add(declaration1Number, itemsList);
+
+                        var item = createNewApprovalDeclaration(certificate, declaration1Number);
+                        newDocumentItems.Add(item);
+                        itemsList.Add(item);
+                        item.AddWareId(wareId);
+
+                        item = createNewApprovalDeclaration(certificate, declaration1Number);
+                        newDocumentItems.Add(item);
+                        itemsList.Add(item);
+                        item.AddWareId(wareId);
+                        }
+                    else
+                        {
+                        itemsList.ForEach(item =>
+                            {
+                                newDocumentItems.Add(item);
+                                item.AddWareId(wareId);
+                            });
+
+                        while (itemsList.Count < 2)
+                            {
+                            var item = createNewApprovalDeclaration(certificate, declaration1Number);
+                            newDocumentItems.Add(item);
+                            itemsList.Add(item);
+                            item.AddWareId(wareId);
+                            }
+                        }
+                    }
+                else
+                    {
+                    if (!string.IsNullOrEmpty(declaration1Number))
+                        {
+                        List<Approvals> itemsList;
+                        Approvals item = null;
+                        if (!declarationsCache.TryGetValue(declaration1Number, out itemsList))
+                            {
+                            itemsList = new List<Approvals>();
+                            declarationsCache.Add(declaration1Number, itemsList);
+
+                            item = createNewApprovalDeclaration(certificate, declaration1Number);
+                            itemsList.Add(item);
+                            }
+                        else
+                            {
+                            item = itemsList[0];
+                            }
+
+                        item.AddWareId(wareId);
+                        newDocumentItems.Add(item);
+                        }
+
+                    if (!string.IsNullOrEmpty(declaration2Number))
+                        {
+                        List<Approvals> itemsList;
+                        Approvals item = null;
+                        if (!declarationsCache.TryGetValue(declaration2Number, out itemsList))
+                            {
+                            itemsList = new List<Approvals>();
+                            declarationsCache.Add(declaration2Number, itemsList);
+
+                            item = createNewApprovalDeclaration(certificate, declaration2Number);
+                            itemsList.Add(item);
+                            }
+                        else
+                            {
+                            item = itemsList[0];
+                            }
+
+                        item.AddWareId(wareId);
+                        newDocumentItems.Add(item);
+                        }
+                    }
+                notifyProgress((1.0 + rowIndex) / totalRowsCount);
+                }
+
+            notifyProgress(0);
+            for (int i = 0; i < newDocumentItems.Count; i++)
+                {
+                var item = newDocumentItems[i];
+                var writtenResult = item.Write();
+                if (writtenResult != WritingResult.Success)
+                    {
+                    errorDescription = "Не удалось записать элемент: " + item;
+                    return false;
+                    }
+                notifyProgress((1.0 + i) / newDocumentItems.Count);
+                }
+
+            errorDescription = null;
+            return true;
+            }
+
+        private Approvals createNewApprovalDeclaration(Approvals certificate, string docNumber)
+            {
+            var item = A.New<Approvals>();
+            item.SetRef("Contractor", O.Contractor.Id);
+            item.DocumentNumber = docNumber;
+            item.SetRef("DocumentType", declarationType.Id);
+            item.DocumentCode = declarationType.QualifierCodeName;
+            item.DateFrom = defaultStartDate;
+            item.DateTo = DateTime.Now.AddYears(2);
+            item.BaseApproval = certificate;
+            return item;
             }
         }
 

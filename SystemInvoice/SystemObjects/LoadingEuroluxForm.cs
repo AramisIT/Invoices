@@ -75,13 +75,9 @@ namespace SystemInvoice.Catalogs.Forms
                     break;
 
                 case ElectroluxLoadingTypes.Nomenclature:
-                    if (string.IsNullOrEmpty(Item.FindArticleAndModelRegEx))
-                        {
-                        Item.FindArticleAndModelRegEx =
-                            @"(?i)(?x)       м\s*о\s*д\s*е\s*л\s*ь[\s-]+  (?<Model>    [^\s\p{P}]+)               (   .*?     (   а\s*р\s*т \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
-                        }
+                case ElectroluxLoadingTypes.Approvals:
                     AramisIO.OpenFileFolderDialogResult selectingResult;
-                    if (!AramisIO.ChooseFilesOrFolder(AramisIO.FilesTypesFilters.Excel_97_2003, out selectingResult)) return;
+                    if (!AramisIO.ChooseFilesOrFolder(AramisIO.FilesTypesFilters.Excel, out selectingResult)) return;
                     var files = selectingResult.GetAllFiles();
                     if (selectingResult.SelectedFolder && files.Count == 0)
                         {
@@ -92,7 +88,7 @@ namespace SystemInvoice.Catalogs.Forms
                     (sender as ButtonEdit).Text = selectingResult.SelectedFolder ? Path.GetDirectoryName(selectingResult.FolderName) :
                         (selectingResult.SelectedOneFile ? Path.GetDirectoryName(selectingResult.FileName) : string.Empty);
 
-                    itemBehaviour.LoadNewWares(files, notifyPercentChanged);
+                    itemBehaviour.LoadExcelFiles(files, notifyPercentChanged);
                     break;
                 }
             }
@@ -134,7 +130,7 @@ namespace SystemInvoice.Catalogs.Forms
             if (sourceRowIndex < 0) return;
             var dataSource = Item.Files[sourceRowIndex];
             file.Text = dataSource.FullFileName;
-            itemBehaviour.LoadNewWares(new List<string>() { dataSource.FullFileName }, notifyPercentChanged);
+            itemBehaviour.LoadExcelFiles(new List<string>() { dataSource.FullFileName }, notifyPercentChanged);
             }
 
 

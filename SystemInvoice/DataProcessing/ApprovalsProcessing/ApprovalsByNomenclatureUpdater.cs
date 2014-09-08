@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using SystemInvoice.DataProcessing.ApprovalsProcessing.ByNomenclatureUpdating;
 using SystemInvoice.Documents;
+using Aramis.Core;
 using Aramis.DatabaseConnector;
 
 namespace SystemInvoice.DataProcessing.ApprovalsProcessing
@@ -145,7 +146,7 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
                 updatedApprovals.Add(approvalId);
                 }
             //сохраняем инфу в справочник
-            this.addToRemoveHistory(rowResult,nomenclatureId);
+            this.addToRemoveHistory(rowResult, nomenclatureId);
             }
 
         /// <summary>
@@ -158,8 +159,8 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
             DateTime dateTo = (DateTime)rowResult[dateToColumnName];
             DateTime removingTime = (DateTime)rowResult[removeDateColumnName];
             NomenclatureApprovalsRemovingHistory removingHistory = new NomenclatureApprovalsRemovingHistory();
-            removingHistory.Nomenclature = new Nomenclature() {Id = nomenclatureId};
-            removingHistory.DocumentType = new DocumentType() {Id = documentTypeId};
+            removingHistory.Nomenclature = new Nomenclature() { Id = nomenclatureId };
+            removingHistory.DocumentType = A.New<IDocumentType>(documentTypeId);
             removingHistory.DateFrom = dateFrom;
             removingHistory.DateTo = dateTo;
             removingHistory.RemovingDate = removingTime;

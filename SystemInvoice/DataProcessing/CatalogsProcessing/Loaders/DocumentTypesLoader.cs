@@ -8,9 +8,8 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
     /// <summary>
     /// Загружает типы документов
     /// </summary>
-    public class DocumentTypesLoader : FromExcelToDataBaseObjectsLoaderBase<DocumentType>
+    public class DocumentTypesLoader : FromExcelToDataBaseObjectsLoaderBase<IDocumentType>
         {
-
         HashSet<string> documentTypesExisted = new HashSet<string>();
 
         public DocumentTypesLoader(SystemInvoiceDBCache cachedData)
@@ -18,7 +17,7 @@ namespace SystemInvoice.DataProcessing.CatalogsProcessing.Loaders
             {
             }
 
-        protected override bool CheckItemBegoreCreate(DocumentType itemToCheck)
+        protected override bool CheckItemBegoreCreate(IDocumentType itemToCheck)
             {
             if (string.IsNullOrEmpty(itemToCheck.Description.Trim()) || string.IsNullOrEmpty(itemToCheck.QualifierCodeName.Trim()) ||
                 documentTypesExisted.Contains(itemToCheck.QualifierCodeName.Trim()))

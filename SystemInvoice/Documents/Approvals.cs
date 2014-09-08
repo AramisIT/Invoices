@@ -11,6 +11,7 @@ using SystemInvoice.Catalogs;
 using System.Data;
 using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
+using Aramis.UI.WinFormsDevXpress;
 using Catalogs;
 using Documents;
 using AramisCatalogs = Catalogs;
@@ -36,11 +37,11 @@ namespace SystemInvoice.Documents
 
         #region (DocumentType) DocumentType Тип документа
         [DataField(Description = "Тип документа", NotEmpty = true, ShowInList = true)]
-        public DocumentType DocumentType
+        public IDocumentType DocumentType
             {
             get
                 {
-                return (DocumentType)GetValueForObjectProperty("DocumentType");
+                return (IDocumentType)GetValueForObjectProperty("DocumentType");
                 }
             set
                 {
@@ -523,5 +524,17 @@ namespace SystemInvoice.Documents
             return nomenclatures;
             }
 
+        internal void AddWareId(long wareId)
+            {
+            foreach (DataRow row in Nomenclatures.Rows)
+                {
+                var currentWareId = (long)row[ItemNomenclature];
+                if (currentWareId == wareId) return;
+                }
+
+            var newRow = Nomenclatures.GetNewRow(this);
+            newRow[ItemNomenclature] = wareId;
+            newRow.AddRowToTable(this);
+            }
         }
     }
