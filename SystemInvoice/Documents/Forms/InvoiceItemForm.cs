@@ -14,6 +14,7 @@ using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.Ap
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.CatalogsInTableSearch;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.SpecificCachesManagement;
 using SystemInvoice.SystemObjects;
+using Aramis.DataBase;
 using Aramis.UI;
 using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Columns;
@@ -941,6 +942,31 @@ namespace SystemInvoice.Documents.Forms
             row[invoice.Country] = newRow.Country.InternationalCode;
             row[invoice.UnitOfMeasure] = newRow.UnitOfMeasure.Description;
             row[invoice.UnitOfMeasureCode] = newRow.UnitOfMeasure.InternationalCode;
+            }
+
+        private Color NEW_WARE_ELECTROLUX_COLOR = "#ffdd8a".ToSystemDrawingColor();
+
+        private StringCacheDictionary newElectroluxWaresCache;
+
+        private void goodsGridView_RowStyle(object sender, RowStyleEventArgs e)
+            {
+            if (Invoice.Contractor.Id == LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR.Id)
+                {
+                var currentRow = goodsGridView.GetDataRow(e.RowHandle);
+                if (currentRow == null) return;
+                var model = currentRow[Invoice.Model] as string;
+
+                if (newElectroluxWaresCache == null)
+                    {
+                    newElectroluxWaresCache = new CatalogCacheCreator<Nomenclature>().GetDescriptionIdCache(
+                        new { Contractor = LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR, WareFromCatalog = true }, "Model");
+                    }
+
+                if (newElectroluxWaresCache.ContainsKey(model))
+                    {
+                    e.Appearance.BackColor = NEW_WARE_ELECTROLUX_COLOR;
+                    }
+                }
             }
 
         }

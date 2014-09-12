@@ -137,7 +137,17 @@ namespace SystemInvoice.SystemObjects
         public LoadingEuroluxBehaviour(ILoadingEurolux item)
             : base(item)
             {
-            O.Contractor = CatalogTable.FindByDescription(typeof(IContractor).GetTableName(), "Electrolux") as IContractor;
+            O.Contractor = ELECTROLUX_CONTRACTOR;
+            }
+
+        private static IContractor _ELECTROLUX_CONTRACTOR;
+        public static IContractor ELECTROLUX_CONTRACTOR
+            {
+            get
+                {
+                return _ELECTROLUX_CONTRACTOR ?? 
+                    (_ELECTROLUX_CONTRACTOR = CatalogTable.FindByDescription(typeof(IContractor).GetTableName(), "Electrolux") as IContractor);
+                }
             }
 
         private bool loaderIsInitiated;
