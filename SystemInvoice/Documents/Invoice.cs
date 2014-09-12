@@ -399,7 +399,7 @@ namespace SystemInvoice.Documents
             "ZaraContent7Code,ZaraContent7UkrName,ZaraContent7EnName,ZaraContent8Code,ZaraContent8UkrName,ZaraContent8EnName,ZaraContent9Code,ZaraContent9UkrName,ZaraContent9EnName," +
             "ZaraContent10Code,ZaraContent10UkrName,ZaraContent10EnName,ZaraContent11Code,ZaraContent11UkrName,ZaraContent11EnName,ZaraContent12Code,ZaraContent12UkrName,ZaraContent12EnName," +
             "ZaraContent13Code,ZaraContent13UkrName,ZaraContent13EnName,ZaraContent14Code,ZaraContent14UkrName,ZaraContent14EnName,ZaraContent15Code,ZaraContent15UkrName,ZaraContent15EnName," +
-            "MSKnitWovenColumnName, ShowRow,BNSInvoicePart,Graf31FilterColumn,TempFilterColumn,Model,RD1BaseNumber,RD2BaseNumber,RD3BaseNumber,RD4BaseNumber,RD5BaseNumber", AllowFiltering = true, AllowPopUpMenu = false, AllowCopyRow = false, ConfirmRowDeletion = true)]
+            "MSKnitWovenColumnName, ShowRow,BNSInvoicePart,Graf31FilterColumn,TempFilterColumn,Model,RD1BaseNumber,RD2BaseNumber,RD3BaseNumber,RD4BaseNumber,RD5BaseNumber,OneItemGross", AllowFiltering = true, AllowPopUpMenu = false, AllowCopyRow = false, ConfirmRowDeletion = true)]
         [DataField(Description = "Товары")]
         public DataTable Goods
             {
@@ -885,6 +885,13 @@ namespace SystemInvoice.Documents
 
         [SubTableField(Description = "РД 5 основание", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
         public DataColumn RD5BaseNumber
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "Брутто един.", PropertyType = typeof(string), Size = 10)]
+        public DataColumn OneItemGross
             {
             get;
             set;

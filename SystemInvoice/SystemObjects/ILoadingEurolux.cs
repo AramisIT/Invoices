@@ -156,7 +156,7 @@ namespace SystemInvoice.SystemObjects
                 producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
                 tradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
 
-                if (O.LoadingType != ElectroluxLoadingTypes.NomenclatureDatabase)
+                if (O.LoadingType == ElectroluxLoadingTypes.NomenclatureDatabase)
                     {
                     approvalsCache = getApprovalCache();
                     }
@@ -165,10 +165,8 @@ namespace SystemInvoice.SystemObjects
                     if (string.IsNullOrEmpty(O.FindArticleAndModelRegEx))
                         {
                         O.FindArticleAndModelRegEx =
-                            @"(?i)(?x)       м\s*о\s*д\s*е\s*л\s*ь[\s-]+  (?<Model>    [^\s\p{P}]+)               (   .*?     (   а\s*р\s*т \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
+                            @"(?i)(?x)       м\s*о\s*д\s*е\s*л\s*ь[\s-]+  (?<Model>    [^\s,]+)               (   .*?     (   а\s*р\s*т \s* \.  \s*  |  артикул  \s*  )            (?<Article>       [^-]*   )  )?";
                         }
-
-                    findArticleAndModelRegEx = new Regex(O.FindArticleAndModelRegEx);
                     }
                 }
             else
@@ -467,7 +465,7 @@ namespace SystemInvoice.SystemObjects
                 }
 
             string errorDescription;
-            if (!writeToDatabase(notifyProgress, out errorDescription))
+            if (!writeToDatabase(notifyProgress, false, out errorDescription))
                 {
                 errorDescription.WarningBox();
                 }
@@ -507,7 +505,7 @@ namespace SystemInvoice.SystemObjects
             return doc;
             }
 
-        private bool writeToDatabase(Action<double> notifyProgress, out string errorDescription)
+        private bool writeToDatabase(Action<double> notifyProgress, bool wareFromCatalog, out string errorDescription)
             {
             foreach (var item in newCatalogItems)
                 {
@@ -535,6 +533,13 @@ namespace SystemInvoice.SystemObjects
                 var row = O.Rows[itemIndex];
 
                 var ware = getWare(row.Article, row.Model);
+
+                if (wareFromCatalog)
+                    {
+                    if (!ware.IsNew) continue;
+
+                    ware.WareFromCatalog = true;
+                    }
 
                 ware.SetRef("Country", row.Country.Id);
                 ware.SetRef("UnitOfMeasure", row.MeasureUnit.Id);
@@ -718,6 +723,7 @@ namespace SystemInvoice.SystemObjects
         internal void LoadExcelFiles(List<string> files, Action<double> notifyProgress)
             {
             initLoader();
+            findArticleAndModelRegEx = new Regex(O.FindArticleAndModelRegEx);
 
             O.Files.Clear();
             notifyProgress(0.0);
@@ -790,6 +796,13 @@ namespace SystemInvoice.SystemObjects
 
         private bool tryLoadNewWaresFromExcelFile(DataSet dataSet, Action<double> notifyProgress, out string errorDescription, out string errorHelpData)
             {
+            if (dataSet.Tables.Count < 2)
+                {
+                errorDescription = "В файле должно быть минимум 2 страницы";
+                errorHelpData = null;
+                return false;
+                }
+
             Dictionary<string, InternalCodesInfo> internalCodesDictionary;
             if (!loadInternalCodes(dataSet.Tables[0], out internalCodesDictionary, out errorDescription, out errorHelpData)) return false;
 
@@ -924,7 +937,7 @@ namespace SystemInvoice.SystemObjects
 
             errorDescription = null;
             var result = true ||
-                writeToDatabase((progress) => { }, out errorDescription);
+                writeToDatabase((progress) => { }, true, out errorDescription);
             return result;
             }
 
@@ -982,24 +995,32 @@ namespace SystemInvoice.SystemObjects
 
                     if (string.IsNullOrEmpty(info.Article))
                         {
+                        errorHelpData = info.Article;
                         errorDescription = string.Format("Стр. № {0}. Не найден артикул", (rowIndex + 1));
                         return false;
                         }
 
                     if (string.IsNullOrEmpty(info.Model))
                         {
+                        errorHelpData = info.Model;
                         errorDescription = string.Format("Стр. № {0}. Не найдена модель", (rowIndex + 1));
                         return false;
                         }
 
-                    if (internalCodesDictionary.ContainsKey(info.Article))
+                    InternalCodesInfo existsCode;
+
+                    if (internalCodesDictionary.TryGetValue(info.Article, out existsCode))
                         {
+                        if (existsCode.Model.EqualsIgnoreCase(info.Model)) continue;
+
+                        errorHelpData = info.Article;
                         errorDescription = string.Format("Стр. № {0}. Повтор артикула", (rowIndex + 1));
                         return false;
                         }
 
                     if (internalCodesDictionary.ContainsKey(info.Model))
                         {
+                        errorHelpData = info.Model;
                         errorDescription = string.Format("Стр. № {0}. Повтор модели", (rowIndex + 1));
                         return false;
                         }

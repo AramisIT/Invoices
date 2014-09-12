@@ -83,6 +83,27 @@ namespace SystemInvoice.Catalogs
         private string z_CustomsCodeExtern = "";
         #endregion
 
+        [DataField(Description = "Товар из каталога", ShowInList = true)]
+        public bool WareFromCatalog
+            {
+            get
+                {
+                return z_WareFromCatalog;
+                }
+            set
+                {
+                if (z_WareFromCatalog == value)
+                    {
+                    return;
+                    }
+
+                z_WareFromCatalog = value;
+                NotifyPropertyChanged("WareFromCatalog");
+                }
+            }
+
+        private bool z_WareFromCatalog;
+       
         #region (string) BarCode Штрих-Код
         [DataField(Description = "Штрих-Код", Size = 20)]
         public string BarCode

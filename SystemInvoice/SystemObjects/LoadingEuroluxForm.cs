@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SystemInvoice.SystemObjects;
 using Aramis;
 using Aramis.DatabaseConnector;
+using Aramis.IO;
 using DevExpress.XtraBars;
 using Aramis.Attributes;
 using Aramis.Core;
@@ -76,12 +77,12 @@ namespace SystemInvoice.Catalogs.Forms
 
                 case ElectroluxLoadingTypes.Nomenclature:
                 case ElectroluxLoadingTypes.Approvals:
-                    AramisIO.OpenFileFolderDialogResult selectingResult;
+                    OpenFileFolderDialogResult selectingResult;
                     if (!AramisIO.ChooseFilesOrFolder(AramisIO.FilesTypesFilters.Excel, out selectingResult)) return;
                     var files = selectingResult.GetAllFiles();
                     if (selectingResult.SelectedFolder && files.Count == 0)
                         {
-                        "В папке не найдено ни одного подходящего файла (*.xls)".NotifyToUser(MessagesToUserTypes.Error);
+                        "В папке не найдено ни одного подходящего файла Excel".NotifyToUser(MessagesToUserTypes.Error);
                         return;
                         }
 

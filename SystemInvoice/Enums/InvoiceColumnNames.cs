@@ -220,6 +220,9 @@ namespace SystemInvoice.Documents
         [DataField(Description = "Модель")]
         Model,
 
+        [DataField(Description = "Брутто един.")]
+        OneItemGross,
+
         [DataField(Description = "РД 1 основание")]
         RD1BaseNumber,
         [DataField(Description = "РД 2 основание")]
