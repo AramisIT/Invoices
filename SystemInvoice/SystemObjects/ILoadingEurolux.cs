@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification;
 using SystemInvoice.Excel;
+using SystemInvoice.Utils;
+using SystemInvoice.Utils.Excel;
 using Aramis.Attributes;
 using Aramis.Core;
 using Aramis.DataBase;
@@ -145,7 +147,7 @@ namespace SystemInvoice.SystemObjects
             {
             get
                 {
-                return _ELECTROLUX_CONTRACTOR ?? 
+                return _ELECTROLUX_CONTRACTOR ??
                     (_ELECTROLUX_CONTRACTOR = CatalogTable.FindByDescription(typeof(IContractor).GetTableName(), "Electrolux") as IContractor);
                 }
             }
@@ -231,13 +233,13 @@ namespace SystemInvoice.SystemObjects
         class ExcelRow
             {
             public DateTime Date;
-            public Row Row;
+            public IExcelRow Row;
 
             public string Article;
             public string Model;
 
             public int RowNumber;
-            public Sheet Sheet;
+            public IExcelSheet Sheet;
             }
 
         internal void LoadWaresDatabaseFromExcel(string fileName, Action<double> notifyProgress)
@@ -249,64 +251,74 @@ namespace SystemInvoice.SystemObjects
 
             O.Rows.Clear();
 
-            ExcelXlsWorkbook book = null;
-            if (!ExcelHelper.tryLoad(fileName, out book))
+            using (IExcelReader excelReader = new NativeExcelReader())
                 {
-                "Не удалось открыть Excel файл!".NotifyToUser();
-                return;
-                }
-
-            const int modelIndex = 4;
-            const int articleIndex = 20;
-            const int dateIndex = 2;
-
-            var waresDictionary = new Dictionary<string, ExcelRow>();
-            var total = 0;
-            for (int sheetIndex = 0; sheetIndex < book.SheetCount; sheetIndex++)
-                {
-                total += book[sheetIndex].RowCount;
-                }
-
-            var current = 0;
-            for (int sheetIndex = 0; sheetIndex < book.SheetCount; sheetIndex++)
-                {
-                Worksheet sheet = book[sheetIndex];
-                for (int rowIndex = 1; rowIndex < sheet.RowCount; rowIndex++)
+                if (!excelReader.OpenFile(fileName))
                     {
-                    current++;
-                    Row row = sheet[rowIndex];
-                    var model = row[modelIndex].Value.ToString().Trim();
-                    var article = row[articleIndex].Value.ToString().Trim();
-
-                    if (string.IsNullOrEmpty(article)) continue;
-
-                    DateTime date;
-                    if (!getDate(row[dateIndex], rowIndex, sheet.Sheet, out date))
-                        {
-                        return;
-                        }
-
-                    var cache = string.Format("{0}$#^#${1}", model, article);
-                    ExcelRow savedRow;
-                    if (waresDictionary.TryGetValue(cache, out savedRow))
-                        {
-                        if (savedRow.Date >= date) continue;
-
-                        savedRow.Date = date;
-                        savedRow.Row = row;
-                        }
-                    else
-                        {
-                        waresDictionary.Add(cache, new ExcelRow() { Date = date, Row = row, Article = article, Model = model, RowNumber = rowIndex + 1, Sheet = sheet.Sheet });
-                        }
-
-                    notifyProgress((double)current / total);
+                    "Не удалось открыть Excel файл!".NotifyToUser();
+                    return;
                     }
-                }
 
-            book.Dispose();
-            //  await Task.Factory.StartNew(() => 
-            loadData(waresDictionary.Values.ToList(), notifyProgress);//);
+                const int modelIndex = 4;
+                const int articleIndex = 20;
+                const int dateIndex = 2;
+
+                var waresDictionary = new Dictionary<string, ExcelRow>();
+                var total = 0;
+                for (int sheetIndex = 0; sheetIndex < excelReader.SheetsCount; sheetIndex++)
+                    {
+                    total += excelReader[sheetIndex].RowsCount;
+                    }
+
+                var current = 0;
+                for (int sheetIndex = 0; sheetIndex < excelReader.SheetsCount; sheetIndex++)
+                    {
+                    var sheet = excelReader[sheetIndex];
+                    for (int rowIndex = 1; rowIndex < sheet.RowsCount; rowIndex++)
+                        {
+                        current++;
+                        var row = sheet[rowIndex];
+                        var model = row.GetString(modelIndex);
+                        var article = row.GetString(articleIndex);
+
+                        if (string.IsNullOrEmpty(article)) continue;
+
+                        var date = row.GetDate(dateIndex);
+                        if (date.IsEmpty())
+                            {
+                            string.Format("Ошибка получения даты в строке № {1}; страница {0}", sheet.Name, (rowIndex + 1)).WarningBox();
+                            return;
+                            }
+
+                        var cache = string.Format("{0}$#^#${1}", model, article);
+                        ExcelRow savedRow;
+                        if (waresDictionary.TryGetValue(cache, out savedRow))
+                            {
+                            if (savedRow.Date >= date) continue;
+
+                            savedRow.Date = date;
+                            savedRow.Row = row;
+                            }
+                        else
+                            {
+                            waresDictionary.Add(cache,
+                                new ExcelRow()
+                                    {
+                                        Date = date,
+                                        Row = row,
+                                        Article = article,
+                                        Model = model,
+                                        RowNumber = rowIndex + 1,
+                                        Sheet = sheet
+                                    });
+                            }
+
+                        notifyProgress((double)current / total);
+                        }
+                    }
+
+                loadData(waresDictionary.Values.ToList(), notifyProgress);
+                }
             }
 
         private void loadData(List<ExcelRow> list, Action<double> notifyProgress)
@@ -339,8 +351,8 @@ namespace SystemInvoice.SystemObjects
                 docRow.Model = row.Model;
                 docRow.Article = row.Article;
 
-                docRow.NameDecl = row.Row[nameDeclIndex].Value.ToString().Trim();
-                docRow.NameInvoice = row.Row[nameInvoiceIndex].Value.ToString().Trim();
+                docRow.NameDecl = row.Row.GetString(nameDeclIndex);
+                docRow.NameInvoice = row.Row.GetString(nameInvoiceIndex);
 
                 if (string.IsNullOrEmpty(docRow.NameDecl))
                     {
@@ -355,7 +367,7 @@ namespace SystemInvoice.SystemObjects
                     continue;
                     }
 
-                docRow.CodeInternal.Id = getId(row.Row[customsCodeIndex].Value, customsCodes, "УКТЗЕД", false);
+                docRow.CodeInternal.Id = getId(row.Row.GetLong(customsCodeIndex), customsCodes, "УКТЗЕД", false);
 
                 if (docRow.CodeInternal.Id == 0)
                     {
@@ -364,28 +376,27 @@ namespace SystemInvoice.SystemObjects
                     continue;
                     }
 
+                docRow.Price = row.Row.GetDouble(priceIndex);
+                docRow.NetOfOne = row.Row.GetDouble(netIndex);
+                docRow.GrossOfOne = row.Row.GetDouble(grossIndex);
+                var count = row.Row.GetDouble(countIndex);
+                if (count > 0.0)
+                    {
+                    docRow.NetOfOne /= count;
+                    docRow.GrossOfOne /= count;
+                    }
+                else
+                    {
+                    docRow.NetOfOne = 0.0;
+                    docRow.GrossOfOne = 0.0;
+                    }
+
                 try
                     {
-                    docRow.Price = row.Row[priceIndex].Value.ToString().ConvertToDouble();
-                    docRow.NetOfOne = row.Row[netIndex].Value.ToString().ConvertToDouble();
-                    docRow.GrossOfOne = row.Row[grossIndex].Value.ToString().ConvertToDouble();
-                    var count = row.Row[countIndex].Value.ToString().ConvertToDouble();
+                    docRow.Country.Id = getId(row.Row.GetLong(countryIndex), countries, "Страна");
+                    docRow.MeasureUnit.Id = getId(row.Row.GetLong(unitMeasureIndex), unitMeasures, "Един. изм.");
 
-                    if (count > 0.0)
-                        {
-                        docRow.NetOfOne /= count;
-                        docRow.GrossOfOne /= count;
-                        }
-                    else
-                        {
-                        docRow.NetOfOne = 0.0;
-                        docRow.GrossOfOne = 0.0;
-                        }
-
-                    docRow.Country.Id = getId(row.Row[countryIndex].Value, countries, "Страна");
-                    docRow.MeasureUnit.Id = getId(row.Row[unitMeasureIndex].Value, unitMeasures, "Един. изм.");
-
-                    var producer = row.Row[producerIndex].Value.ToString().TrimEnd();
+                    var producer = row.Row.GetString(producerIndex);
                     if (string.IsNullOrEmpty(producer))
                         {
                         addWarning("Не заполненно производитель!", row);
@@ -394,11 +405,11 @@ namespace SystemInvoice.SystemObjects
                         }
 
                     docRow.Producer.Item = getItem<IManufacturer>(producer, producers);
-                    docRow.TradeMark.Item = getItem<ITradeMark>(row.Row[tradeMarkIndex].Value.ToString().TrimEnd(), tradeMarks);
+                    docRow.TradeMark.Item = getItem<ITradeMark>(row.Row.GetString(tradeMarkIndex), tradeMarks);
                     }
                 catch (Exception exp)
                     {
-                    string.Format("Ошибка в строке № {0}, на странице \"{1}\".\r\n{2}", row.RowNumber, row.Sheet.SheetName, exp.Message).WarningBox();
+                    string.Format("Ошибка в строке № {0}, на странице \"{1}\".\r\n{2}", row.RowNumber, row.Sheet.Name, exp.Message).WarningBox();
                     return;
                     }
 
@@ -412,17 +423,18 @@ namespace SystemInvoice.SystemObjects
                 var currentColumnOffset = approvalsIndexOffset;
                 while (true)
                     {
-                    var docType = getId(row.Row[currentColumnOffset].Value, approvalsTypes, "Типы док-в", false);
+                    var docType = getId(row.Row.GetLong(currentColumnOffset), approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         break;
                         }
 
-                    var documentNumber = row.Row[currentColumnOffset + approvalNumberIndex].Value.ToString();
-                    DateTime date;
-                    if (!getDate(row.Row[currentColumnOffset + approvalDateIndex], row.RowNumber - 1, row.Sheet, out date))
+                    var documentNumber = row.Row.GetString(currentColumnOffset + approvalNumberIndex);
+                    var date = row.Row.GetDate(currentColumnOffset + approvalDateIndex);
+                    if (date.IsEmpty())
                         {
-                        date = DateTime.MinValue;
+                        string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name, row.RowNumber).WarningBox();
+                        return;
                         }
 
                     var newDoc = new ApprovalDocumentInfo() { DocumentNumber = documentNumber.Trim(), StartDate = date, DocumentType = docType };
@@ -433,11 +445,11 @@ namespace SystemInvoice.SystemObjects
                         }
 
                     currentColumnOffset += 3;
-                    docType = getId(row.Row[currentColumnOffset].Value, approvalsTypes, "Типы док-в", false);
+                    docType = getId(row.Row.GetLong(currentColumnOffset), approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         currentColumnOffset++;
-                        docType = getId(row.Row[currentColumnOffset].Value, approvalsTypes, "Типы док-в", false);
+                        docType = getId(row.Row.GetLong(currentColumnOffset), approvalsTypes, "Типы док-в", false);
                         if (docType > 0)
                             {
                             Trace.WriteLine("Long string");
@@ -483,7 +495,7 @@ namespace SystemInvoice.SystemObjects
 
         private void addWarning(string message, ExcelRow row)
             {
-            warnings.AppendLine(string.Format("{0} Страница - {1} № стр. - {2}", message.PadRight(40), row.Sheet.SheetName.PadRight(25), row.RowNumber));
+            warnings.AppendLine(string.Format("{0} Страница - {1} № стр. - {2}", message.PadRight(40), row.Sheet.Name.PadRight(25), row.RowNumber));
             }
 
         private Approvals getApprovalsDocument(ApprovalDocumentInfo docInfo)
@@ -678,6 +690,8 @@ namespace SystemInvoice.SystemObjects
 
         private long getId(object value, StringCacheDictionary cache, string fieldName, bool throwException = true)
             {
+            if (value == null) return 0;
+
             var strValue = value.ToString();
             if (string.IsNullOrEmpty(strValue))
                 {
