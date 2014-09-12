@@ -271,6 +271,7 @@ namespace SystemInvoice.SystemObjects
                     }
 
                 var current = 0;
+                int rowsSkipped = 0;
                 for (int sheetIndex = 0; sheetIndex < excelReader.SheetsCount; sheetIndex++)
                     {
                     var sheet = excelReader[sheetIndex];
@@ -281,7 +282,15 @@ namespace SystemInvoice.SystemObjects
                         var model = row.GetString(modelIndex);
                         var article = row.GetString(articleIndex);
 
-                        if (string.IsNullOrEmpty(article)) continue;
+                        if (string.IsNullOrEmpty(article))
+                            {
+                            rowsSkipped++;
+                            if (rowsSkipped > 10)
+                                {
+                                break;
+                                }
+                            continue;
+                            }
 
                         var date = row.GetDate(dateIndex);
                         if (date.IsEmpty())

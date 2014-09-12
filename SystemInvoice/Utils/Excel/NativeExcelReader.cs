@@ -9,13 +9,13 @@ namespace SystemInvoice.Utils.Excel
     public class NativeExcelRow : IExcelRow
         {
         private Range range;
-        private int rowIndex;
+        private int rowNumber;
         private int columnsCount;
 
         public NativeExcelRow(Range range, int rowIndex, int columnsCount)
             {
             this.range = range;
-            this.rowIndex = rowIndex;
+            this.rowNumber = rowIndex + 1;
             this.columnsCount = columnsCount;
             }
 
@@ -23,14 +23,14 @@ namespace SystemInvoice.Utils.Excel
             {
             var value = getValue(cellIndex);
             if (value == null) return string.Empty;
-            
+
             return value.ToString();
             }
 
         private object getValue(int cellIndex)
             {
-            if (cellIndex >= columnsCount) return null;
-            return (range[rowIndex, cellIndex] as Range).Value2;
+            if (cellIndex > columnsCount) return null;
+            return (range[rowNumber, cellIndex + 1] as Range).Value2;
             }
 
         public DateTime GetDate(int cellIndex)
@@ -39,6 +39,12 @@ namespace SystemInvoice.Utils.Excel
             if (value == null) return DateTime.MinValue;
             if (value is DateTime) return (DateTime)value;
 
+            if (!(value is string))
+                {
+                TimeSpan datefromexcel = new TimeSpan(Convert.ToInt32(value) - 2, 0, 0, 0);
+                DateTime inputdate = new DateTime(1900, 1, 1).Add(datefromexcel);
+                return inputdate;
+                }
             var strValue = value.ToString();
             try
                 {
@@ -98,7 +104,7 @@ namespace SystemInvoice.Utils.Excel
             {
             get
                 {
-                if (rowIndex >= RowsCount) return null;
+                if (rowIndex > RowsCount) return null;
 
                 NativeExcelRow row;
                 if (!rows.TryGetValue(rowIndex, out row))
