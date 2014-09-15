@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.IO;
+using SystemInvoice.Documents;
+using TableViewInterfaces;
 
 namespace SystemInvoice.Excel
     {
@@ -127,11 +129,27 @@ namespace SystemInvoice.Excel
                 }
             }
 
+        static readonly HashSet<string> doubleProperties = new HashSet<string>()
+            {
+            InvoiceColumnNames.Price.ToString(),
+            InvoiceColumnNames.Count.ToString(),
+            InvoiceColumnNames.PriceWithMargin.ToString(),
+            InvoiceColumnNames.NetWeight.ToString(),
+            InvoiceColumnNames.ItemGrossWeight.ToString()
+            };
+
         protected override void OnPropertySet(string propertyName, object value)
             {
             if (value != null)
                 {
-                currentRow[propertyName] = value;
+                if (doubleProperties.Contains(propertyName))
+                    {
+                    currentRow[propertyName] = value.ToString().ConvertToDouble().ToString();
+                    }
+                else
+                    {
+                    currentRow[propertyName] = value;
+                    }
                 }
             else
                 {
