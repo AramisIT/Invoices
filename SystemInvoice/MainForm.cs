@@ -350,5 +350,10 @@ namespace SystemInvoice
             loadElectrolux(ElectroluxLoadingTypes.Nomenclature);
             }
 
+        private void barButtonItem50_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            UserInterface.Current.ShowReport("Разрешительные документы");
+            }
+
         }
     }

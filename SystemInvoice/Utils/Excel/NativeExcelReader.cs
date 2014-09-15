@@ -24,7 +24,7 @@ namespace SystemInvoice.Utils.Excel
             var value = getValue(cellIndex);
             if (value == null) return string.Empty;
 
-            return value.ToString();
+            return value.ToString().Trim();
             }
 
         private object getValue(int cellIndex)

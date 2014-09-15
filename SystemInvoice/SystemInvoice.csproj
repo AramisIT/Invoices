@@ -640,6 +640,7 @@
     <None Include="Resources\1325753463_delete.png" />
     <None Include="Resources\exit.png" />
     <None Include="Resources\restart.png" />
+    <None Include="Resources\reports.png" />
     <Content Include="TraceAramis.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -363,24 +363,29 @@ namespace SystemInvoice.SystemObjects
                 docRow.NameDecl = row.Row.GetString(nameDeclIndex);
                 docRow.NameInvoice = row.Row.GetString(nameInvoiceIndex);
 
-                if (string.IsNullOrEmpty(docRow.NameDecl))
+                if (string.IsNullOrEmpty(docRow.NameDecl)
+                    && string.IsNullOrEmpty(docRow.NameInvoice))
                     {
-                    addWarning("Не заполненно наименование декларации!", row);
+                    addWarning("Не заполненно ни наим. декларации ни наим. инв.!", row);
                     docRow.RemoveFromTable();
                     continue;
+                    }
+
+                if (string.IsNullOrEmpty(docRow.NameDecl))
+                    {
+                    docRow.NameDecl = docRow.NameInvoice;
                     }
                 else if (string.IsNullOrEmpty(docRow.NameInvoice))
                     {
-                    addWarning("Не заполненно наименование инвойс!", row);
-                    docRow.RemoveFromTable();
-                    continue;
+                    docRow.NameInvoice = docRow.NameDecl;
                     }
 
-                docRow.CodeInternal.Id = getId(row.Row.GetLong(customsCodeIndex), customsCodes, "УКТЗЕД", false);
+                var internalColde = row.Row.GetString(customsCodeIndex);
+                docRow.CodeInternal.Id = getId(internalColde, customsCodes, "УКТЗЕД", false);
 
                 if (docRow.CodeInternal.Id == 0)
                     {
-                    addWarning("Не найден УКТЗЕД!", row);
+                    addWarning("Не найден УКТЗЕД!", row, internalColde);
                     docRow.RemoveFromTable();
                     continue;
                     }
@@ -402,8 +407,8 @@ namespace SystemInvoice.SystemObjects
 
                 try
                     {
-                    docRow.Country.Id = getId(row.Row.GetLong(countryIndex), countries, "Страна");
-                    docRow.MeasureUnit.Id = getId(row.Row.GetLong(unitMeasureIndex), unitMeasures, "Един. изм.");
+                    docRow.Country.Id = getId(row.Row.GetString(countryIndex), countries, "Страна");
+                    docRow.MeasureUnit.Id = getId(row.Row.GetString(unitMeasureIndex), unitMeasures, "Един. изм.");
 
                     var producer = row.Row.GetString(producerIndex);
                     if (string.IsNullOrEmpty(producer))
@@ -432,7 +437,7 @@ namespace SystemInvoice.SystemObjects
                 var currentColumnOffset = approvalsIndexOffset;
                 while (true)
                     {
-                    var docType = getId(row.Row.GetLong(currentColumnOffset), approvalsTypes, "Типы док-в", false);
+                    var docType = getId(row.Row.GetString(currentColumnOffset), approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         break;
@@ -454,11 +459,11 @@ namespace SystemInvoice.SystemObjects
                         }
 
                     currentColumnOffset += 3;
-                    docType = getId(row.Row.GetLong(currentColumnOffset), approvalsTypes, "Типы док-в", false);
+                    docType = getId(row.Row.GetString(currentColumnOffset), approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         currentColumnOffset++;
-                        docType = getId(row.Row.GetLong(currentColumnOffset), approvalsTypes, "Типы док-в", false);
+                        docType = getId(row.Row.GetString(currentColumnOffset), approvalsTypes, "Типы док-в", false);
                         if (docType > 0)
                             {
                             Trace.WriteLine("Long string");
@@ -502,9 +507,11 @@ namespace SystemInvoice.SystemObjects
                 }
             }
 
-        private void addWarning(string message, ExcelRow row)
+        private void addWarning(string message, ExcelRow row, string comment = "")
             {
-            warnings.AppendLine(string.Format("{0} Страница - {1} № стр. - {2}", message.PadRight(40), row.Sheet.Name.PadRight(25), row.RowNumber));
+            warnings.AppendLine(
+                string.Format("{0} Страница - {1} № стр. - {2}; {3}",
+                message.PadRight(40), row.Sheet.Name.PadRight(25), row.RowNumber, comment));
             }
 
         private Approvals getApprovalsDocument(ApprovalDocumentInfo docInfo)
