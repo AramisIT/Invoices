@@ -135,7 +135,9 @@ namespace SystemInvoice.Excel
             InvoiceColumnNames.Count.ToString(),
             InvoiceColumnNames.PriceWithMargin.ToString(),
             InvoiceColumnNames.NetWeight.ToString(),
-            InvoiceColumnNames.ItemGrossWeight.ToString()
+            InvoiceColumnNames.ItemGrossWeight.ToString(),
+            InvoiceColumnNames.UnitWeight.ToString(),
+            InvoiceColumnNames.OneItemGross.ToString()
             };
 
         protected override void OnPropertySet(string propertyName, object value)
