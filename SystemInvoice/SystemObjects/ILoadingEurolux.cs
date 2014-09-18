@@ -251,7 +251,7 @@ namespace SystemInvoice.SystemObjects
 
             O.Rows.Clear();
 
-            using (IExcelReader excelReader = new NativeExcelReader())
+            using (IExcelReader excelReader = new FirstExcelReader())
                 {
                 if (!excelReader.OpenFile(fileName))
                     {
