@@ -70,7 +70,10 @@ namespace SystemInvoice.DataProcessing.Cache.TradeMarksCache
         /// <returns>ID торговой марки. 0 - если не найдена.</returns>
         public long GetTradeMarkIdOrCurrent( string tradeMarkName )
             {
-            tradeMarkName = tradeMarkName.Trim();
+            if (tradeMarkName != null)
+                {
+                tradeMarkName = tradeMarkName.Trim();
+                }
             long tradeMarkId = tradeMarkContractorSource.TradeMark.Id;
             if (tradeMarkId > 0)
                 {

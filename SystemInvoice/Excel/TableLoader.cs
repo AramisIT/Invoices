@@ -146,7 +146,8 @@ namespace SystemInvoice.Excel
                 {
                 if (doubleProperties.Contains(propertyName))
                     {
-                    currentRow[propertyName] = value.ToString().ConvertToDouble().ToString();
+                    var newValue = value.ToString().ConvertToDouble().ToString();
+                    currentRow[propertyName] = newValue;
                     }
                 else
                     {

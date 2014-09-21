@@ -42,7 +42,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
             q.AddInputParameter("Contractor", contractor.Id);
             q.AddInputParameter("Article", article);
 
-            return q.SelectString();
+            var result = q.SelectString();
+            return result;
             }
         }
     }

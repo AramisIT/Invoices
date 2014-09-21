@@ -11,8 +11,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
     /// </summary>
     public class UnitNWFromCountAndNWHandler : CustomExpressionHandlerBase
         {
-        public UnitNWFromCountAndNWHandler( SystemInvoiceDBCache cachedData )
-            : base( cachedData )
+        public UnitNWFromCountAndNWHandler(SystemInvoiceDBCache cachedData)
+            : base(cachedData)
             {
             }
 
@@ -22,17 +22,17 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
                 {
                 return null;
                 }
-            object netWeightTotalValue = parameters[0];
-            object itemsCountValue = parameters[1];
+            var netWeightTotalValue = parameters[0].ToString();
+            var itemsCountValue = parameters[1].ToString();
             double netWeightTotal;
-            int countTotal;
-            if (!double.TryParse( netWeightTotalValue.ToString(), out netWeightTotal ) ||
-                !int.TryParse( itemsCountValue.ToString(), out countTotal ))
+            double countTotal;
+            if (!netWeightTotalValue.TryConvertToDouble(out netWeightTotal) ||
+                !itemsCountValue.TryConvertToDouble(out countTotal))
                 {
                 return null;
                 }
             double val = netWeightTotal / countTotal;
-            return Math.Round( val, 3 ).ToString();
+            return Math.Round(val, 3).ToString();
             }
         }
     }

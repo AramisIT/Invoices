@@ -7,9 +7,6 @@ using SystemInvoice.DataProcessing.Cache.NomenclaturesCache;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandlers
     {
-    /// <summary>
-    /// Получает контрагента из номенклатуры
-    /// </summary>
     public class ModelFromArticleHandler : FromArticleHandlerBase
         {
         public ModelFromArticleHandler(SystemInvoiceDBCache cachedData)
@@ -17,7 +14,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
             {
             }
 
-        protected override object ProcessExpression(NomenclatureCacheObject cacheObject)//Артикул.Контр[Артикул,Торговая марка]
+        protected override object ProcessExpression(NomenclatureCacheObject cacheObject)
             {
             if (cacheObject != null)
                 {
