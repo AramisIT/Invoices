@@ -22,7 +22,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
         public InvoiceAfterAprovalsUpdater(Invoice invoice, SystemInvoiceDBCache dbCache)
             {
             this.invoice = invoice;
-            this.searcher = new ApprovalsSearcher(dbCache);
+            this.searcher = new ApprovalsSearcher(dbCache, invoice);
             }
 
         /// <summary>

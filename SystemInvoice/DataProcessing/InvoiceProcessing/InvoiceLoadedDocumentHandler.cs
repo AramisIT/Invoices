@@ -48,7 +48,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.syncronizationManager = syncronizationManager;
             this.invoice = invoice;
             catalogsSearchHandler = new CatalogsSearchHandler(dbCache);
-            approvalsSearcher = new ApprovalsSearcher(dbCache);
+            approvalsSearcher = new ApprovalsSearcher(dbCache, invoice);
             groupingHandler = new GroupingHandler(() => !invoice.ExcelLoadingFormat.SaveOriginalRowsSet);
             grafCalculationHandler = new GrafCalcHandler(dbCache, invoice);
             groupOfGoodsCreationHandler = new GroupsOfGoodsCreationHandler(dbCache);

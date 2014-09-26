@@ -22,9 +22,12 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
         private List<string> RDBaseNumberToColumnNames = new List<string>();
         private List<string> RDDocNumberColumnNames = new List<string>();
         private SystemInvoiceDBCache dbCache = null;
+        private Invoice invoice;
+        private string dateFormatStr;
 
-        public ApprovalsSearcher(SystemInvoiceDBCache dbCache)
+        public ApprovalsSearcher(SystemInvoiceDBCache dbCache, Invoice invoice)
             {
+            this.invoice = invoice;
             approvalsCacheObjectStore = dbCache.ApprovalsCacheObjectsStore;
             this.dbCache = dbCache;
             initColumnNames();
@@ -57,6 +60,13 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     TransactionManager.TransactionManagerInstance.CompleteBusingessTransaction();
                     }
                 }
+
+            dateFormatStr = invoice.ExcelLoadingFormat.DateFormatStr;
+            if (string.IsNullOrEmpty(dateFormatStr))
+                {
+                dateFormatStr = "yyyy.MM.dd";
+                }
+
             foreach (DataRow row in tableToProcess.Rows)
                 {
                 this.setApprovals(row);
@@ -122,8 +132,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     string currentDateToColumnName = RDDateToColumnNames[i];
                     string currentDocNumberColumnName = RDDocNumberColumnNames[i];
                     dataRow[currentDocTypeColumnName] = foundedApproval.DocumentCodeName;
-                    dataRow[currentDateFromColumnName] = foundedApproval.DateFrom.ToString("yyyy.MM.dd");
-                    dataRow[currentDateToColumnName] = foundedApproval.DateTo == DateTime.MinValue ? "" : foundedApproval.DateTo.ToString("yyyy.MM.dd");
+                    dataRow[currentDateFromColumnName] = foundedApproval.DateFrom.ToString(dateFormatStr);
+                    dataRow[currentDateToColumnName] = foundedApproval.DateTo == DateTime.MinValue ? "" : foundedApproval.DateTo.ToString(dateFormatStr);
                     dataRow[currentDocNumberColumnName] = foundedApproval.DocumentNumber;
                     dataRow[foundedApprovalColumnName] = foundedApproval.ApprovalsId;
                     dataRow[RDBaseNumberToColumnNames[i]] = foundedApproval.DocumentBaseNumber;

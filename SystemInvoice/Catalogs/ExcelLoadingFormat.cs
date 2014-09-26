@@ -86,6 +86,26 @@ namespace SystemInvoice.Catalogs
             }
         private bool z_OrderInvoiceColumns;
 
+        [DataField(Description = "Формат даты при выгрузке в Excel")]
+        public string DateFormatStr
+            {
+            get
+                {
+                return z_DateFormatStr;
+                }
+            set
+                {
+                if (z_DateFormatStr == value)
+                    {
+                    return;
+                    }
+
+                z_DateFormatStr = value;
+                NotifyPropertyChanged("DateFormatStr");
+                }
+            }
+        private string z_DateFormatStr = "";
+
         [DataField(Description = "Сохранять начальный набор строк")]
         public bool SaveOriginalRowsSet
             {
