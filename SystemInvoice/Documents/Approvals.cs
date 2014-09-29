@@ -27,7 +27,7 @@ namespace SystemInvoice.Documents
         DateFieldDescription = "Дата создания", ShowCreationDate = false, ShowLastModifiedDate = false)]
     public class Approvals : DocumentTable, ITradeMarkContractorApprovalsLoadFormatSource
         {
-        public const int NUMBER_MAX_LENGTH = 30;
+        public const int NUMBER_MAX_LENGTH = 70;
         private Color errorColor = Color.White;
         private const string DATE_TO_COLUMN_NAME = "DateTo";
         private HashSet<long> whenLoadDocumentNomenclatures = new HashSet<long>();

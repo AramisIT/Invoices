@@ -484,7 +484,7 @@ namespace SystemInvoice.Catalogs
 
         #region Табличная часть Разрешительные документы
 
-        [Table(Columns = "ApprovalId,DateFrom,DateTo,DocumentNumber,DocumentCode,DocumentType", ShowLineNumberColumn = false)]
+        [Table(Columns = "ApprovalId,DateFrom,DateTo,DocumentNumber,DocumentCode,DocumentType", ShowLineNumberColumn = false, AllowFiltering = true)]
         [DataField(Description = "Разрешительные документы", StorageType = StorageTypes.Local)]
         public DataTable Approvals
             {

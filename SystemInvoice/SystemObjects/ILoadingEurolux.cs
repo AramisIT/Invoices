@@ -23,6 +23,7 @@ using Aramis.UI.WinFormsDevXpress;
 using AramisWpfComponents.Excel;
 using Excel;
 using NPOI.HSSF.Record.Formula.Functions;
+using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using TableViewInterfaces;
 using Cell = AramisWpfComponents.Excel.Cell;
@@ -134,7 +135,7 @@ namespace SystemInvoice.SystemObjects
 
         private Dictionary<string, Approvals> certificatesCache;
 
-        private Dictionary<DateTime, Dictionary<string, Approvals>> approvalsCache;
+        private Dictionary<DateTime, Dictionary<string, List<Approvals>>> approvalsCache;
 
         public LoadingEuroluxBehaviour(ILoadingEurolux item)
             : base(item)
@@ -197,33 +198,37 @@ namespace SystemInvoice.SystemObjects
             loaderIsInitiated = true;
             }
 
-        private Dictionary<DateTime, Dictionary<string, Approvals>> getApprovalCache()
+        private Dictionary<DateTime, Dictionary<string, List<Approvals>>> getApprovalCache()
             {
             var q = DB.NewQuery(@"select rtrim(cap.documentNumber) number, cast(dateFrom as date) Date, cap.Id
 	from Approvals cap
 	where cap.MarkForDeleting = 0 and cap.Contractor = @Contractor
-	order by dateFrom");
+	order by dateFrom, cap.documentNumber");
             q.AddInputParameter("Contractor", O.Contractor.Id);
             using (var qResult = q.Select())
                 {
-                var result = new Dictionary<DateTime, Dictionary<string, Approvals>>();
+                var result = new Dictionary<DateTime, Dictionary<string, List<Approvals>>>();
                 while (qResult.Next())
                     {
                     var number = qResult[0] as string;
                     var date = (DateTime)qResult[1];
 
-                    Dictionary<string, Approvals> subDict;
+                    Dictionary<string, List<Approvals>> subDict;
                     if (!result.TryGetValue(date, out subDict))
                         {
-                        subDict = new Dictionary<string, Approvals>(new IgnoreCaseStringEqualityComparer());
+                        subDict = new Dictionary<string, List<Approvals>>(new IgnoreCaseStringEqualityComparer());
                         result.Add(date, subDict);
                         }
 
-                    var id = qResult[2].ToInt64();
-                    if (!subDict.ContainsKey(number))
+                    List<Approvals> documents;
+                    if (!subDict.TryGetValue(number, out documents))
                         {
-                        subDict.Add(number, A.New<Approvals>(id));
+                        documents = new List<Approvals>();
+                        subDict.Add(number, documents);
                         }
+
+                    var id = qResult[2].ToInt64();
+                    documents.Add(A.New<Approvals>(id));
                     }
 
                 return result;
@@ -419,6 +424,13 @@ namespace SystemInvoice.SystemObjects
                         }
 
                     docRow.Producer.Item = getItem<IManufacturer>(producer, producers);
+                    if (docRow.Producer.Item.Id == 0)
+                        {
+                        addWarning("Не заполненно производитель!", row);
+                        docRow.RemoveFromTable();
+                        continue;
+                        }
+
                     docRow.TradeMark.Item = getItem<ITradeMark>(row.Row.GetString(tradeMarkIndex), tradeMarks);
                     }
                 catch (Exception exp)
@@ -437,25 +449,34 @@ namespace SystemInvoice.SystemObjects
                 var currentColumnOffset = approvalsIndexOffset;
                 while (true)
                     {
-                    var docType = getId(row.Row.GetString(currentColumnOffset), approvalsTypes, "Типы док-в", false);
+                    var docCode = row.Row.GetString(currentColumnOffset).Trim();
+                    var docType = getId(docCode, approvalsTypes, "Типы док-в", false);
                     if (docType == 0)
                         {
                         break;
                         }
 
-                    var documentNumber = row.Row.GetString(currentColumnOffset + approvalNumberIndex);
-                    var date = row.Row.GetDate(currentColumnOffset + approvalDateIndex);
-                    if (date.IsEmpty())
+                    if (!docCode.Equals("5111"))
                         {
-                        string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name, row.RowNumber).WarningBox();
-                        return;
-                        }
+                        var documentNumber = row.Row.GetString(currentColumnOffset + approvalNumberIndex);
+                        var date = row.Row.GetDate(currentColumnOffset + approvalDateIndex);
+                        if (date.IsEmpty())
+                            {
+                            string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name,
+                                row.RowNumber).WarningBox();
+                            return;
+                            }
 
-                    var newDoc = new ApprovalDocumentInfo() { DocumentNumber = documentNumber.Trim(), StartDate = date, DocumentType = docType };
-                    if (!newDoc.StartDate.Equals(DateTime.MinValue) || !string.IsNullOrEmpty(newDoc.DocumentNumber))
-                        {
-                        newDoc.ApprovalsDocument = getApprovalsDocument(newDoc);
-                        approvalDocuments.Add(newDoc);
+                        var newDoc = new ApprovalDocumentInfo()
+                            {
+                                DocumentNumber = documentNumber.Trim(),
+                                StartDate = date,
+                                DocumentType = docType
+                            };
+                        if (!newDoc.StartDate.Equals(DateTime.MinValue) || !string.IsNullOrEmpty(newDoc.DocumentNumber))
+                            {
+                            approvalDocuments.Add(newDoc);
+                            }
                         }
 
                     currentColumnOffset += 3;
@@ -480,6 +501,9 @@ namespace SystemInvoice.SystemObjects
                         break;
                         }
                     }
+
+                fillApprovals(approvalDocuments);
+
 
                 approvalsDocuments.Add(docRow.LineNumber, approvalDocuments);
 
@@ -507,6 +531,70 @@ namespace SystemInvoice.SystemObjects
                 }
             }
 
+        private void fillApprovals(List<ApprovalDocumentInfo> approvalDocuments)
+            {
+            var tasks = new Dictionary<DateTime, Dictionary<string, List<ApprovalDocumentInfo>>>();
+
+            foreach (var doc in approvalDocuments)
+                {
+                Dictionary<string, List<ApprovalDocumentInfo>> subDict;
+                if (!tasks.TryGetValue(doc.StartDate, out subDict))
+                    {
+                    subDict = new Dictionary<string, List<ApprovalDocumentInfo>>(new IgnoreCaseStringEqualityComparer());
+                    tasks.Add(doc.StartDate, subDict);
+                    }
+
+                List<ApprovalDocumentInfo> documents;
+                if (!subDict.TryGetValue(doc.DocumentNumber, out documents))
+                    {
+                    documents = new List<ApprovalDocumentInfo>();
+                    subDict.Add(doc.DocumentNumber, documents);
+                    }
+
+                documents.Add(doc);
+                }
+
+            foreach (var kvp in tasks)
+                {
+                var date = kvp.Key;
+                foreach (var kvpNumber in kvp.Value)
+                    {
+                    var number = kvpNumber.Key;
+                    List<ApprovalDocumentInfo> documents = kvpNumber.Value;
+                    var cachedDocs = getApprovalsDocument(date, number);
+                    checkExistsDocuments(documents, cachedDocs);
+                    }
+                }
+            }
+
+        private void checkExistsDocuments(List<ApprovalDocumentInfo> requaredDocuments, List<Approvals> existDocs)
+            {
+            for (int docIndex = 0; docIndex < requaredDocuments.Count; docIndex++)
+                {
+                var requaredDoc = requaredDocuments[docIndex];
+                requaredDoc.ApprovalsDocument = getApprovalsDocument(existDocs, docIndex, requaredDoc);
+                }
+            }
+
+        private Approvals getApprovalsDocument(List<Approvals> existDocs, int docIndex, ApprovalDocumentInfo requaredDoc)
+            {
+            if (docIndex < existDocs.Count)
+                {
+                return existDocs[docIndex];
+                }
+
+            var newDoc = A.New<Approvals>();
+            newDoc.DateFrom = requaredDoc.StartDate.Equals(DateTime.MinValue) ? DateTime.Now : requaredDoc.StartDate;
+            newDoc.DateTo = newDoc.DateFrom.AddYears(2);
+            newDoc.Date = DateTime.Now;
+            newDoc.DocumentNumber = requaredDoc.DocumentNumber;
+            newDoc.Contractor = O.Contractor;
+            newDoc.SetRef("DocumentType", requaredDoc.DocumentType);
+            existDocs.Add(newDoc);
+            newDocumentItems.Add(newDoc);
+            return newDoc;
+            }
+
         private void addWarning(string message, ExcelRow row, string comment = "")
             {
             warnings.AppendLine(
@@ -514,33 +602,23 @@ namespace SystemInvoice.SystemObjects
                 message.PadRight(40), row.Sheet.Name.PadRight(25), row.RowNumber, comment));
             }
 
-        private Approvals getApprovalsDocument(ApprovalDocumentInfo docInfo)
+        private List<Approvals> getApprovalsDocument(DateTime dateTime, string docNumber)
             {
-            var dateTime = docInfo.StartDate;
-            var docNumber = docInfo.DocumentNumber;
-
-            Dictionary<string, Approvals> subDict;
+            Dictionary<string, List<Approvals>> subDict;
             if (!approvalsCache.TryGetValue(dateTime, out subDict))
                 {
-                subDict = new Dictionary<string, Approvals>(new IgnoreCaseStringEqualityComparer());
+                subDict = new Dictionary<string, List<Approvals>>(new IgnoreCaseStringEqualityComparer());
                 approvalsCache.Add(dateTime, subDict);
                 }
 
-            Approvals doc;
-            if (!subDict.TryGetValue(docNumber, out doc))
+            List<Approvals> docs;
+            if (!subDict.TryGetValue(docNumber, out docs))
                 {
-                doc = A.New<Approvals>();
-                doc.DateFrom = dateTime.Equals(DateTime.MinValue) ? DateTime.Now : dateTime;
-                doc.DateTo = doc.DateFrom.AddYears(2);
-                doc.Date = DateTime.Now;
-                doc.DocumentNumber = docNumber;
-                doc.Contractor = O.Contractor;
-                doc.SetRef("DocumentType", docInfo.DocumentType);
-                subDict.Add(docNumber, doc);
-                newDocumentItems.Add(doc);
+                docs = new List<Approvals>();
+                subDict.Add(docNumber, docs);
                 }
 
-            return doc;
+            return docs;
             }
 
         private bool writeToDatabase(Action<double> notifyProgress, bool wareFromCatalog, out string errorDescription)
@@ -564,6 +642,8 @@ namespace SystemInvoice.SystemObjects
                     return false;
                     }
                 }
+
+            var errors = new StringBuilder();
 
             var rowsCount = O.Rows.RowsCount;
             for (int itemIndex = 0; itemIndex < rowsCount; itemIndex++)
@@ -600,8 +680,9 @@ namespace SystemInvoice.SystemObjects
                 var writtenResult = ware.Write();
                 if (writtenResult != WritingResult.Success)
                     {
-                    errorDescription = string.Format("Не удалось записать товар: {0}\r\n{1}", ware.Description, ware.LastWrittingError);
-                    return false;
+                    var error = string.Format("Не удалось записать товар: {0}\r\n{1}", ware.Description, ware.LastWrittingError);
+                    errors.AppendLine(error);
+                    continue;
                     }
 
                 if (approvalsDocuments.Count > 0)
@@ -638,6 +719,12 @@ namespace SystemInvoice.SystemObjects
                         }
                     }
                 notifyProgress((double)itemIndex / (double)rowsCount);
+
+                if (errors.Length > 0)
+                    {
+                    errorDescription = errors.ToString();
+                    return false;
+                    }
                 }
 
             if (warnings != null && warnings.Length > 0)
@@ -670,6 +757,7 @@ namespace SystemInvoice.SystemObjects
 
         private List<ICatalog> newCatalogItems = new List<ICatalog>();
         private List<IDocument> newDocumentItems = new List<IDocument>();
+
         private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
         private StringBuilder warnings;
 
@@ -1129,6 +1217,13 @@ namespace SystemInvoice.SystemObjects
                         certificate.DocumentCode = certificateType.QualifierCodeName;
                         certificate.DateFrom = defaultStartDate;
                         certificate.DateTo = DateTime.Now.AddYears(2);
+                        var writtenResult = certificate.Write();
+                        if (!writtenResult.IsSuccess())
+                            {
+                            errorDescription = certificate.LastWrittingError;
+                            errorHelpData = certificateNumber;
+                            return false;
+                            }
                         }
                     else
                         {
@@ -1163,6 +1258,7 @@ namespace SystemInvoice.SystemObjects
                         itemsList.ForEach(item =>
                             {
                                 newDocumentItems.Add(item);
+                                item.BaseApproval = certificate;
                                 item.AddWareId(wareId);
                             });
 
@@ -1194,6 +1290,7 @@ namespace SystemInvoice.SystemObjects
                             item = itemsList[0];
                             }
 
+                        item.BaseApproval = certificate;
                         item.AddWareId(wareId);
                         newDocumentItems.Add(item);
                         }
@@ -1215,6 +1312,7 @@ namespace SystemInvoice.SystemObjects
                             item = itemsList[0];
                             }
 
+                        item.BaseApproval = certificate;
                         item.AddWareId(wareId);
                         newDocumentItems.Add(item);
                         }
