@@ -125,16 +125,31 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 long documentTypeId = this.getDocumentType(dataRow, i);
                 DateTime from = this.getFromDate(dataRow, i);
                 DateTime to = this.getToDate(dataRow, i);
-
+                string baseCertificateNumber = getBaseDocumentNumber(dataRow, i);
                 string codeName = this.getDocumentCodeName(dataRow, i);
                 if ((!string.IsNullOrEmpty(codeName) || !string.IsNullOrEmpty(documentNumber)) && (invoiceDate >= from && (invoiceDate <= to) || to == DateTime.MinValue))
                     {
-                    ApprovalsCacheObject approvalsRow = new ApprovalsCacheObject(documentNumber, codeName, documentTypeId, contractorId, tradeMarkId, from, to, invoiceDate, nomenclatureId);
+                    var approvalsRow = new ApprovalsCacheObject(documentNumber, codeName, documentTypeId,
+                        contractorId, tradeMarkId,
+                        from, to, invoiceDate, nomenclatureId, baseCertificateNumber);
                     approvalsRow.DocumentBaseNumber = dataRow[RDBaseNumberToColumnNames[i]] as string;
                     approvalsList.Add(approvalsRow);
                     }
                 }
             return approvalsList;
+            }
+
+        private string getBaseDocumentNumber(DataRow dataRow, int index)
+            {
+            List<string> columnNames = RDBaseNumberToColumnNames;
+            var result = string.Empty;
+            if (index >= columnNames.Count)
+                {
+                return result;
+                }
+            string columnName = columnNames[index];
+            result = dataRow.TrySafeGetColumnValue<string>(columnName, string.Empty);
+            return result;
             }
 
         /// <summary>

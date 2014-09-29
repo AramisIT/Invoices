@@ -127,7 +127,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         /// Обрабатывает загруженную из экселя табличную часть документа
         /// </summary>
         private bool tryHandleLoadedDocument(DataTable table, bool refreshOnly = false)
-            {
+            {// P002
             try
                 {
                 DateTime from = DateTime.Now;

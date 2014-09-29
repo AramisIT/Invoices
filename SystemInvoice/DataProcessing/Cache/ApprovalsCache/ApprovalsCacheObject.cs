@@ -28,7 +28,9 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
         public DateTime DateTo { get; private set; }
         public DateTime SearchedDate { get; private set; }
 
-        public ApprovalsCacheObject(string DocumentNumber, string DocumentTypeName, string DocumentCodeName, string ContractorName, string TradeMarkName, long DocumentTypeId, long ContractorId, long TradeMarkId, DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long approvalsId, long nomenclatureId, string documentBaseNumber)
+        public ApprovalsCacheObject(string DocumentNumber, string DocumentTypeName, string DocumentCodeName,
+            string ContractorName, string TradeMarkName, long DocumentTypeId, long ContractorId, long TradeMarkId,
+            DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long approvalsId, long nomenclatureId, string documentBaseNumber)
             {
             this.DocumentBaseNumber = documentBaseNumber;
             this.DocumentNumber = DocumentNumber;
@@ -46,8 +48,9 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
             this.SearchedDate = searchedDate;
             }
 
-        public ApprovalsCacheObject(string DocumentNumber, string documetCodeName, long DocumentTypeId, long ContractorId, long TradeMarkId, DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long nomenclatureId)
-            : this(DocumentNumber, string.Empty, documetCodeName, string.Empty, string.Empty, DocumentTypeId, ContractorId, TradeMarkId, DateFrom, DateTo, searchedDate, 0, nomenclatureId, string.Empty)
+        public ApprovalsCacheObject(string DocumentNumber, string documetCodeName, long DocumentTypeId, long ContractorId, long TradeMarkId,
+            DateTime DateFrom, DateTime DateTo, DateTime searchedDate, long nomenclatureId, string documentBaseNumber = "")
+            : this(DocumentNumber, string.Empty, documetCodeName, string.Empty, string.Empty, DocumentTypeId, ContractorId, TradeMarkId, DateFrom, DateTo, searchedDate, 0, nomenclatureId, documentBaseNumber)
             {
             }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ using Aramis.UI.WinFormsDevXpress;
 using Catalogs;
 using Documents;
 using AramisCatalogs = Catalogs;
+using SystemInvoice.SystemObjects;
 
 namespace SystemInvoice.Documents
     {
@@ -537,4 +539,22 @@ namespace SystemInvoice.Documents
             newRow.AddRowToTable(this);
             }
         }
+
+    //public class ApprovalsBehaviour : Behaviour<Approvals>
+    //    {
+    //    public ApprovalsBehaviour(Approvals item)
+    //        : base(item)
+    //        {
+    //        O.BeforeWriting += O_BeforeWriting;
+    //        }
+
+    //    void O_BeforeWriting(DatabaseObject item, ref bool cancel)
+    //        {
+    //        if (O.Contractor.Id == LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR.Id
+    //            && O.DateTo.Equals(DateTime.MinValue))
+    //            {
+    //            Trace.WriteLine("asdf");
+    //            }
+    //        }
+    //    }
     }

@@ -5,7 +5,10 @@ using System.Text;
 using SystemInvoice.Documents;
 using SystemInvoice.Catalogs;
 using System.Data;
+using SystemInvoice.SystemObjects;
 using Aramis.Core;
+using Aramis.DatabaseConnector;
+using Aramis.UI.WinFormsDevXpress;
 
 namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
     {
@@ -63,9 +66,13 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 approvals.DocumentType = docType;
                 approvals.DocumentNumber = cacheObject.DocumentNumber;
                 approvals.DateFrom = cacheObject.DateFrom;
-                approvals.DateTo = cacheObject.DateTo == DateTime.MinValue ? new DateTime(DateTime.Now.Year + 1, 1, 1) : cacheObject.DateTo;
+                approvals.DateTo = cacheObject.DateTo == DateTime.MinValue ? cacheObject.DateFrom.AddYears(2)
+                    //    new DateTime(DateTime.Now.Year + 1, 1, 1) 
+                    : cacheObject.DateTo;
                 approvals.DocumentCode = cacheObject.DocumentTypeId == 0 ? string.Empty : cacheObject.DocumentCodeName;
                 forNewAprovalsNomenclatureLists.TryGetValue(cacheObject, out nomenclatures);
+                var baseApprovalId = getBaseApproval(approvals, cacheObject.DocumentBaseNumber, nomenclatures);
+                approvals.SetRef("BaseApproval", baseApprovalId);
                 }
             if (nomenclatures != null && nomenclatures.Count > 0)
                 {
@@ -81,13 +88,49 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 approvals.Nomenclatures.Rows.Add(row);
                 approvals.NotifyTableRowAdded(approvals.Nomenclatures, row);
                 }
-           // approvals.UpdateLocalValuesOfTablePart();
+            // approvals.UpdateLocalValuesOfTablePart();
             int startLineNumber = 1;
             foreach (DataRow row in approvals.Nomenclatures.Rows)
                 {
                 row["LineNumber"] = startLineNumber++;
                 }
             return approvals;
+            }
+
+        private long getBaseApproval(Approvals approval, string number, List<long> nomenclatures)
+            {
+            if (approval.Contractor.Id != LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR.Id || string.IsNullOrEmpty(number)) return 0;
+            var q = DB.NewQuery(@"select Id
+	from Approvals
+	where DocumentCode = 5111 and DocumentNumber = @DocumentNumber and Contractor = @Contractor and MarkForDeleting = 0");
+            q.AddInputParameter("Contractor", approval.Contractor.Id);
+            q.AddInputParameter("DocumentNumber", number);
+            var result = q.SelectInt64();
+            if (result > 0) return result;
+
+            var newApproval = A.New<Approvals>();
+            newApproval.DateFrom = approval.DateFrom;
+            newApproval.DateTo = approval.DateTo;
+            newApproval.Date = approval.Date;
+            newApproval.Contractor = approval.Contractor;
+            newApproval.TradeMark = approval.TradeMark;
+            newApproval.DocumentNumber = number;
+            newApproval.DocumentType = DocumentTypeHelper.GetCertificateType();
+            newApproval.DocumentCode = newApproval.DocumentType.QualifierCodeName;
+
+            nomenclatures.ForEach(wareId =>
+                {
+                    var row = newApproval.Nomenclatures.GetNewRow(newApproval);
+                    row[newApproval.ItemNomenclature] = wareId;
+                    row.AddRowToTable(newApproval);
+                });
+
+            var writtenResult = newApproval.Write();
+            if (!writtenResult.IsSuccess())
+                {
+                "Не удалось создать документ основание!".WarningBox();
+                }
+            return newApproval.Id;
             }
 
         protected override void deleteObject(Approvals objectToDelete)
@@ -169,6 +212,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 return;
                 }
             ApprovalsCacheObject withoutNomenclatureAndTradeMarkObject = new ApprovalsCacheObject(approvalRow.DocumentNumber, approvalRow.DocumentCodeName, approvalRow.DocumentTypeId, approvalRow.ContractorId, 0, approvalRow.DateFrom, approvalRow.DateTo, DateTime.MinValue, 0);
+            withoutNomenclatureAndTradeMarkObject.DocumentBaseNumber = approvalRow.DocumentBaseNumber;
             List<long> nomenclaturesList = null;
             if (!forNewAprovalsNomenclatureLists.TryGetValue(withoutNomenclatureAndTradeMarkObject, out nomenclaturesList))
                 {

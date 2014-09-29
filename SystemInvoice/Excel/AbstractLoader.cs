@@ -70,6 +70,7 @@ namespace SystemInvoice.Excel
         /// <param name="finishRowIndex">конечная строка (-1 если все строки начиная с начальной)</param>
         protected bool TryLoad(string fileName, ExcelMapper mapper, int workSheetIndex, int startRowIndex, int finishRowIndex)
             {
+            // P001
             List<FormattersStore> formatters = createColumnFormatters(mapper);
             ExcelXlsWorkbook book = null;
             if (!ExcelHelper.tryLoad(fileName, out book))
