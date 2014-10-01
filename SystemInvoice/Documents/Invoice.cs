@@ -662,7 +662,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД №", PropertyType = typeof(string), Size = 20)]
+        [SubTableField(Description = "РД №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
         public DataColumn RDNumber1
             {
             get;
@@ -690,7 +690,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 2 №", PropertyType = typeof(string), Size = 20)]
+        [SubTableField(Description = "РД 2 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
         public DataColumn RDNumber2
             {
             get;
@@ -719,7 +719,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 3 №", PropertyType = typeof(string), Size = 20)]
+        [SubTableField(Description = "РД 3 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
         public DataColumn RDNumber3
             {
             get;
@@ -748,7 +748,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 4 №", PropertyType = typeof(string), Size = 20)]
+        [SubTableField(Description = "РД 4 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
         public DataColumn RDNumber4
             {
             get;
@@ -778,7 +778,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 5 №", PropertyType = typeof(string), Size = 20)]
+        [SubTableField(Description = "РД 5 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
         public DataColumn RDNumber5
             {
             get;
