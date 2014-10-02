@@ -41,7 +41,7 @@ namespace SystemInvoice.Documents
                 }
             InvoiceColumnNames.Remove(Documents.InvoiceColumnNames.Empty.ToString());
             InvoiceColumnNames.Add("Graf31FilterColumn", "ФильтрГрафы31");
-            
+
             foreach (KeyValuePair<string, string> pair in InvoiceColumnNames)
                 {
                 InvoiceColumnNamesTranslated.Add(pair.Value, pair.Key);
@@ -662,7 +662,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        [SubTableField(Description = "РД №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH, StorageType = StorageTypes.Local)]
         public DataColumn RDNumber1
             {
             get;
@@ -690,7 +690,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 2 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        [SubTableField(Description = "РД 2 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH, StorageType = StorageTypes.Local)]
         public DataColumn RDNumber2
             {
             get;
@@ -719,7 +719,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 3 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        [SubTableField(Description = "РД 3 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH, StorageType = StorageTypes.Local)]
         public DataColumn RDNumber3
             {
             get;
@@ -748,7 +748,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 4 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        [SubTableField(Description = "РД 4 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH, StorageType = StorageTypes.Local)]
         public DataColumn RDNumber4
             {
             get;
@@ -778,7 +778,7 @@ namespace SystemInvoice.Documents
             set;
             }
 
-        [SubTableField(Description = "РД 5 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        [SubTableField(Description = "РД 5 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH, StorageType = StorageTypes.Local)]
         public DataColumn RDNumber5
             {
             get;
@@ -1287,7 +1287,7 @@ namespace SystemInvoice.Documents
 
         #region Табличная часть Товары(часть полей) (для хранения части данных которые не помещаются в табличной части Товары max=4026 (max 8061 bytes including 7 bytes of internal overhead))
 
-        [Table(Columns = "Graf31Saved,NameDeclSaved,NameInvSaved", AllowFiltering = true, AllowPopUpMenu = false)]
+        [Table(Columns = "Graf31Saved,NameDeclSaved,NameInvSaved,StoringRDNumber1,StoringRDNumber2,StoringRDNumber3,StoringRDNumber4,StoringRDNumber5", AllowFiltering = true, AllowPopUpMenu = false)]
         [DataField(Description = "Товары(часть полей)")]
         public DataTable GoodsPartialTable
             {
@@ -1314,6 +1314,41 @@ namespace SystemInvoice.Documents
 
         [SubTableField(Description = "Наим. Декл", PropertyType = typeof(string), Size = 300, AllowGroup = true)]
         public DataColumn NameInvSaved
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 1 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn StoringRDNumber1
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 2 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn StoringRDNumber2
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 3 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn StoringRDNumber3
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 4 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn StoringRDNumber4
+            {
+            get;
+            set;
+            }
+
+        [SubTableField(Description = "РД 5 №", PropertyType = typeof(string), Size = Approvals.NUMBER_MAX_LENGTH)]
+        public DataColumn StoringRDNumber5
             {
             get;
             set;
@@ -1387,6 +1422,11 @@ namespace SystemInvoice.Documents
                 newRow[Graf31Saved] = graf31;
                 newRow[NameDeclSaved] = declarationNmae;
                 newRow[NameInvSaved] = invoiceName;
+                newRow[StoringRDNumber1] = row[RDNumber1];
+                newRow[StoringRDNumber2] = row[RDNumber2];
+                newRow[StoringRDNumber3] = row[RDNumber3];
+                newRow[StoringRDNumber4] = row[RDNumber4];
+                newRow[StoringRDNumber5] = row[RDNumber5];
                 GoodsPartialTable.Rows.Add(newRow);
                 }
             }
@@ -1437,6 +1477,12 @@ namespace SystemInvoice.Documents
                         }
                     dataRow[NomenclatureInvoice] = invoiceNameSaved;
                     dataRow[NomenclatureDeclaration] = nameDeclSaved;
+
+                    dataRow[RDNumber1] = updateByRow[StoringRDNumber1];
+                    dataRow[RDNumber2] = updateByRow[StoringRDNumber2];
+                    dataRow[RDNumber3] = updateByRow[StoringRDNumber3];
+                    dataRow[RDNumber4] = updateByRow[StoringRDNumber4];
+                    dataRow[RDNumber5] = updateByRow[StoringRDNumber5];
                     }
                 }
             }
