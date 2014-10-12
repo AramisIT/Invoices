@@ -12,6 +12,7 @@ using SystemInvoice.Catalogs;
 using System.Data;
 using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
+using Aramis.Platform;
 using Aramis.UI.WinFormsDevXpress;
 using Catalogs;
 using Documents;
@@ -24,7 +25,8 @@ namespace SystemInvoice.Documents
     /// Документ. Содержит информацию о сроках действия сертификатов/документов для группы товаров
     /// </summary>
     [Document(Description = "Разрешительный документ", GUID = "0980DB9C-524B-43B6-91F4-424982EF9B99", NumberType = NumberType.Int64,
-        DateFieldDescription = "Дата создания", ShowCreationDate = false, ShowLastModifiedDate = false)]
+        DateFieldDescription = "Дата создания", ShowCreationDate = false, ShowLastModifiedDate = false,
+        ShowResponsibleInList = true)]
     public class Approvals : DocumentTable, ITradeMarkContractorApprovalsLoadFormatSource
         {
         public const int NUMBER_MAX_LENGTH = 70;
@@ -415,6 +417,10 @@ namespace SystemInvoice.Documents
             for (int i = 0; i < Nomenclatures.Rows.Count; i++)
                 {
                 Nomenclatures.Rows[i]["LineNumber"] = lineNumber++;
+                }
+            if (IsNew && Responsible.Empty)
+                {
+                SetRef("Responsible", SystemAramis.CurrentUserId);
                 }
             return base.Write();
             }

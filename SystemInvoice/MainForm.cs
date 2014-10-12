@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using SystemInvoice.Catalogs.Forms;
 using SystemInvoice.DataProcessing.CatalogsProcessing;
+using SystemInvoice.Documents;
 using SystemInvoice.SystemObjects;
 using Aramis.CommonForms;
 using Aramis.Core;
@@ -353,6 +354,27 @@ namespace SystemInvoice
         private void barButtonItem50_ItemClick(object sender, ItemClickEventArgs e)
             {
             UserInterface.Current.ShowReport("Разрешительные документы");
+            }
+
+        private void barButtonItem51_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            var info = SystemConfiguration.DBConfigurationTree[typeof(Invoice).GetTableName()];
+            foreach (var subtableInfo in info.InfoSubTables.Values)
+                {
+                var length = 0;
+               // if (subtableInfo.Name != "Goods") continue;
+
+                foreach (var infoOfSubTableField in subtableInfo.SubtableFields.Values)
+                    {
+                    if (infoOfSubTableField.PropertyType == typeof(string)
+                             && infoOfSubTableField.Attr.StorageType == StorageTypes.Database)
+                        {
+                        length += infoOfSubTableField.Attr.Size;
+                        }
+                    }
+
+                string.Format("Width of {0} table = {1}", subtableInfo.Name, length).NotifyToUser();
+                }
             }
 
         }
