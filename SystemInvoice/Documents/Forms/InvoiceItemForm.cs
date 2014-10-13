@@ -950,7 +950,7 @@ namespace SystemInvoice.Documents.Forms
 
         private void goodsGridView_RowStyle(object sender, RowStyleEventArgs e)
             {
-            if (Invoice.Contractor.Id == LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR.Id)
+            if (Invoice.Contractor.Id == ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR.Id)
                 {
                 var currentRow = goodsGridView.GetDataRow(e.RowHandle);
                 if (currentRow == null) return;
@@ -959,7 +959,7 @@ namespace SystemInvoice.Documents.Forms
                 if (newElectroluxWaresCache == null)
                     {
                     newElectroluxWaresCache = new CatalogCacheCreator<Nomenclature>().GetDescriptionIdCache(
-                        new { Contractor = LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR, WareFromCatalog = true }, "Model");
+                        new { Contractor = ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR, WareFromCatalog = true }, "Model");
                     }
 
                 if (newElectroluxWaresCache.ContainsKey(model))

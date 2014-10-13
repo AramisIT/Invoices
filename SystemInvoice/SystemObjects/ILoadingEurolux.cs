@@ -53,12 +53,12 @@ namespace SystemInvoice.SystemObjects
         [DataField(Size = 1000)]
         string FindArticleAndModelRegEx { get; set; }
 
-        Table<ILoadingEuroluxRow> Rows { get; }
+        Table<ILoadingWareRow> Rows { get; }
 
         Table<ILoadingEuroluxWareFile> Files { get; }
         }
 
-    public interface ILoadingEuroluxRow : ITableRow
+    public interface ILoadingWareRow : ITableRow
         {
         [DataField(Description = "Артикул", Size = 100)]
         string Article { get; set; }
@@ -107,7 +107,7 @@ namespace SystemInvoice.SystemObjects
 
     public class LoadingEuroluxBehaviour : Behaviour<ILoadingEurolux>
         {
-        class ApprovalDocumentInfo
+        public class ApprovalDocumentInfo
             {
             public long DocumentType { get; set; }
             public DateTime StartDate { get; set; }
@@ -121,39 +121,24 @@ namespace SystemInvoice.SystemObjects
                 dataRow[ApprovalsDocument.ItemNomenclature] = wareId;
                 dataRow.AddRowToTable(ApprovalsDocument);
                 }
+
+            public long Cert { get; set; }
             }
 
         private StringCacheDictionary nomnclatureCache;
 
-        private StringCacheDictionary customsCodes;
-        private StringCacheDictionary approvalsTypes;
-        private StringCacheDictionary countries;
-        private StringCacheDictionary unitMeasures;
-
-        private Dictionary<string, IManufacturer> producers;
-        private Dictionary<string, ITradeMark> tradeMarks;
-
         private Dictionary<string, Approvals> certificatesCache;
 
-        private Dictionary<DateTime, Dictionary<string, List<Approvals>>> approvalsCache;
 
         public LoadingEuroluxBehaviour(ILoadingEurolux item)
-            : base(item)
-            {
-            O.Contractor = ELECTROLUX_CONTRACTOR;
-            }
-
-        private static IContractor _ELECTROLUX_CONTRACTOR;
-        public static IContractor ELECTROLUX_CONTRACTOR
-            {
-            get
-                {
-                return _ELECTROLUX_CONTRACTOR ??
-                    (_ELECTROLUX_CONTRACTOR = CatalogTable.FindByDescription(typeof(IContractor).GetTableName(), "Electrolux") as IContractor);
-                }
-            }
+            : base(item) { }
 
         private bool loaderIsInitiated;
+
+        public override void InitItemBeforeShowing()
+            {
+            O.Contractor = loadingParameters.Contractor;
+            }
 
         private void initLoader()
             {
@@ -161,17 +146,19 @@ namespace SystemInvoice.SystemObjects
 
             if (O.LoadingType != ElectroluxLoadingTypes.Approvals)
                 {
-                customsCodes = new CatalogCacheCreator<CustomsCode>().GetDescriptionIdCache();
-                countries = new CatalogCacheCreator<Country>().GetDescriptionIdCache(descriptionFieldName: "InternationalCode");
-                unitMeasures = new CatalogCacheCreator<UnitOfMeasure>().GetDescriptionIdCache(descriptionFieldName: "ShortName");
-                approvalsTypes = new CatalogCacheCreator<IDocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
+                loadingParameters.CustomsCodes = new CatalogCacheCreator<CustomsCode>().GetDescriptionIdCache();
+                loadingParameters.ApprovalsCertTypes = new CatalogCacheCreator<Approvals>().GetDescriptionIdCache(descriptionFieldName: "DocumentNumber",
+                    parametersObject: new { DocumentType = DocumentTypeHelper.GetCertificateType().Id, Contractor = O.Contractor.Id });
+                loadingParameters.Countries = new CatalogCacheCreator<Country>().GetDescriptionIdCache(descriptionFieldName: "InternationalCode");
+                loadingParameters.UnitMeasures = new CatalogCacheCreator<UnitOfMeasure>().GetDescriptionIdCache(descriptionFieldName: "ShortName");
+                loadingParameters.ApprovalsTypes = new CatalogCacheCreator<IDocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
 
-                producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
-                tradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
+                loadingParameters.Producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
+                loadingParameters.TradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
 
                 if (O.LoadingType == ElectroluxLoadingTypes.NomenclatureDatabase)
                     {
-                    approvalsCache = getApprovalCache();
+                    loadingParameters.ApprovalsCache = getApprovalCache();
                     }
                 else if (O.LoadingType == ElectroluxLoadingTypes.Nomenclature)
                     {
@@ -187,7 +174,6 @@ namespace SystemInvoice.SystemObjects
                 var declarationIdList = DB.NewQuery("select cap.Id from DocumentType cap where cap.QualifierCodeName = 5112 and cap.MarkForDeleting = 0").SelectToList<long>();
                 declarationType = A.New<IDocumentType>(declarationIdList.Count == 1 ? declarationIdList.First() : 0);
 
-                var certificateTypeIdList = DB.NewQuery("select cap.Id from DocumentType cap where cap.QualifierCodeName = 5111 and cap.MarkForDeleting = 0").SelectToList<long>();
                 certificateType = DocumentTypeHelper.GetCertificateType();
 
                 nomnclatureCache = new CatalogCacheCreator<Nomenclature>().GetDescriptionIdCache(new { Contractor = O.Contractor }, "Model");
@@ -235,7 +221,7 @@ namespace SystemInvoice.SystemObjects
                 }
             }
 
-        class ExcelRow
+        public class ExcelRow
             {
             public DateTime Date;
             public IExcelRow Row;
@@ -250,8 +236,9 @@ namespace SystemInvoice.SystemObjects
         internal void LoadWaresDatabaseFromExcel(string fileName, Action<double> notifyProgress)
             {
             initLoader();
+            loadingParameters.Init();
 
-            warnings = new StringBuilder();
+            warnings = loadingParameters.Warnings;
             warnings.AppendLine();
 
             O.Rows.Clear();
@@ -263,10 +250,6 @@ namespace SystemInvoice.SystemObjects
                     "Не удалось открыть Excel файл!".NotifyToUser();
                     return;
                     }
-
-                const int modelIndex = 4;
-                const int articleIndex = 20;
-                const int dateIndex = 2;
 
                 var waresDictionary = new Dictionary<string, ExcelRow>();
                 var total = 0;
@@ -284,8 +267,8 @@ namespace SystemInvoice.SystemObjects
                         {
                         current++;
                         var row = sheet[rowIndex];
-                        var model = row.GetString(modelIndex);
-                        var article = row.GetString(articleIndex);
+                        var model = row.GetString(loadingParameters.ModelIndex);
+                        var article = row.GetString(loadingParameters.ArticleIndex);
 
                         if (string.IsNullOrEmpty(article))
                             {
@@ -297,7 +280,7 @@ namespace SystemInvoice.SystemObjects
                             continue;
                             }
 
-                        var date = row.GetDate(dateIndex);
+                        var date = row.GetDate(loadingParameters.DateIndex);
                         if (date.IsEmpty())
                             {
                             string.Format("Ошибка получения даты в строке № {1}; страница {0}", sheet.Name, (rowIndex + 1)).WarningBox();
@@ -331,179 +314,28 @@ namespace SystemInvoice.SystemObjects
                         }
                     }
 
-                loadData(waresDictionary.Values.ToList(), notifyProgress);
+                loadApprovalsAndModels(waresDictionary.Values.ToList(), notifyProgress);
                 }
             }
 
-        private void loadData(List<ExcelRow> list, Action<double> notifyProgress)
+        private void loadApprovalsAndModels(List<ExcelRow> list, Action<double> notifyProgress)
             {
-            const int countryIndex = 15;
-            const int producerIndex = 17;
-            const int customsCodeIndex = 3;
-            const int unitMeasureIndex = 18;
-            const int tradeMarkIndex = 16;
-
-            const int nameDeclIndex = 6;
-            const int nameInvoiceIndex = 5;
-
-            const int priceIndex = 8;
-
-            const int countIndex = 7;
-            const int netIndex = 11;
-            const int grossIndex = 12;
-
-            newCatalogItems.Clear();
-            newDocumentItems.Clear();
+            loadingParameters.NewCatalogItems.Clear();
+            loadingParameters.NewDocumentItems.Clear();
             approvalsDocuments.Clear();
-
 
             for (int i = 0; i < list.Count; i++)
                 {
                 var row = list[i];
 
                 var docRow = O.Rows.Add();
-                docRow.Model = row.Model;
+                var approvalDocuments = new List<ApprovalDocumentInfo>();
+
                 docRow.Article = row.Article;
 
-                docRow.NameDecl = row.Row.GetString(nameDeclIndex);
-                docRow.NameInvoice = row.Row.GetString(nameInvoiceIndex);
+                if (!loadingParameters.ProcessExcelRow(row, docRow, approvalDocuments)) return;
 
-                if (string.IsNullOrEmpty(docRow.NameDecl)
-                    && string.IsNullOrEmpty(docRow.NameInvoice))
-                    {
-                    addWarning("Не заполненно ни наим. декларации ни наим. инв.!", row);
-                    docRow.RemoveFromTable();
-                    continue;
-                    }
-
-                if (string.IsNullOrEmpty(docRow.NameDecl))
-                    {
-                    docRow.NameDecl = docRow.NameInvoice;
-                    }
-                else if (string.IsNullOrEmpty(docRow.NameInvoice))
-                    {
-                    docRow.NameInvoice = docRow.NameDecl;
-                    }
-
-                var internalColde = row.Row.GetString(customsCodeIndex);
-                docRow.CodeInternal.Id = getId(internalColde, customsCodes, "УКТЗЕД", false);
-
-                if (docRow.CodeInternal.Id == 0)
-                    {
-                    addWarning("Не найден УКТЗЕД!", row, internalColde);
-                    docRow.RemoveFromTable();
-                    continue;
-                    }
-
-                docRow.Price = row.Row.GetDouble(priceIndex);
-                docRow.NetOfOne = row.Row.GetDouble(netIndex);
-                docRow.GrossOfOne = row.Row.GetDouble(grossIndex);
-                var count = row.Row.GetDouble(countIndex);
-                if (count > 0.0)
-                    {
-                    docRow.NetOfOne /= count;
-                    docRow.GrossOfOne /= count;
-                    }
-                else
-                    {
-                    docRow.NetOfOne = 0.0;
-                    docRow.GrossOfOne = 0.0;
-                    }
-
-                try
-                    {
-                    docRow.Country.Id = getId(row.Row.GetString(countryIndex), countries, "Страна");
-                    docRow.MeasureUnit.Id = getId(row.Row.GetString(unitMeasureIndex), unitMeasures, "Един. изм.");
-
-                    var producer = row.Row.GetString(producerIndex);
-                    if (string.IsNullOrEmpty(producer))
-                        {
-                        addWarning("Не заполненно производитель!", row);
-                        docRow.RemoveFromTable();
-                        continue;
-                        }
-
-                    docRow.Producer.Item = getItem<IManufacturer>(producer, producers);
-                    if (docRow.Producer.Item.Id == 0)
-                        {
-                        addWarning("Не заполненно производитель!", row);
-                        docRow.RemoveFromTable();
-                        continue;
-                        }
-
-                    docRow.TradeMark.Item = getItem<ITradeMark>(row.Row.GetString(tradeMarkIndex), tradeMarks);
-                    }
-                catch (Exception exp)
-                    {
-                    string.Format("Ошибка в строке № {0}, на странице \"{1}\".\r\n{2}", row.RowNumber, row.Sheet.Name, exp.Message).WarningBox();
-                    return;
-                    }
-
-                const int approvalsIndexOffset = 21;
-
-                const int approvalNumberIndex = 1;
-                const int approvalDateIndex = 2;
-
-                var approvalDocuments = new List<ApprovalDocumentInfo>();
-                var documentIndex = 1;
-                var currentColumnOffset = approvalsIndexOffset;
-                while (true)
-                    {
-                    var docCode = row.Row.GetString(currentColumnOffset).Trim();
-                    var docType = getId(docCode, approvalsTypes, "Типы док-в", false);
-                    if (docType == 0)
-                        {
-                        break;
-                        }
-
-                    if (!docCode.Equals("5111"))
-                        {
-                        var documentNumber = row.Row.GetString(currentColumnOffset + approvalNumberIndex);
-                        var date = row.Row.GetDate(currentColumnOffset + approvalDateIndex);
-                        if (date.IsEmpty())
-                            {
-                            string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name,
-                                row.RowNumber).WarningBox();
-                            return;
-                            }
-
-                        var newDoc = new ApprovalDocumentInfo()
-                            {
-                                DocumentNumber = documentNumber.Trim(),
-                                StartDate = date,
-                                DocumentType = docType
-                            };
-                        if (!newDoc.StartDate.Equals(DateTime.MinValue) || !string.IsNullOrEmpty(newDoc.DocumentNumber))
-                            {
-                            approvalDocuments.Add(newDoc);
-                            }
-                        }
-
-                    currentColumnOffset += 3;
-                    docType = getId(row.Row.GetString(currentColumnOffset), approvalsTypes, "Типы док-в", false);
-                    if (docType == 0)
-                        {
-                        currentColumnOffset++;
-                        docType = getId(row.Row.GetString(currentColumnOffset), approvalsTypes, "Типы док-в", false);
-                        if (docType > 0)
-                            {
-                            Trace.WriteLine("Long string");
-                            }
-                        else
-                            {
-                            break;
-                            }
-                        }
-
-                    documentIndex++;
-                    if (documentIndex == 5)
-                        {
-                        break;
-                        }
-                    }
-
-                fillApprovals(approvalDocuments);
-
+                if (docRow.LineNumber < 1) continue;
 
                 approvalsDocuments.Add(docRow.LineNumber, approvalDocuments);
 
@@ -512,11 +344,11 @@ namespace SystemInvoice.SystemObjects
 
             "Загрузка завершена!".NotifyToUser();
 
-            if (newCatalogItems.Count > 0)
+            if (loadingParameters.NewCatalogItems.Count > 0)
                 {
                 var newItemsMessage = new StringBuilder("Создать следующие элементы?");
                 newItemsMessage.AppendLine();
-                foreach (var item in newCatalogItems)
+                foreach (var item in loadingParameters.NewCatalogItems)
                     {
                     newItemsMessage.AppendLine(string.Format("{0} ({1})", item.Description, item.ObjInfo.Description));
                     }
@@ -531,99 +363,9 @@ namespace SystemInvoice.SystemObjects
                 }
             }
 
-        private void fillApprovals(List<ApprovalDocumentInfo> approvalDocuments)
-            {
-            var tasks = new Dictionary<DateTime, Dictionary<string, List<ApprovalDocumentInfo>>>();
-
-            foreach (var doc in approvalDocuments)
-                {
-                Dictionary<string, List<ApprovalDocumentInfo>> subDict;
-                if (!tasks.TryGetValue(doc.StartDate, out subDict))
-                    {
-                    subDict = new Dictionary<string, List<ApprovalDocumentInfo>>(new IgnoreCaseStringEqualityComparer());
-                    tasks.Add(doc.StartDate, subDict);
-                    }
-
-                List<ApprovalDocumentInfo> documents;
-                if (!subDict.TryGetValue(doc.DocumentNumber, out documents))
-                    {
-                    documents = new List<ApprovalDocumentInfo>();
-                    subDict.Add(doc.DocumentNumber, documents);
-                    }
-
-                documents.Add(doc);
-                }
-
-            foreach (var kvp in tasks)
-                {
-                var date = kvp.Key;
-                foreach (var kvpNumber in kvp.Value)
-                    {
-                    var number = kvpNumber.Key;
-                    List<ApprovalDocumentInfo> documents = kvpNumber.Value;
-                    var cachedDocs = getApprovalsDocument(date, number);
-                    checkExistsDocuments(documents, cachedDocs);
-                    }
-                }
-            }
-
-        private void checkExistsDocuments(List<ApprovalDocumentInfo> requaredDocuments, List<Approvals> existDocs)
-            {
-            for (int docIndex = 0; docIndex < requaredDocuments.Count; docIndex++)
-                {
-                var requaredDoc = requaredDocuments[docIndex];
-                requaredDoc.ApprovalsDocument = getApprovalsDocument(existDocs, docIndex, requaredDoc);
-                }
-            }
-
-        private Approvals getApprovalsDocument(List<Approvals> existDocs, int docIndex, ApprovalDocumentInfo requaredDoc)
-            {
-            if (docIndex < existDocs.Count)
-                {
-                return existDocs[docIndex];
-                }
-
-            var newDoc = A.New<Approvals>();
-            newDoc.DateFrom = requaredDoc.StartDate.Equals(DateTime.MinValue) ? DateTime.Now : requaredDoc.StartDate;
-            newDoc.DateTo = newDoc.DateFrom.AddYears(2);
-            newDoc.Date = DateTime.Now;
-            newDoc.DocumentNumber = requaredDoc.DocumentNumber;
-            newDoc.Contractor = O.Contractor;
-            newDoc.SetRef("DocumentType", requaredDoc.DocumentType);
-            existDocs.Add(newDoc);
-            newDocumentItems.Add(newDoc);
-            return newDoc;
-            }
-
-        private void addWarning(string message, ExcelRow row, string comment = "")
-            {
-            warnings.AppendLine(
-                string.Format("{0} Страница - {1} № стр. - {2}; {3}",
-                message.PadRight(40), row.Sheet.Name.PadRight(25), row.RowNumber, comment));
-            }
-
-        private List<Approvals> getApprovalsDocument(DateTime dateTime, string docNumber)
-            {
-            Dictionary<string, List<Approvals>> subDict;
-            if (!approvalsCache.TryGetValue(dateTime, out subDict))
-                {
-                subDict = new Dictionary<string, List<Approvals>>(new IgnoreCaseStringEqualityComparer());
-                approvalsCache.Add(dateTime, subDict);
-                }
-
-            List<Approvals> docs;
-            if (!subDict.TryGetValue(docNumber, out docs))
-                {
-                docs = new List<Approvals>();
-                subDict.Add(docNumber, docs);
-                }
-
-            return docs;
-            }
-
         private bool writeToDatabase(Action<double> notifyProgress, bool wareFromCatalog, out string errorDescription)
             {
-            foreach (var item in newCatalogItems)
+            foreach (var item in loadingParameters.NewCatalogItems)
                 {
                 var writtenResult = item.Write();
                 if (writtenResult != WritingResult.Success)
@@ -633,7 +375,7 @@ namespace SystemInvoice.SystemObjects
                     }
                 }
 
-            foreach (var item in newDocumentItems)
+            foreach (var item in loadingParameters.NewDocumentItems)
                 {
                 var writtenResult = item.Write();
                 if (writtenResult != WritingResult.Success)
@@ -727,12 +469,16 @@ namespace SystemInvoice.SystemObjects
                     }
                 }
 
+            "Данные загружены в базу!".NotifyToUser();
+
             if (warnings != null && warnings.Length > 0)
                 {
-                "Данные загружены в базу!".NotifyToUser();
-
-                Clipboard.SetText(warnings.ToString());
-                "Обнаруженные ошибки в буфере обмена!".NotifyToUser(MessagesToUserTypes.Error);
+                var strWarnings = warnings.ToString().Trim();
+                if (!string.IsNullOrEmpty(strWarnings))
+                    {
+                    Clipboard.SetText(strWarnings);
+                    "Обнаруженные ошибки в буфере обмена!".NotifyToUser(MessagesToUserTypes.Error);
+                    }
                 }
 
             errorDescription = string.Empty;
@@ -755,63 +501,8 @@ namespace SystemInvoice.SystemObjects
             return result;
             }
 
-        private List<ICatalog> newCatalogItems = new List<ICatalog>();
-        private List<IDocument> newDocumentItems = new List<IDocument>();
-
         private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
         private StringBuilder warnings;
-
-        private T getItem<T>(string strValue, Dictionary<string, T> cache) where T : IDatabaseObject
-            {
-            if (!string.IsNullOrEmpty(strValue))
-                {
-                T item;
-                if (cache.TryGetValue(strValue, out item))
-                    {
-                    return item;
-                    }
-                else
-                    {
-                    item = A.New<T>();
-                    item.SetRef("Contractor", O.Contractor.Id);
-                    if (item is ICatalog)
-                        {
-                        ((ICatalog)item).Description = strValue;
-                        newCatalogItems.Add((ICatalog)item);
-                        }
-                    else
-                        {
-                        newDocumentItems.Add((IDocument)item);
-                        }
-                    cache.Add(strValue, item);
-                    return item;
-                    }
-                }
-
-            throw new Exception(string.Format("Не удалось получить поле {0}",
-                    SystemConfiguration.DBConfigurationTree[typeof(T).GetTableName()].Description));
-            }
-
-        private long getId(object value, StringCacheDictionary cache, string fieldName, bool throwException = true)
-            {
-            if (value == null) return 0;
-
-            var strValue = value.ToString();
-            if (string.IsNullOrEmpty(strValue))
-                {
-                return 0;
-                }
-            long id;
-            if (cache.TryGetValue(strValue, out id))
-                {
-                return id;
-                }
-            if (throwException)
-                {
-                throw new Exception(string.Format("Не удалось получить поле {0}", fieldName));
-                }
-            return 0;
-            }
 
         private bool getDate(Cell cell, int rowIndex, Sheet sheet, out DateTime date)
             {
@@ -940,7 +631,7 @@ namespace SystemInvoice.SystemObjects
         private bool loadWares(DataTable table, Dictionary<string, InternalCodesInfo> internalCodesDictionary,
             out string errorDescription, out string errorHelpData)
             {
-            newCatalogItems.Clear();
+            loadingParameters.NewCatalogItems.Clear();
             errorHelpData = null;
             O.Rows.Clear();
 
@@ -951,7 +642,7 @@ namespace SystemInvoice.SystemObjects
                 const int COUNTRY_INDEX = 5;
                 const int TRADE_MARK_INDEX = 7;
 
-                var countryId = getId(row[COUNTRY_INDEX], countries, "страна", false);
+                var countryId = loadingParameters.GetId(row[COUNTRY_INDEX], loadingParameters.Countries, "страна", false);
                 var tradeMarkName = row[TRADE_MARK_INDEX].ToString().Trim();
 
                 if (countryId == 0)
@@ -1038,8 +729,8 @@ namespace SystemInvoice.SystemObjects
                     docRow.Country.Id = countryId;
                     docRow.MeasureUnit.Id = getDefaultMeasureUnitId();
 
-                    docRow.Producer.Item = getItem<IManufacturer>(producerName, producers);
-                    docRow.TradeMark.Item = getItem<ITradeMark>(tradeMarkName, tradeMarks);
+                    docRow.Producer.Item = loadingParameters.GetItem<IManufacturer>(producerName, loadingParameters.Producers);
+                    docRow.TradeMark.Item = loadingParameters.GetItem<ITradeMark>(tradeMarkName, loadingParameters.TradeMarks);
                     }
                 catch (Exception exp)
                     {
@@ -1074,12 +765,13 @@ namespace SystemInvoice.SystemObjects
         private IDocumentType certificateType;
         private Dictionary<string, List<Approvals>> declarationsCache;
         private DateTime defaultStartDate = new DateTime(2010, 1, 1);
+        private LoadingParameters loadingParameters;
 
         private long getDefaultMeasureUnitId()
             {
             if (defaultMeasureUnitId == 0)
                 {
-                defaultMeasureUnitId = getId("шт", unitMeasures, "Един. изм.");
+                defaultMeasureUnitId = loadingParameters.GetId("шт", loadingParameters.UnitMeasures, "Един. изм.");
                 }
             return defaultMeasureUnitId;
             }
@@ -1097,7 +789,7 @@ namespace SystemInvoice.SystemObjects
                 var inputString = row[3].ToString();
 
                 const int customsCodeIndex = 1;
-                var codeId = getId(row[customsCodeIndex], customsCodes, "УКТЗЕД", false);
+                var codeId = loadingParameters.GetId(row[customsCodeIndex], loadingParameters.CustomsCodes, "УКТЗЕД", false);
 
                 if (codeId == 0)
                     {
@@ -1178,8 +870,8 @@ namespace SystemInvoice.SystemObjects
                 return false;
                 }
 
-            newCatalogItems.Clear();
-            newDocumentItems.Clear();
+            loadingParameters.NewCatalogItems.Clear();
+            loadingParameters.NewDocumentItems.Clear();
 
             DataTable sheet = dataSet.Tables[0];
             var totalRowsCount = (double)sheet.Rows.Count;
@@ -1188,7 +880,7 @@ namespace SystemInvoice.SystemObjects
             for (int rowIndex = 1; rowIndex < sheet.Rows.Count; rowIndex++)
                 {
                 var row = sheet.Rows[rowIndex];
-                var wareId = getId(row[0], nomnclatureCache, "ware", false);
+                var wareId = loadingParameters.GetId(row[0], nomnclatureCache, "ware", false);
                 if (wareId == 0) continue;
 
                 var declaration1Number = row[1].ToString().Trim();
@@ -1209,7 +901,7 @@ namespace SystemInvoice.SystemObjects
                     }
                 else
                     {
-                    certificate = getItem<Approvals>(certificateNumber, certificatesCache);
+                    certificate = loadingParameters.GetItem<Approvals>(certificateNumber, certificatesCache);
                     if (certificate.IsNew)
                         {
                         certificate.DocumentNumber = certificateNumber;
@@ -1228,7 +920,7 @@ namespace SystemInvoice.SystemObjects
                     else
                         {
                         // need to update
-                        newDocumentItems.Add(certificate);
+                        loadingParameters.NewDocumentItems.Add(certificate);
                         }
 
                     certificate.AddWareId(wareId);
@@ -1244,12 +936,12 @@ namespace SystemInvoice.SystemObjects
                         declarationsCache.Add(declaration1Number, itemsList);
 
                         var item = createNewApprovalDeclaration(certificate, declaration1Number);
-                        newDocumentItems.Add(item);
+                        loadingParameters.NewDocumentItems.Add(item);
                         itemsList.Add(item);
                         item.AddWareId(wareId);
 
                         item = createNewApprovalDeclaration(certificate, declaration1Number);
-                        newDocumentItems.Add(item);
+                        loadingParameters.NewDocumentItems.Add(item);
                         itemsList.Add(item);
                         item.AddWareId(wareId);
                         }
@@ -1257,7 +949,7 @@ namespace SystemInvoice.SystemObjects
                         {
                         itemsList.ForEach(item =>
                             {
-                                newDocumentItems.Add(item);
+                                loadingParameters.NewDocumentItems.Add(item);
                                 item.BaseApproval = certificate;
                                 item.AddWareId(wareId);
                             });
@@ -1265,7 +957,7 @@ namespace SystemInvoice.SystemObjects
                         while (itemsList.Count < 2)
                             {
                             var item = createNewApprovalDeclaration(certificate, declaration1Number);
-                            newDocumentItems.Add(item);
+                            loadingParameters.NewDocumentItems.Add(item);
                             itemsList.Add(item);
                             item.AddWareId(wareId);
                             }
@@ -1292,7 +984,7 @@ namespace SystemInvoice.SystemObjects
 
                         item.BaseApproval = certificate;
                         item.AddWareId(wareId);
-                        newDocumentItems.Add(item);
+                        loadingParameters.NewDocumentItems.Add(item);
                         }
 
                     if (!string.IsNullOrEmpty(declaration2Number))
@@ -1314,23 +1006,23 @@ namespace SystemInvoice.SystemObjects
 
                         item.BaseApproval = certificate;
                         item.AddWareId(wareId);
-                        newDocumentItems.Add(item);
+                        loadingParameters.NewDocumentItems.Add(item);
                         }
                     }
                 notifyProgress((1.0 + rowIndex) / totalRowsCount);
                 }
 
             notifyProgress(0);
-            for (int i = 0; i < newDocumentItems.Count; i++)
+            for (int i = 0; i < loadingParameters.NewDocumentItems.Count; i++)
                 {
-                var item = newDocumentItems[i];
+                var item = loadingParameters.NewDocumentItems[i];
                 var writtenResult = item.Write();
                 if (writtenResult != WritingResult.Success)
                     {
                     errorDescription = "Не удалось записать элемент: " + item;
                     return false;
                     }
-                notifyProgress((1.0 + i) / newDocumentItems.Count);
+                notifyProgress((1.0 + i) / loadingParameters.NewDocumentItems.Count);
                 }
 
             errorDescription = null;
@@ -1348,6 +1040,11 @@ namespace SystemInvoice.SystemObjects
             item.DateTo = DateTime.Now.AddYears(2);
             item.BaseApproval = certificate;
             return item;
+            }
+
+        internal void SetLoadingParameters(LoadingParameters loadingParameters)
+            {
+            this.loadingParameters = loadingParameters;
             }
         }
 

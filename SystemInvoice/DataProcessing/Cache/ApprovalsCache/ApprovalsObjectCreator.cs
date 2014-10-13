@@ -99,7 +99,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
 
         private long getBaseApproval(Approvals approval, string number, List<long> nomenclatures)
             {
-            if (approval.Contractor.Id != LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR.Id || string.IsNullOrEmpty(number)) return 0;
+            if (approval.Contractor.Id != ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR.Id || string.IsNullOrEmpty(number)) return 0;
             var q = DB.NewQuery(@"select Id
 	from Approvals
 	where DocumentCode = 5111 and DocumentNumber = @DocumentNumber and Contractor = @Contractor and MarkForDeleting = 0");

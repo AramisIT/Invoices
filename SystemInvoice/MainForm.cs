@@ -328,12 +328,13 @@ namespace SystemInvoice
 
         private void barButtonItem47_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase);
+            loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase, new ElectroluxLoadingParameters());
             }
 
-        private static void loadElectrolux(ElectroluxLoadingTypes loadingType)
+        private static void loadElectrolux(ElectroluxLoadingTypes loadingType, LoadingParameters loadingParameters)
             {
             var loadingEurolux = A.New<ILoadingEurolux>();
+            loadingEurolux.GetBehaviour<LoadingEuroluxBehaviour>().SetLoadingParameters(loadingParameters);
             loadingEurolux.LoadingType = loadingType;
 
 
@@ -343,12 +344,12 @@ namespace SystemInvoice
 
         private void barButtonItem48_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.Approvals);
+            loadElectrolux(ElectroluxLoadingTypes.Approvals, new ElectroluxLoadingParameters());
             }
 
         private void barButtonItem49_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.Nomenclature);
+            loadElectrolux(ElectroluxLoadingTypes.Nomenclature, new ElectroluxLoadingParameters());
             }
 
         private void barButtonItem50_ItemClick(object sender, ItemClickEventArgs e)
@@ -362,7 +363,7 @@ namespace SystemInvoice
             foreach (var subtableInfo in info.InfoSubTables.Values)
                 {
                 var length = 0;
-               // if (subtableInfo.Name != "Goods") continue;
+                // if (subtableInfo.Name != "Goods") continue;
 
                 foreach (var infoOfSubTableField in subtableInfo.SubtableFields.Values)
                     {
@@ -375,6 +376,11 @@ namespace SystemInvoice
 
                 string.Format("Width of {0} table = {1}", subtableInfo.Name, length).NotifyToUser();
                 }
+            }
+
+        private void barButtonItem52_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase, new WhirlpoolLoadingParameters());
             }
 
         }

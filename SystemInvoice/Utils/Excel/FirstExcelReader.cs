@@ -41,7 +41,10 @@ namespace SystemInvoice.Utils.Excel
 
             if (!(value is string))
                 {
-                TimeSpan datefromexcel = new TimeSpan(Convert.ToInt32(value) - 2, 0, 0, 0);
+                var dec = value.ToDecimal();
+                if (dec > Int32.MaxValue) return DateTime.MinValue;
+
+                TimeSpan datefromexcel = new TimeSpan(Convert.ToInt32(dec) - 2, 0, 0, 0);
                 DateTime inputdate = new DateTime(1900, 1, 1).Add(datefromexcel);
                 return inputdate;
                 }
