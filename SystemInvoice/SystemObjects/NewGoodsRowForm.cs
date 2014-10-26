@@ -102,6 +102,8 @@ namespace SystemInvoice.Catalogs.Forms
             Item.ItemProducer = A.New<IManufacturer>(Item.Nomenclature.Manufacturer.Id);
             Item.InternalCode = A.New<CustomsCode>(Item.Nomenclature.CustomsCodeInternal.Id);
             Item.TradeMark = A.New<ITradeMark>(Item.Nomenclature.TradeMark.Id);
+            Item.NetPerUnit = Item.Nomenclature.NetWeightTo.ToDecimal();
+            Item.GrossPerUnit = Item.Nomenclature.GrossWeightTo.ToDecimal();
             }
 
         private void SearchRowsControl_Leave(object sender, EventArgs e)

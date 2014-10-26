@@ -96,6 +96,8 @@
             this.barButtonItem50 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem51 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem5 = new DevExpress.XtraBars.BarSubItem();
+            this.barButtonItem52 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.administratorPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -155,8 +157,7 @@
             this.barButtonItem40 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem41 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
-            this.barSubItem5 = new DevExpress.XtraBars.BarSubItem();
-            this.barButtonItem52 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem53 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).BeginInit();
@@ -237,15 +238,16 @@
             this.barSubItem4,
             this.barButtonItem51,
             this.barSubItem5,
-            this.barButtonItem52});
+            this.barButtonItem52,
+            this.barButtonItem53});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 91;
+            this.ribbon.MaxItemId = 92;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
             this.administratorPage,
             this.ribbonPage2});
-            this.ribbon.Size = new System.Drawing.Size(875, 144);
+            this.ribbon.Size = new System.Drawing.Size(875, 147);
             this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // applicationMenu2
@@ -722,6 +724,22 @@
             this.barButtonItem51.Name = "barButtonItem51";
             this.barButtonItem51.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem51_ItemClick);
             // 
+            // barSubItem5
+            // 
+            this.barSubItem5.Caption = "Whirlpool";
+            this.barSubItem5.Id = 89;
+            this.barSubItem5.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem52),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem53)});
+            this.barSubItem5.Name = "barSubItem5";
+            // 
+            // barButtonItem52
+            // 
+            this.barButtonItem52.Caption = "Загрузка базы";
+            this.barButtonItem52.Id = 90;
+            this.barButtonItem52.Name = "barButtonItem52";
+            this.barButtonItem52.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem52_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -816,10 +834,10 @@
             // 
             // ribbonStatusBar
             // 
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 418);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 426);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(875, 31);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(875, 23);
             // 
             // defaultLookAndFeel
             // 
@@ -1109,20 +1127,12 @@
             this.barButtonItem42.Id = 19;
             this.barButtonItem42.Name = "barButtonItem42";
             // 
-            // barSubItem5
+            // barButtonItem53
             // 
-            this.barSubItem5.Caption = "Whirlpool";
-            this.barSubItem5.Id = 89;
-            this.barSubItem5.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem52)});
-            this.barSubItem5.Name = "barSubItem5";
-            // 
-            // barButtonItem52
-            // 
-            this.barButtonItem52.Caption = "Загрузка базы";
-            this.barButtonItem52.Id = 90;
-            this.barButtonItem52.Name = "barButtonItem52";
-            this.barButtonItem52.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem52_ItemClick);
+            this.barButtonItem53.Caption = "Загрузить базу разр. документов";
+            this.barButtonItem53.Id = 91;
+            this.barButtonItem53.Name = "barButtonItem53";
+            this.barButtonItem53.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem53_ItemClick);
             // 
             // MainForm
             // 
@@ -1275,5 +1285,6 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem51;
         private DevExpress.XtraBars.BarSubItem barSubItem5;
         private DevExpress.XtraBars.BarButtonItem barButtonItem52;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem53;
         }
     }

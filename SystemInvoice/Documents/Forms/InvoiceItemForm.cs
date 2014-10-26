@@ -934,6 +934,8 @@ namespace SystemInvoice.Documents.Forms
             row[invoice.Count] = newRow.Amount.ConvertToString();
             row[invoice.Sum] = newRow.Sum.ConvertToString();
 
+            row[invoice.UnitWeight] = newRow.NetPerUnit.ConvertToString();
+
             row[invoice.NetWeight] = newRow.Net.ConvertToString();
             row[invoice.ItemGrossWeight] = newRow.Gross.ConvertToString();
 

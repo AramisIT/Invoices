@@ -32,8 +32,8 @@
             this.okBtn = new DevExpress.XtraBars.BarButtonItem();
             this.CancelBtn = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
-            this.FilesBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.FilesBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.btnOk = new DevExpress.XtraBars.BarButtonItem();
             this.btnWrite = new DevExpress.XtraBars.BarButtonItem();
             this.btnCancel = new DevExpress.XtraBars.BarButtonItem();
@@ -52,6 +52,8 @@
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.FindArticleAndModelRegEx = new DevExpress.XtraEditors.TextEdit();
             this.okButtonItem = new DevExpress.XtraBars.BarButtonItem();
+            this.ApprovalDurationYears = new DevExpress.XtraEditors.CalcEdit();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
@@ -68,6 +70,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FindArticleAndModelRegEx.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ApprovalDurationYears.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -82,8 +85,8 @@
             this.ribbon.Location = new System.Drawing.Point(0, 0);
             this.ribbon.MaxItemId = 5;
             this.ribbon.Name = "ribbon";
-            this.ribbon.Size = new System.Drawing.Size(679, 27);
-            this.ribbon.StatusBar = this.ribbonStatusBar;
+            this.ribbon.Size = new System.Drawing.Size(679, 30);
+            this.ribbon.StatusBar = this.FilesBar;
             // 
             // okBtn
             // 
@@ -111,6 +114,15 @@
             this.barButtonItem1.Name = "barButtonItem1";
             this.barButtonItem1.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem1_ItemClick);
             // 
+            // ribbonStatusBar
+            // 
+            this.ribbonStatusBar.ItemLinks.Add(this.okBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.CancelBtn);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 489);
+            this.ribbonStatusBar.Name = "ribbonStatusBar";
+            this.ribbonStatusBar.Ribbon = this.ribbon;
+            this.ribbonStatusBar.Size = new System.Drawing.Size(679, 23);
+            // 
             // FilesBar
             // 
             this.FilesBar.Dock = System.Windows.Forms.DockStyle.Top;
@@ -118,16 +130,7 @@
             this.FilesBar.Location = new System.Drawing.Point(2, 21);
             this.FilesBar.Name = "FilesBar";
             this.FilesBar.Ribbon = this.ribbon;
-            this.FilesBar.Size = new System.Drawing.Size(669, 27);
-            // 
-            // ribbonStatusBar
-            // 
-            this.ribbonStatusBar.ItemLinks.Add(this.okBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.CancelBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 481);
-            this.ribbonStatusBar.Name = "ribbonStatusBar";
-            this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(679, 31);
+            this.FilesBar.Size = new System.Drawing.Size(670, 23);
             // 
             // btnOk
             // 
@@ -162,15 +165,17 @@
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.labelControl3);
+            this.panelControl1.Controls.Add(this.ApprovalDurationYears);
             this.panelControl1.Controls.Add(this.progressBar);
             this.panelControl1.Controls.Add(this.labelControl1);
             this.panelControl1.Controls.Add(this.file);
             this.panelControl1.Controls.Add(this.Contractor);
             this.panelControl1.Controls.Add(this.desc);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelControl1.Location = new System.Drawing.Point(0, 27);
+            this.panelControl1.Location = new System.Drawing.Point(0, 30);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(679, 84);
+            this.panelControl1.Size = new System.Drawing.Size(679, 129);
             this.panelControl1.TabIndex = 206;
             // 
             // progressBar
@@ -228,10 +233,10 @@
             // xtraTabControl1
             // 
             this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl1.Location = new System.Drawing.Point(0, 111);
+            this.xtraTabControl1.Location = new System.Drawing.Point(0, 159);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(679, 370);
+            this.xtraTabControl1.Size = new System.Drawing.Size(679, 330);
             this.xtraTabControl1.TabIndex = 209;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
@@ -240,7 +245,7 @@
             // 
             this.xtraTabPage1.Controls.Add(this.groupControl1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(673, 342);
+            this.xtraTabPage1.Size = new System.Drawing.Size(674, 304);
             this.xtraTabPage1.Text = "Загрузка новых товаров";
             // 
             // groupControl1
@@ -251,18 +256,18 @@
             this.groupControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupControl1.Location = new System.Drawing.Point(0, 0);
             this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(673, 342);
+            this.groupControl1.Size = new System.Drawing.Size(674, 304);
             this.groupControl1.TabIndex = 20;
             this.groupControl1.Text = "Список файлов, которые не удалось загрузить";
             // 
             // Files
             // 
             this.Files.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Files.Location = new System.Drawing.Point(2, 48);
+            this.Files.Location = new System.Drawing.Point(2, 44);
             this.Files.MainView = this.filesGridView;
             this.Files.MenuManager = this.ribbon;
             this.Files.Name = "Files";
-            this.Files.Size = new System.Drawing.Size(669, 255);
+            this.Files.Size = new System.Drawing.Size(670, 221);
             this.Files.TabIndex = 19;
             this.Files.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.filesGridView});
@@ -279,9 +284,9 @@
             this.panelControl2.Controls.Add(this.labelControl2);
             this.panelControl2.Controls.Add(this.FindArticleAndModelRegEx);
             this.panelControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelControl2.Location = new System.Drawing.Point(2, 303);
+            this.panelControl2.Location = new System.Drawing.Point(2, 265);
             this.panelControl2.Name = "panelControl2";
-            this.panelControl2.Size = new System.Drawing.Size(669, 37);
+            this.panelControl2.Size = new System.Drawing.Size(670, 37);
             this.panelControl2.TabIndex = 20;
             // 
             // labelControl2
@@ -299,7 +304,7 @@
             this.FindArticleAndModelRegEx.Location = new System.Drawing.Point(210, 8);
             this.FindArticleAndModelRegEx.MenuManager = this.ribbon;
             this.FindArticleAndModelRegEx.Name = "FindArticleAndModelRegEx";
-            this.FindArticleAndModelRegEx.Size = new System.Drawing.Size(454, 20);
+            this.FindArticleAndModelRegEx.Size = new System.Drawing.Size(455, 20);
             this.FindArticleAndModelRegEx.TabIndex = 0;
             // 
             // okButtonItem
@@ -308,6 +313,24 @@
             this.okButtonItem.Caption = "OK";
             this.okButtonItem.Id = 10;
             this.okButtonItem.Name = "okButtonItem";
+            // 
+            // ApprovalDurationYears
+            // 
+            this.ApprovalDurationYears.Location = new System.Drawing.Point(270, 81);
+            this.ApprovalDurationYears.MenuManager = this.ribbon;
+            this.ApprovalDurationYears.Name = "ApprovalDurationYears";
+            this.ApprovalDurationYears.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.ApprovalDurationYears.Size = new System.Drawing.Size(100, 20);
+            this.ApprovalDurationYears.TabIndex = 216;
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Location = new System.Drawing.Point(9, 84);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(244, 13);
+            this.labelControl3.TabIndex = 217;
+            this.labelControl3.Text = "Длительность разр. док-та по умолчанию (лет)";
             // 
             // LoadingEuroluxForm
             // 
@@ -342,6 +365,7 @@
             this.panelControl2.ResumeLayout(false);
             this.panelControl2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FindArticleAndModelRegEx.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ApprovalDurationYears.Properties)).EndInit();
             this.ResumeLayout(false);
 
             }
@@ -372,5 +396,7 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.TextEdit FindArticleAndModelRegEx;
+        private DevExpress.XtraEditors.LabelControl labelControl3;
+        private DevExpress.XtraEditors.CalcEdit ApprovalDurationYears;
         }
     }

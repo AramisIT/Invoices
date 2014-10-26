@@ -543,6 +543,7 @@ namespace SystemInvoice.Documents
             var newRow = Nomenclatures.GetNewRow(this);
             newRow[ItemNomenclature] = wareId;
             newRow.AddRowToTable(this);
+            SetSubtableModified("Nomenclatures");
             }
         }
 

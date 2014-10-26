@@ -55,6 +55,9 @@ namespace SystemInvoice.SystemObjects
         decimal Gross { get; set; }
 
         [DataField(DecimalPointsNumber = 4)]
+        decimal GrossPerUnit { get; set; }
+
+        [DataField(DecimalPointsNumber = 4)]
         decimal NetPerUnit { get; set; }
 
         int PlacesCount { get; set; }
@@ -87,11 +90,16 @@ namespace SystemInvoice.SystemObjects
             {
             O.AddPropertyChanged(O.Price, () => updateSum());
             O.AddPropertyChanged(O.Amount, () => updateSum());
+            O.AddPropertyChanged(O.GrossPerUnit, () => updateSum());
+            O.AddPropertyChanged(O.NetPerUnit, () => updateSum());
             }
 
         private void updateSum()
             {
             O.Sum = O.Price * O.Amount;
+            O.Net = O.NetPerUnit * O.Amount;
+            O.Gross = O.GrossPerUnit * O.Amount;
+            O.PlacesCount = (int)O.Amount;
             }
 
         public override void InitItemBeforeShowing()

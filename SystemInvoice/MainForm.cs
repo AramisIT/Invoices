@@ -383,5 +383,10 @@ namespace SystemInvoice
             loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase, new WhirlpoolLoadingParameters());
             }
 
+        private void barButtonItem53_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            loadElectrolux(ElectroluxLoadingTypes.Approvals, new WhirlpoolLoadingParameters());
+            }
+
         }
     }

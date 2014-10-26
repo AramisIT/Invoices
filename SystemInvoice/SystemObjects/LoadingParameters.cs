@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SystemInvoice.Catalogs;
+using SystemInvoice.DataProcessing.Cache.NomenclaturesCache;
 using SystemInvoice.Documents;
 using Aramis.Core;
 using Aramis.DataBase;
+using Aramis.DatabaseConnector;
 using Aramis.SystemConfigurations;
+using Aramis.UI.WinFormsDevXpress;
+using ReportView;
 using TableViewInterfaces;
 
 namespace SystemInvoice.SystemObjects
@@ -52,15 +57,25 @@ namespace SystemInvoice.SystemObjects
         public Dictionary<string, ITradeMark> TradeMarks { get; set; }
         public Dictionary<DateTime, Dictionary<string, List<Approvals>>> ApprovalsCache { get; set; }
 
+        public Dictionary<string, List<Approvals>> DeclarationsCache { get; set; }
+        protected StringCacheDictionary NomnclatureCache { get; set; }
+        public Dictionary<string, Approvals> CertificatesCache { get; set; }
+        public IDocumentType DeclarationType { get; set; }
+        public IDocumentType CertificateType { get; set; }
+
+        public DateTime DefaultStartDate = new DateTime(2010, 1, 1);
+
+
         public long GetId(object value, StringCacheDictionary cache, string fieldName, bool throwException = true)
             {
             if (value == null) return 0;
 
-            var strValue = value.ToString();
+            var strValue = value.ToString().Trim();
             if (string.IsNullOrEmpty(strValue))
                 {
                 return 0;
                 }
+
             long id;
             if (cache.TryGetValue(strValue, out id))
                 {
@@ -103,6 +118,12 @@ namespace SystemInvoice.SystemObjects
             throw new Exception(string.Format("Не удалось получить поле {0}",
                     SystemConfiguration.DBConfigurationTree[typeof(T).GetTableName()].Description));
             }
+
+        public abstract bool TryLoadApprovals(System.Data.DataSet dataSet, Action<double> notifyProgress,
+            int approvalDurationYears,
+            out string errorDescription, out string errorHelpData);
+
+        internal abstract void InitForApprovals();
         }
 
     class ElectroluxLoadingParameters : LoadingParameters
@@ -424,11 +445,192 @@ namespace SystemInvoice.SystemObjects
                 }
             return id;
             }
+
+        private Approvals createNewApprovalDeclaration(Approvals certificate, string docNumber)
+            {
+            var item = A.New<Approvals>();
+            item.SetRef("Contractor", Contractor.Id);
+            item.DocumentNumber = docNumber;
+            item.SetRef("DocumentType", DeclarationType.Id);
+            item.DocumentCode = DeclarationType.QualifierCodeName;
+            item.DateFrom = DefaultStartDate;
+            item.DateTo = DateTime.Now.AddYears(2);
+            item.BaseApproval = certificate;
+            return item;
+            }
+
+        public override bool TryLoadApprovals(System.Data.DataSet dataSet, Action<double> notifyProgress, int approvalDurationYears, out string errorDescription, out string errorHelpData)
+            {
+            errorHelpData = null;
+
+            DataTable sheet = dataSet.Tables[0];
+            var totalRowsCount = (double)sheet.Rows.Count;
+            notifyProgress(0.0);
+
+            for (int rowIndex = 1; rowIndex < sheet.Rows.Count; rowIndex++)
+                {
+                var row = sheet.Rows[rowIndex];
+                var wareId = GetId(row[0], NomnclatureCache, "ware", false);
+                if (wareId == 0) continue;
+
+                var declaration1Number = row[1].ToString().Trim();
+                var declaration2Number = row[2].ToString().Trim();
+                var certificateNumber = row[3].ToString().Trim();
+
+                if (string.IsNullOrEmpty(declaration1Number) &&
+                    string.IsNullOrEmpty(declaration2Number) &&
+                    string.IsNullOrEmpty(certificateNumber))
+                    {
+                    continue;
+                    }
+
+                Approvals certificate;
+                if (string.IsNullOrEmpty(certificateNumber))
+                    {
+                    certificate = A.New<Approvals>();
+                    }
+                else
+                    {
+                    certificate = GetItem<Approvals>(certificateNumber, CertificatesCache);
+                    if (certificate.IsNew)
+                        {
+                        certificate.DocumentNumber = certificateNumber;
+                        certificate.SetRef("DocumentType", CertificateType.Id);
+                        certificate.DocumentCode = CertificateType.QualifierCodeName;
+                        certificate.DateFrom = DefaultStartDate;
+                        certificate.DateTo = DateTime.Now.AddYears(2);
+                        var writtenResult = certificate.Write();
+                        if (!writtenResult.IsSuccess())
+                            {
+                            errorDescription = certificate.LastWrittingError;
+                            errorHelpData = certificateNumber;
+                            return false;
+                            }
+                        }
+                    else
+                        {
+                        // need to update
+                        NewDocumentItems.Add(certificate);
+                        }
+
+                    certificate.AddWareId(wareId);
+                    }
+
+                if (!string.IsNullOrEmpty(declaration1Number)
+                    && declaration1Number.Equals(declaration2Number))
+                    {
+                    List<Approvals> itemsList;
+                    if (!DeclarationsCache.TryGetValue(declaration1Number, out itemsList))
+                        {
+                        itemsList = new List<Approvals>();
+                        DeclarationsCache.Add(declaration1Number, itemsList);
+
+                        var item = createNewApprovalDeclaration(certificate, declaration1Number);
+                        NewDocumentItems.Add(item);
+                        itemsList.Add(item);
+                        item.AddWareId(wareId);
+
+                        item = createNewApprovalDeclaration(certificate, declaration1Number);
+                        NewDocumentItems.Add(item);
+                        itemsList.Add(item);
+                        item.AddWareId(wareId);
+                        }
+                    else
+                        {
+                        itemsList.ForEach(item =>
+                        {
+                            NewDocumentItems.Add(item);
+                            item.BaseApproval = certificate;
+                            item.AddWareId(wareId);
+                        });
+
+                        while (itemsList.Count < 2)
+                            {
+                            var item = createNewApprovalDeclaration(certificate, declaration1Number);
+                            NewDocumentItems.Add(item);
+                            itemsList.Add(item);
+                            item.AddWareId(wareId);
+                            }
+                        }
+                    }
+                else
+                    {
+                    if (!string.IsNullOrEmpty(declaration1Number))
+                        {
+                        List<Approvals> itemsList;
+                        Approvals item = null;
+                        if (!DeclarationsCache.TryGetValue(declaration1Number, out itemsList))
+                            {
+                            itemsList = new List<Approvals>();
+                            DeclarationsCache.Add(declaration1Number, itemsList);
+
+                            item = createNewApprovalDeclaration(certificate, declaration1Number);
+                            itemsList.Add(item);
+                            }
+                        else
+                            {
+                            item = itemsList[0];
+                            }
+
+                        item.BaseApproval = certificate;
+                        item.AddWareId(wareId);
+                        NewDocumentItems.Add(item);
+                        }
+
+                    if (!string.IsNullOrEmpty(declaration2Number))
+                        {
+                        List<Approvals> itemsList;
+                        Approvals item = null;
+                        if (!DeclarationsCache.TryGetValue(declaration2Number, out itemsList))
+                            {
+                            itemsList = new List<Approvals>();
+                            DeclarationsCache.Add(declaration2Number, itemsList);
+
+                            item = createNewApprovalDeclaration(certificate, declaration2Number);
+                            itemsList.Add(item);
+                            }
+                        else
+                            {
+                            item = itemsList[0];
+                            }
+
+                        item.BaseApproval = certificate;
+                        item.AddWareId(wareId);
+                        NewDocumentItems.Add(item);
+                        }
+                    }
+                notifyProgress((1.0 + rowIndex) / totalRowsCount);
+                }
+
+            notifyProgress(0);
+            for (int i = 0; i < NewDocumentItems.Count; i++)
+                {
+                var item = NewDocumentItems[i];
+                var writtenResult = item.Write();
+                if (writtenResult != WritingResult.Success)
+                    {
+                    errorDescription = "Не удалось записать элемент: " + item;
+                    return false;
+                    }
+                notifyProgress((1.0 + i) / NewDocumentItems.Count);
+                }
+
+            errorDescription = null;
+            return true;
+            }
+
+        internal override void InitForApprovals()
+            {
+            NomnclatureCache = new CatalogCacheCreator<Nomenclature>().GetDescriptionIdCache(new { Contractor = Contractor }, "Model");
+            }
         }
 
     class WhirlpoolLoadingParameters : LoadingParameters
         {
         private static IContractor _WHIRLPOOL_CONTRACTOR;
+
+        private int defaultApprovalDurationYears;
+
         public static IContractor WHIRLPOOL_CONTRACTOR
             {
             get
@@ -539,6 +741,247 @@ namespace SystemInvoice.SystemObjects
                 }
 
             return true;
+            }
+
+        public override bool TryLoadApprovals(DataSet dataSet, Action<double> notifyProgress, int approvalDurationYears, out string errorDescription, out string errorHelpData)
+            {
+            errorDescription = string.Empty;
+            errorHelpData = string.Empty;
+            defaultApprovalDurationYears = approvalDurationYears;
+            notifyProgress(0.0);
+
+            var totalRows = 0;
+            var currentRowIndex = 0;
+
+
+            foreach (DataTable table in dataSet.Tables)
+                {
+                for (int rowIndex = 2; rowIndex < table.Rows.Count; rowIndex++) totalRows++;
+                }
+
+            foreach (DataTable table in dataSet.Tables)
+                {
+                for (int rowIndex = 2; rowIndex < table.Rows.Count; rowIndex++)
+                    {
+                    var row = table.Rows[rowIndex];
+
+                    const int acticleIndex = 4;
+                    var wareId = GetId(row[acticleIndex], NomnclatureCache, "ware", false);
+                    if (wareId == 0)
+                        {
+                        currentRowIndex++;
+                        continue;
+                        }
+
+                    if (!loadApprovals(wareId, row, out  errorDescription))
+                        {
+                        errorHelpData = A.New<Nomenclature>(wareId).Article;
+                        return false;
+                        }
+
+                    currentRowIndex++;
+                    notifyProgress(((double)currentRowIndex) / totalRows);
+                    }
+                }
+
+            return true;
+            }
+
+        private bool loadApprovals(long wareId, DataRow row, out string errorDescription)
+            {
+            const int offset = 7;
+            const int docNumberIndex = 1;
+            const int startDateIndex = 2;
+            const int finishDateIndex = 3;
+
+            var approvalsInfo = new List<KeyValuePair<ApprovalInfo, int>>();
+
+            int currentOffset = offset;
+            int blockNumber = 0;
+            int maxBlockNumber = 5;
+            while (blockNumber < maxBlockNumber)
+                {
+                blockNumber++;
+                if (currentOffset >= row.Table.Columns.Count)
+                    {
+                    break;
+                    }
+
+                var docType = GetId(row[currentOffset], ApprovalsTypes, "Типы док-в", false);
+                if (docType == 0)
+                    {
+                    currentOffset += 4;
+                    continue;
+                    }
+
+                var approvalInfo = new ApprovalInfo(defaultApprovalDurationYears) { DocumentType = docType };
+                approvalInfo.Number = row[currentOffset + docNumberIndex].ToString().Trim();
+                approvalInfo.StartDate = getDate(row[currentOffset + startDateIndex]);
+
+                var finishDateResultIndex = currentOffset + finishDateIndex;
+                if (finishDateResultIndex < row.Table.Columns.Count)
+                    {
+                    var nextDocType = GetId(row[finishDateResultIndex], ApprovalsTypes, "Типы док-в", false);
+                    if (nextDocType == 0)
+                        {
+                        approvalInfo.FinishDate = getDate(row[finishDateResultIndex]);
+                        currentOffset += 4;
+                        }
+                    else
+                        {
+                        currentOffset += 3;
+                        }
+                    }
+
+                if (!approvalInfo.Number.StartsWith("#") && !string.IsNullOrEmpty(approvalInfo.Number))
+                    {
+                    var added = false;
+                    for (int itemIndex = 0; itemIndex < approvalsInfo.Count; itemIndex++)
+                        {
+                        var item = approvalsInfo[itemIndex];
+
+                        if (item.Key.Equals(approvalInfo))
+                            {
+                            var number = item.Value + 1;
+                            approvalsInfo.Remove(item);
+                            approvalsInfo.Add(new KeyValuePair<ApprovalInfo, int>(approvalInfo, number));
+                            added = true;
+                            }
+                        }
+                    if (!added)
+                        {
+                        approvalsInfo.Add(new KeyValuePair<ApprovalInfo, int>(approvalInfo, 1));
+                        }
+                    }
+                }
+
+            return saveApprovalsToDatabase(wareId, approvalsInfo, out  errorDescription);
+            }
+
+        private DateTime getDate(object value)
+            {
+            if (value is DateTime)
+                {
+                return (DateTime)value;
+                }
+
+            return DateTime.MinValue;
+            }
+
+        private bool saveApprovalsToDatabase(long wareId, List<KeyValuePair<ApprovalInfo, int>> approvalsInfo, out string errorDescription)
+            {
+            foreach (var item in approvalsInfo)
+                {
+                var approval = item.Key;
+
+                var q = DB.NewQuery(@"select Id, case when n.ItemNomenclature is null then 0 else 1 end ContainsWare
+	from Approvals a
+	left join SubApprovalsNomenclatures n on n.IdDoc = a.Id and n.ItemNomenclature = @Ware
+	where a.Contractor = @Contractor and a.DocumentType=@DocumentType
+		and a.Deleted = 0 and a.DateFrom = @StartDate and a.DateTo = @FinishDate
+		and a.DocumentNumber = @Number
+		
+		order by ContainsWare desc");
+                q.AddInputParameter("Contractor", Contractor.Id);
+                q.AddInputParameter("Number", approval.Number);
+                q.AddInputParameter("StartDate", approval.StartDate);
+                q.AddInputParameter("FinishDate", approval.FinishDate);
+                q.AddInputParameter("DocumentType", approval.DocumentType);
+                q.AddInputParameter("Ware", wareId);
+
+                var docsCount = item.Value;
+                using (var qResult = q.Select())
+                    {
+                    while (qResult.Next())
+                        {
+                        var containsWare = qResult["ContainsWare"].ToBoolean();
+                        if (!containsWare)
+                            {
+                            var doc = A.New<Approvals>(qResult["Id"]);
+                            doc.AddWareId(wareId);
+                            var writtenResult = doc.Write();
+
+                            if (!writtenResult.IsSuccess())
+                                {
+                                errorDescription = doc.LastWrittingError;
+                                return false;
+                                }
+                            }
+
+                        docsCount--;
+                        }
+                    }
+
+                for (int i = 0; i < docsCount; i++)
+                    {
+                    var newDoc = A.New<Approvals>();
+                    newDoc.DateFrom = approval.StartDate;
+                    newDoc.DateTo = approval.FinishDate;
+                    newDoc.Date = DateTime.Now;
+                    newDoc.DocumentNumber = approval.Number;
+                    newDoc.Contractor = Contractor;
+                    newDoc.DocumentType = A.New<IDocumentType>(approval.DocumentType);
+                    newDoc.DocumentCode = newDoc.DocumentType.QualifierCodeName;
+
+                    newDoc.AddWareId(wareId);
+
+                    var writtenResult = newDoc.Write();
+
+                    if (!writtenResult.IsSuccess())
+                        {
+                        errorDescription = newDoc.LastWrittingError;
+                        return false;
+                        }
+                    }
+                }
+
+            errorDescription = null;
+            return true;
+            }
+
+        class ApprovalInfo
+            {
+            private int defaultApprovalDurationYears;
+            public ApprovalInfo(int defaultApprovalDurationYears)
+                {
+                this.defaultApprovalDurationYears = defaultApprovalDurationYears;
+                }
+
+            public string Number { get; set; }
+
+            public DateTime StartDate { get; set; }
+
+            private DateTime finishDate;
+
+            public DateTime FinishDate
+                {
+                get
+                    {
+                    return finishDate.Equals(DateTime.MinValue) ?
+                        StartDate.AddYears(defaultApprovalDurationYears)
+                        : finishDate;
+                    }
+
+                set { finishDate = value; }
+                }
+
+            public long DocumentType { get; set; }
+
+            public override bool Equals(object obj)
+                {
+                var item2 = obj as ApprovalInfo;
+                if (item2.IsNull()) return false;
+
+                return item2.DocumentType == DocumentType
+                       && item2.Number.Equals(Number)
+                       && item2.StartDate.Equals(StartDate)
+                       && item2.FinishDate.Equals(FinishDate);
+                }
+            }
+
+        internal override void InitForApprovals()
+            {
+            NomnclatureCache = new CatalogCacheCreator<Nomenclature>().GetDescriptionIdCache(new { Contractor = Contractor }, "Article");
             }
         }
     }
