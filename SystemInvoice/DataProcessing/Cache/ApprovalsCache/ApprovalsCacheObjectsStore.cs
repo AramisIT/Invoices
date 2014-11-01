@@ -189,7 +189,7 @@ where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (app
         /// </summary>
         /// <param name="approvalsSearchObject">Содержит в себе данные из шапки РД и номенклатуру, используемые при поиске РД</param>
         /// <returns>Присутствует ли номенклатура в РД</returns>
-        public bool ContainsApprovals(ApprovalsCacheObject approvalsSearchObject)
+        public long ContainsApprovals(ApprovalsCacheObject approvalsSearchObject)
             {
             return ContainsApprovals(approvalsSearchObject.DocumentNumber, approvalsSearchObject.DocumentTypeId, approvalsSearchObject.TradeMarkId,
                 approvalsSearchObject.ContractorId, approvalsSearchObject.DateFrom, approvalsSearchObject.DateTo, approvalsSearchObject.NomenclatureId, approvalsSearchObject.DocumentBaseNumber);
@@ -199,18 +199,18 @@ where appr.MarkForDeleting = 0  and (appr.TradeMark = {11} or {11} = 0) and (app
         /// Проверяет существует ли строка табличной части РД (поиск осуществляется для шапки и номенклатуры в табличной части)
         /// </summary>
         /// <returns>Присутствует ли номенклатура в РД</returns>
-        public bool ContainsApprovals(string documentNumber, long docType, long tradeMark, long contractor, DateTime from, DateTime to, long nomenclatureId, string baseDocumentNumber)
+        public long ContainsApprovals(string documentNumber, long docType, long tradeMark, long contractor, DateTime from, DateTime to, long nomenclatureId, string baseDocumentNumber)
             {
             long founded = 0;
             ApprovalsCacheObject withTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty,
                 docType, contractor, tradeMark, from, to, DateTime.MinValue, 0, nomenclatureId, baseDocumentNumber);
             if ((founded = GetCachedObjectId(withTmSearchObject)) != 0)
                 {
-                return true;
+                return founded;
                 }
             ApprovalsCacheObject withoutTmSearchObject = new ApprovalsCacheObject(documentNumber, string.Empty, string.Empty, string.Empty, string.Empty, docType, contractor, 0, from, to, DateTime.MinValue, 0, nomenclatureId, baseDocumentNumber);
 
-            return GetCachedObjectId(withoutTmSearchObject) > 0;
+            return GetCachedObjectId(withoutTmSearchObject);
             }
 
         /// <summary>

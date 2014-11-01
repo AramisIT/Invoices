@@ -4,6 +4,8 @@ using SystemInvoice.DataProcessing.Cache;
 using System.Data;
 using SystemInvoice.DataProcessing.Cache.ApprovalsCache;
 using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking.RDChecking;
+using SystemInvoice.Documents;
+using Aramis.Core;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification
     {
@@ -91,9 +93,14 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     foreach (ApprovalsCacheObject approvalsRow in approvalsInfo)
                         {
                         //проверяем есть ли они уже в базе если нет - добавляем в наш список
-                        if (approvalsRow != null && !isApprovalsExists(approvalsRow))
+                        if (approvalsRow != null)
                             {
-                            newApprovalsInDocument.Add(approvalsRow);
+                            var id = findApprovalId(approvalsRow);
+                            var approvalIsExists = id > 0;
+                            if (!approvalIsExists)
+                                {
+                                newApprovalsInDocument.Add(approvalsRow);
+                                }
                             }
                         }
                     }
@@ -101,7 +108,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             return newApprovalsInDocument;
             }
 
-        private bool isApprovalsExists(ApprovalsCacheObject approvalsInfo)
+        private long findApprovalId(ApprovalsCacheObject approvalsInfo)
             {
             return approvalsCacheObjectStore.ContainsApprovals(approvalsInfo);
             }

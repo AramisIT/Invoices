@@ -547,21 +547,20 @@ namespace SystemInvoice.Documents
             }
         }
 
-    //public class ApprovalsBehaviour : Behaviour<Approvals>
-    //    {
-    //    public ApprovalsBehaviour(Approvals item)
-    //        : base(item)
-    //        {
-    //        O.BeforeWriting += O_BeforeWriting;
-    //        }
+    public class ApprovalsBehaviour : Behaviour<Approvals>
+        {
+        public ApprovalsBehaviour(Approvals item)
+            : base(item)
+            {
+            O.BeforeWriting += O_BeforeWriting;
+            }
 
-    //    void O_BeforeWriting(DatabaseObject item, ref bool cancel)
-    //        {
-    //        if (O.Contractor.Id == LoadingEuroluxBehaviour.ELECTROLUX_CONTRACTOR.Id
-    //            && O.DateTo.Equals(DateTime.MinValue))
-    //            {
-    //            Trace.WriteLine("asdf");
-    //            }
-    //        }
-    //    }
+        void O_BeforeWriting(DatabaseObject item, ref bool cancel)
+            {
+            if (item.Empty)
+                {
+                Trace.WriteLine("asdf");
+                }
+            }
+        }
     }

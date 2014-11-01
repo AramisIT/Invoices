@@ -48,13 +48,16 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
         protected override Approvals createDBObject(ApprovalsCacheObject cacheObject)
             {
             List<long> nomenclatures = null;//список номенклатуры которая в конечном итоге должна быть сформирована в табличной части РД
-            Approvals approvals = new Approvals();
+            Approvals approval = new Approvals();
             if (cacheObject.ApprovalsId != 0)//добавляем строку в существующий РД
                 {
-                approvals.Id = cacheObject.ApprovalsId;
-                approvals.Read();//считываем существующие строки в табличной части РД
+                approval.Id = cacheObject.ApprovalsId;
+                approval.Read();//считываем существующие строки в табличной части РД
                 forExistedApprovalsNomenclatureLists.TryGetValue(cacheObject, out nomenclatures);//получаем список номенклатуры для существующего РД
-                updatedApprovals.Add(approvals);
+                updatedApprovals.Add(approval);
+
+                var baseApprovalId = GetBaseApprovalId(approval, cacheObject.DocumentBaseNumber, nomenclatures);
+                approval.SetRef("BaseApproval", baseApprovalId);
                 }
             else//создаем новый РД
                 {
@@ -62,42 +65,42 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 contractor.Id = cacheObject.ContractorId;
                 var docType = A.New<IDocumentType>();
                 docType.Id = cacheObject.DocumentTypeId;
-                approvals.Contractor = contractor;
-                approvals.DocumentType = docType;
-                approvals.DocumentNumber = cacheObject.DocumentNumber;
-                approvals.DateFrom = cacheObject.DateFrom;
-                approvals.DateTo = cacheObject.DateTo == DateTime.MinValue ? cacheObject.DateFrom.AddYears(2)
+                approval.Contractor = contractor;
+                approval.DocumentType = docType;
+                approval.DocumentNumber = cacheObject.DocumentNumber;
+                approval.DateFrom = cacheObject.DateFrom;
+                approval.DateTo = cacheObject.DateTo == DateTime.MinValue ? cacheObject.DateFrom.AddYears(2)
                     //    new DateTime(DateTime.Now.Year + 1, 1, 1) 
                     : cacheObject.DateTo;
-                approvals.DocumentCode = cacheObject.DocumentTypeId == 0 ? string.Empty : cacheObject.DocumentCodeName;
+                approval.DocumentCode = cacheObject.DocumentTypeId == 0 ? string.Empty : cacheObject.DocumentCodeName;
                 forNewAprovalsNomenclatureLists.TryGetValue(cacheObject, out nomenclatures);
-                var baseApprovalId = getBaseApproval(approvals, cacheObject.DocumentBaseNumber, nomenclatures);
-                approvals.SetRef("BaseApproval", baseApprovalId);
+                var baseApprovalId = GetBaseApprovalId(approval, cacheObject.DocumentBaseNumber, nomenclatures);
+                approval.SetRef("BaseApproval", baseApprovalId);
                 }
             if (nomenclatures != null && nomenclatures.Count > 0)
                 {
-                createdNomenclaturesRows.Add(approvals, nomenclatures);//добавляем в словарь для удаляемых строк в табличной части РД
+                createdNomenclaturesRows.Add(approval, nomenclatures);//добавляем в словарь для удаляемых строк в табличной части РД
                 }
             //Создаем полностью табличную часть для РД которая затем будет записана в базу
             foreach (long nomenclatureId in nomenclatures)
                 {
                 Nomenclature nomenclature = new Nomenclature();
                 nomenclature.Id = nomenclatureId;
-                DataRow row = approvals.Nomenclatures.NewRow();
-                row[approvals.ItemNomenclature] = nomenclature.Id;
-                approvals.Nomenclatures.Rows.Add(row);
-                approvals.NotifyTableRowAdded(approvals.Nomenclatures, row);
+                DataRow row = approval.Nomenclatures.NewRow();
+                row[approval.ItemNomenclature] = nomenclature.Id;
+                approval.Nomenclatures.Rows.Add(row);
+                approval.NotifyTableRowAdded(approval.Nomenclatures, row);
                 }
             // approvals.UpdateLocalValuesOfTablePart();
             int startLineNumber = 1;
-            foreach (DataRow row in approvals.Nomenclatures.Rows)
+            foreach (DataRow row in approval.Nomenclatures.Rows)
                 {
                 row["LineNumber"] = startLineNumber++;
                 }
-            return approvals;
+            return approval;
             }
 
-        private long getBaseApproval(Approvals approval, string number, List<long> nomenclatures)
+        public static long GetBaseApprovalId(Approvals approval, string number, List<long> nomenclatures)
             {
             if (approval.Contractor.Id != ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR.Id || string.IsNullOrEmpty(number)) return 0;
             var q = DB.NewQuery(@"select Id
@@ -239,6 +242,7 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
                 if (!forExistedApprovalsNomenclatureLists.TryGetValue(existedApprovalDoc, out nomenclaturesList))
                     {
                     nomenclaturesList = new List<long>();
+                    existedApprovalDoc.DocumentBaseNumber = approvalRow.DocumentBaseNumber;
                     forExistedApprovalsNomenclatureLists.Add(existedApprovalDoc, nomenclaturesList);
                     }
                 nomenclaturesList.Add(approvalRow.NomenclatureId);

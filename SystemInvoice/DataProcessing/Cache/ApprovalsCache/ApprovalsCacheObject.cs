@@ -57,7 +57,8 @@ namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache
         protected override bool equals(ApprovalsCacheObject other)
             {
             return this.DocumentTypeId.Equals(other.DocumentTypeId) && this.ContractorId.Equals(other.ContractorId) && this.TradeMarkId.Equals(other.TradeMarkId) &&
-                this.DateFrom.Equals(other.DateFrom) && this.DateTo.Equals(other.DateTo) && this.NomenclatureId.Equals(other.NomenclatureId) && this.DocumentNumber.Equals(other.DocumentNumber);
+                this.DateFrom.Equals(other.DateFrom) && this.DateTo.Equals(other.DateTo) && this.NomenclatureId.Equals(other.NomenclatureId)
+                && this.DocumentNumber.Equals(other.DocumentNumber) && this.DocumentBaseNumber.Equals(other.DocumentBaseNumber);
             }
 
         protected override object[] getForCacheCalculatedObjects()
