@@ -411,6 +411,7 @@ namespace SystemInvoice.Documents
 
         public override WritingResult Write()
             {
+            removeSameRows();
             saveDeletedNomenclaturesHistory();
             refreshComparedNomenclatures();
             int lineNumber = 1;
@@ -423,6 +424,25 @@ namespace SystemInvoice.Documents
                 SetRef("Responsible", SystemAramis.CurrentUserId);
                 }
             return base.Write();
+            }
+
+        private void removeSameRows()
+            {
+            var wares = new HashSet<long>();
+
+            for (int rowIndex = Nomenclatures.Rows.Count - 1; rowIndex >= 0; rowIndex--)
+                {
+                var row = Nomenclatures.Rows[rowIndex];
+                var wareId = row[ItemNomenclature].ToInt64();
+                if (wareId == 0 || wares.Contains(wareId))
+                    {
+                    Nomenclatures.Rows.RemoveAt(rowIndex);
+                    }
+                else
+                    {
+                    wares.Add(wareId);
+                    }
+                }
             }
 
         private System.Drawing.Color getColorForRow(DataRow row)
@@ -544,23 +564,6 @@ namespace SystemInvoice.Documents
             newRow[ItemNomenclature] = wareId;
             newRow.AddRowToTable(this);
             SetSubtableModified("Nomenclatures");
-            }
-        }
-
-    public class ApprovalsBehaviour : Behaviour<Approvals>
-        {
-        public ApprovalsBehaviour(Approvals item)
-            : base(item)
-            {
-            O.BeforeWriting += O_BeforeWriting;
-            }
-
-        void O_BeforeWriting(DatabaseObject item, ref bool cancel)
-            {
-            if (item.Empty)
-                {
-                Trace.WriteLine("asdf");
-                }
             }
         }
     }
