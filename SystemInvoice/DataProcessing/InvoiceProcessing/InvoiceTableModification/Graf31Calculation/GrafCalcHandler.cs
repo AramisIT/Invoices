@@ -212,8 +212,13 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 if (part.ToUpper().Equals("З") || part.ToUpper().Equals("ІЗ"))
                     {
                     var newPartIndex = this.checkContentWords(i, parts, resultBuilder, existedWords);
+                    if (newPartIndex == i && (i + 1) < parts.Length && !isWordContent(parts[i + 1]))
+                        {
+                        resultBuilder.Append(" ");
+                        resultBuilder.Append(part);
+                        }
                     i = newPartIndex;
-                    if (newPartIndex != i) continue;
+                    continue;
                     }
 
                 if (!(i == 0 || part.StartsWith(".") || part.StartsWith(",") || part.StartsWith(":") || part.StartsWith(";") || part.StartsWith("-")))
