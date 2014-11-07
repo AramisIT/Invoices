@@ -154,6 +154,7 @@
       <DependentUpon>UsersItemForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Catalogs\GroupOfGoods.cs" />
+    <Compile Include="Catalogs\IEmptyNumbersSubstitutes.cs" />
     <Compile Include="Catalogs\MaterialType.cs" />
     <Compile Include="DataProcessing\Cache\MaterialsMappingCache\MaterialsMappingCacheObject.cs" />
     <Compile Include="DataProcessing\Cache\MaterialsMappingCache\MaterialsMappingCacheObjectsStore.cs" />

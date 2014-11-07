@@ -32,9 +32,10 @@
             this.okBtn = new DevExpress.XtraBars.BarButtonItem();
             this.WriteBtn = new DevExpress.XtraBars.BarButtonItem();
             this.CancelBtn = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
             this.SetContentsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ApprovalsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.tab = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.Model = new DevExpress.XtraEditors.TextEdit();
@@ -140,12 +141,13 @@
             this.ribbon.ExpandCollapseItem,
             this.okBtn,
             this.WriteBtn,
-            this.CancelBtn});
+            this.CancelBtn,
+            this.barButtonItem4});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 4;
+            this.ribbon.MaxItemId = 5;
             this.ribbon.Name = "ribbon";
-            this.ribbon.Size = new System.Drawing.Size(695, 49);
-            this.ribbon.StatusBar = this.ApprovalsButtonsBar;
+            this.ribbon.Size = new System.Drawing.Size(695, 54);
+            this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // okBtn
             // 
@@ -173,15 +175,13 @@
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.CancelBtn_ItemClick);
             // 
-            // ribbonStatusBar
+            // barButtonItem4
             // 
-            this.ribbonStatusBar.ItemLinks.Add(this.okBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.WriteBtn);
-            this.ribbonStatusBar.ItemLinks.Add(this.CancelBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 495);
-            this.ribbonStatusBar.Name = "ribbonStatusBar";
-            this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(695, 31);
+            this.barButtonItem4.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.barButtonItem4.Caption = "Исправить разреш. документы";
+            this.barButtonItem4.Id = 4;
+            this.barButtonItem4.Name = "barButtonItem4";
+            this.barButtonItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem4_ItemClick);
             // 
             // SetContentsButtonsBar
             // 
@@ -194,10 +194,21 @@
             // ApprovalsButtonsBar
             // 
             this.ApprovalsButtonsBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ApprovalsButtonsBar.ItemLinks.Add(this.barButtonItem4);
             this.ApprovalsButtonsBar.Location = new System.Drawing.Point(0, 0);
             this.ApprovalsButtonsBar.Name = "ApprovalsButtonsBar";
             this.ApprovalsButtonsBar.Ribbon = this.ribbon;
             this.ApprovalsButtonsBar.Size = new System.Drawing.Size(483, 27);
+            // 
+            // ribbonStatusBar
+            // 
+            this.ribbonStatusBar.ItemLinks.Add(this.okBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.WriteBtn);
+            this.ribbonStatusBar.ItemLinks.Add(this.CancelBtn);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 503);
+            this.ribbonStatusBar.Name = "ribbonStatusBar";
+            this.ribbonStatusBar.Ribbon = this.ribbon;
+            this.ribbonStatusBar.Size = new System.Drawing.Size(695, 23);
             // 
             // tab
             // 
@@ -252,7 +263,7 @@
             this.xtraTabPage1.Controls.Add(this.Article);
             this.xtraTabPage1.Controls.Add(this.labelControl23);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(483, 407);
+            this.xtraTabPage1.Size = new System.Drawing.Size(484, 409);
             this.xtraTabPage1.Text = "Основные данные";
             // 
             // Model
@@ -261,7 +272,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Model.Location = new System.Drawing.Point(152, 382);
             this.Model.Name = "Model";
-            this.Model.Size = new System.Drawing.Size(317, 20);
+            this.Model.Size = new System.Drawing.Size(318, 20);
             this.Model.TabIndex = 194;
             // 
             // labelControl14
@@ -290,7 +301,7 @@
             this.Contractor.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Contractor.Properties.FirstPopUp = null;
             this.Contractor.Properties.NullText = "";
-            this.Contractor.Size = new System.Drawing.Size(317, 20);
+            this.Contractor.Size = new System.Drawing.Size(318, 20);
             this.Contractor.TabIndex = 192;
             // 
             // contrDescr
@@ -319,7 +330,7 @@
             this.CustomsCodeInternal.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.CustomsCodeInternal.Properties.FirstPopUp = null;
             this.CustomsCodeInternal.Properties.NullText = "";
-            this.CustomsCodeInternal.Size = new System.Drawing.Size(317, 20);
+            this.CustomsCodeInternal.Size = new System.Drawing.Size(318, 20);
             this.CustomsCodeInternal.TabIndex = 190;
             // 
             // Currency
@@ -340,7 +351,7 @@
             this.Currency.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Currency.Properties.FirstPopUp = null;
             this.Currency.Properties.NullText = "";
-            this.Currency.Size = new System.Drawing.Size(317, 20);
+            this.Currency.Size = new System.Drawing.Size(318, 20);
             this.Currency.TabIndex = 189;
             // 
             // labelControl15
@@ -360,7 +371,7 @@
             this.Price.Name = "Price";
             this.Price.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.Price.Size = new System.Drawing.Size(317, 20);
+            this.Price.Size = new System.Drawing.Size(318, 20);
             this.Price.TabIndex = 187;
             // 
             // labelControl13
@@ -380,7 +391,7 @@
             this.GrossWeightTo.Name = "GrossWeightTo";
             this.GrossWeightTo.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.GrossWeightTo.Size = new System.Drawing.Size(170, 20);
+            this.GrossWeightTo.Size = new System.Drawing.Size(171, 20);
             this.GrossWeightTo.TabIndex = 185;
             // 
             // labelControl11
@@ -418,7 +429,7 @@
             this.NetWeightTo.Name = "NetWeightTo";
             this.NetWeightTo.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.NetWeightTo.Size = new System.Drawing.Size(170, 20);
+            this.NetWeightTo.Size = new System.Drawing.Size(171, 20);
             this.NetWeightTo.TabIndex = 181;
             // 
             // labelControl10
@@ -465,7 +476,7 @@
             this.UnitOfMeasure.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.UnitOfMeasure.Properties.FirstPopUp = null;
             this.UnitOfMeasure.Properties.NullText = "";
-            this.UnitOfMeasure.Size = new System.Drawing.Size(317, 20);
+            this.UnitOfMeasure.Size = new System.Drawing.Size(318, 20);
             this.UnitOfMeasure.TabIndex = 177;
             // 
             // labelControl8
@@ -494,7 +505,7 @@
             this.SubGroupOfGoods.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.SubGroupOfGoods.Properties.FirstPopUp = null;
             this.SubGroupOfGoods.Properties.NullText = "";
-            this.SubGroupOfGoods.Size = new System.Drawing.Size(317, 20);
+            this.SubGroupOfGoods.Size = new System.Drawing.Size(318, 20);
             this.SubGroupOfGoods.TabIndex = 175;
             // 
             // labelControl7
@@ -523,7 +534,7 @@
             this.Country.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Country.Properties.FirstPopUp = null;
             this.Country.Properties.NullText = "";
-            this.Country.Size = new System.Drawing.Size(317, 20);
+            this.Country.Size = new System.Drawing.Size(318, 20);
             this.Country.TabIndex = 173;
             // 
             // labelControl6
@@ -552,7 +563,7 @@
             this.Manufacturer.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Manufacturer.Properties.FirstPopUp = null;
             this.Manufacturer.Properties.NullText = "";
-            this.Manufacturer.Size = new System.Drawing.Size(317, 20);
+            this.Manufacturer.Size = new System.Drawing.Size(318, 20);
             this.Manufacturer.TabIndex = 171;
             // 
             // labelControl5
@@ -581,7 +592,7 @@
             this.TradeMark.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.TradeMark.Properties.FirstPopUp = null;
             this.TradeMark.Properties.NullText = "";
-            this.TradeMark.Size = new System.Drawing.Size(317, 20);
+            this.TradeMark.Size = new System.Drawing.Size(318, 20);
             this.TradeMark.TabIndex = 169;
             // 
             // labelControl4
@@ -598,7 +609,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BarCode.Location = new System.Drawing.Point(152, 89);
             this.BarCode.Name = "BarCode";
-            this.BarCode.Size = new System.Drawing.Size(317, 20);
+            this.BarCode.Size = new System.Drawing.Size(318, 20);
             this.BarCode.TabIndex = 167;
             // 
             // labelControl3
@@ -615,7 +626,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.CustomsCodeExtern.Location = new System.Drawing.Point(152, 63);
             this.CustomsCodeExtern.Name = "CustomsCodeExtern";
-            this.CustomsCodeExtern.Size = new System.Drawing.Size(317, 20);
+            this.CustomsCodeExtern.Size = new System.Drawing.Size(318, 20);
             this.CustomsCodeExtern.TabIndex = 165;
             // 
             // labelControl2
@@ -640,7 +651,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Article.Location = new System.Drawing.Point(152, 11);
             this.Article.Name = "Article";
-            this.Article.Size = new System.Drawing.Size(317, 20);
+            this.Article.Size = new System.Drawing.Size(318, 20);
             this.Article.TabIndex = 161;
             // 
             // labelControl23
@@ -735,7 +746,7 @@
             // 
             this.xtraTabPage3.Controls.Add(this.NameEng);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(189, 156);
+            this.xtraTabPage3.Size = new System.Drawing.Size(190, 158);
             this.xtraTabPage3.Text = "Исходное";
             // 
             // NameEng
@@ -747,7 +758,7 @@
             this.NameEng.MenuManager = this.ribbon;
             this.NameEng.Name = "NameEng";
             this.NameEng.Properties.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.NameEng.Size = new System.Drawing.Size(195, 167);
+            this.NameEng.Size = new System.Drawing.Size(196, 169);
             this.NameEng.TabIndex = 230;
             // 
             // xtraTabControl3
@@ -767,7 +778,7 @@
             // 
             this.xtraTabPage5.Controls.Add(this.NameDecl);
             this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(189, 189);
+            this.xtraTabPage5.Size = new System.Drawing.Size(190, 191);
             this.xtraTabPage5.Text = "Декларация";
             // 
             // NameDecl
@@ -777,7 +788,7 @@
             this.NameDecl.MenuManager = this.ribbon;
             this.NameDecl.Name = "NameDecl";
             this.NameDecl.Properties.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.NameDecl.Size = new System.Drawing.Size(189, 189);
+            this.NameDecl.Size = new System.Drawing.Size(190, 191);
             this.NameDecl.TabIndex = 231;
             // 
             // xtraTabPage6
@@ -955,5 +966,6 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem3;
         private DevExpress.XtraEditors.TextEdit Model;
         private DevExpress.XtraEditors.LabelControl labelControl14;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem4;
         }
     }

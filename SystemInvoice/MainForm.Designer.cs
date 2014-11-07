@@ -98,6 +98,7 @@
             this.barButtonItem51 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem5 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem52 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem53 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.administratorPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -157,7 +158,7 @@
             this.barButtonItem40 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem41 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem53 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem54 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).BeginInit();
@@ -239,9 +240,10 @@
             this.barButtonItem51,
             this.barSubItem5,
             this.barButtonItem52,
-            this.barButtonItem53});
+            this.barButtonItem53,
+            this.barButtonItem54});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 92;
+            this.ribbon.MaxItemId = 93;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -443,7 +445,8 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.UnitOfMeasureBtn),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnSettings),
             new DevExpress.XtraBars.LinkPersistInfo(this.openMaterialTypesBtn),
-            new DevExpress.XtraBars.LinkPersistInfo(this.openMaterialsTypesMappings)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.openMaterialsTypesMappings),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem54)});
             this.barSubItem1.Name = "barSubItem1";
             // 
             // approvalsLoadFormatBtn
@@ -739,6 +742,13 @@
             this.barButtonItem52.Id = 90;
             this.barButtonItem52.Name = "barButtonItem52";
             this.barButtonItem52.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem52_ItemClick);
+            // 
+            // barButtonItem53
+            // 
+            this.barButtonItem53.Caption = "Загрузить базу разр. документов";
+            this.barButtonItem53.Id = 91;
+            this.barButtonItem53.Name = "barButtonItem53";
+            this.barButtonItem53.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem53_ItemClick);
             // 
             // ribbonPage1
             // 
@@ -1127,12 +1137,12 @@
             this.barButtonItem42.Id = 19;
             this.barButtonItem42.Name = "barButtonItem42";
             // 
-            // barButtonItem53
+            // barButtonItem54
             // 
-            this.barButtonItem53.Caption = "Загрузить базу разр. документов";
-            this.barButtonItem53.Id = 91;
-            this.barButtonItem53.Name = "barButtonItem53";
-            this.barButtonItem53.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem53_ItemClick);
+            this.barButtonItem54.Caption = "Замены пустых номеров";
+            this.barButtonItem54.Id = 92;
+            this.barButtonItem54.Name = "barButtonItem54";
+            this.barButtonItem54.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem54_ItemClick);
             // 
             // MainForm
             // 
@@ -1286,5 +1296,6 @@
         private DevExpress.XtraBars.BarSubItem barSubItem5;
         private DevExpress.XtraBars.BarButtonItem barButtonItem52;
         private DevExpress.XtraBars.BarButtonItem barButtonItem53;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem54;
         }
     }

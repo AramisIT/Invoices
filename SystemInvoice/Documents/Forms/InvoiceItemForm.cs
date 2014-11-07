@@ -16,6 +16,7 @@ using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.Sp
 using SystemInvoice.SystemObjects;
 using Aramis.DataBase;
 using Aramis.UI;
+using Catalogs;
 using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
@@ -35,6 +36,7 @@ using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking;
 using SystemInvoice.DataProcessing.ApprovalsProcessing.ByNomenclatureUpdating;
 using SystemInvoice.DataProcessing.ApprovalsProcessing;
 using DevExpress.XtraGrid;
+using TableViewInterfaces;
 
 namespace SystemInvoice.Documents.Forms
     {
@@ -768,6 +770,69 @@ namespace SystemInvoice.Documents.Forms
             syncronizationManager.AllowSyncronization();
             syncronizationManager.RefreshAll();
             this.refreshInvoiceApprovalsCache();
+            updateDots();
+            }
+
+        private List<DataColumn> _RDNumbers;
+        private List<DataColumn> _RDDates;
+        private List<DataColumn> _RDBaseNumbers;
+        private Table<IEmptyNumberSubstituteRow> dots;
+        private HashSet<string> emptyNumbersHashSet;
+
+        private void updateDots()
+            {
+            if (dots.IsNull())
+                {
+                var q =
+                    DB.NewQuery(
+                        @"select top 1 Id from EmptyNumbersSubstitutes where Contractor = @Contractor and MarkForDeleting = 0");
+                q.AddInputParameter("Contractor", Invoice.Contractor.Id);
+                var id = q.SelectInt64();
+                var doc = A.New<IEmptyNumbersSubstitutes>(id);
+                dots = doc.Substitute;
+
+                if (dots.RowsCount > 0)
+                    {
+                    emptyNumbersHashSet = doc.GetEmptyNumbersHashSet();
+                    }
+                }
+
+            if (dots.RowsCount == 0) return;
+
+            if (_RDNumbers.IsNull())
+                {
+                _RDNumbers = new List<DataColumn>() { Invoice.RDNumber1, Invoice.RDNumber2, Invoice.RDNumber3, Invoice.RDNumber4, Invoice.RDNumber5 };
+                _RDDates = new List<DataColumn>() { Invoice.RDFromDate1, Invoice.RDFromDate2, Invoice.RDFromDate3, Invoice.RDFromDate4, Invoice.RDFromDate5 };
+                _RDBaseNumbers = new List<DataColumn>() { Invoice.RD1BaseNumber, Invoice.RD2BaseNumber, Invoice.RD3BaseNumber, Invoice.RD4BaseNumber, Invoice.RD5BaseNumber };
+                }
+
+            var substitutesCache = new Dictionary<string, int>(new IgnoreCaseStringEqualityComparer());
+
+            foreach (DataRow row in Invoice.Goods.Rows)
+                {
+                for (int rdNumberIndex = 0; rdNumberIndex < 5; rdNumberIndex++)
+                    {
+                    var docNumber = (row[_RDNumbers[rdNumberIndex]] as string).Trim();
+
+                    if (string.IsNullOrEmpty(docNumber)) continue;
+                    if (!emptyNumbersHashSet.Contains(docNumber.ToUpper())) continue;
+
+                    var dateAndBaseNumber = (row[_RDDates[rdNumberIndex]] as string).Trim() + (row[_RDBaseNumbers[rdNumberIndex]] as string).Trim();
+
+                    int index = 0;
+                    if (substitutesCache.TryGetValue(dateAndBaseNumber, out index))
+                        {
+                        index++;
+                        substitutesCache[dateAndBaseNumber] = index;
+                        }
+                    else
+                        {
+                        substitutesCache.Add(dateAndBaseNumber, index);
+                        }
+
+                    row[_RDNumbers[rdNumberIndex]] = dots[index].Substitute;
+                    }
+                }
             }
 
         #endregion
@@ -949,6 +1014,8 @@ namespace SystemInvoice.Documents.Forms
         private Color NEW_WARE_ELECTROLUX_COLOR = "#ffdd8a".ToSystemDrawingColor();
 
         private StringCacheDictionary newElectroluxWaresCache;
+
+
 
         private void goodsGridView_RowStyle(object sender, RowStyleEventArgs e)
             {

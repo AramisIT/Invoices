@@ -388,5 +388,10 @@ namespace SystemInvoice
             loadElectrolux(ElectroluxLoadingTypes.Approvals, new WhirlpoolLoadingParameters());
             }
 
+        private void barButtonItem54_ItemClick(object sender, ItemClickEventArgs e)
+            {
+            UserInterface.Current.ShowList(typeof(IEmptyNumbersSubstitutes));
+            }
+
         }
     }
