@@ -691,6 +691,7 @@ namespace SystemInvoice.Documents.Forms
                 {
                 return;
                 }
+            clearDots();
             if (this.filesManager.TrySaveErrorsToEdit(lastUnloadUnprocessedFileName))
                 {
                 disableEditing();
@@ -706,6 +707,7 @@ namespace SystemInvoice.Documents.Forms
                 {
                 return;
                 }
+            clearDots();
             if (this.filesManager.TrySaveAllToEdit(lastUnloadUnprocessedFileName))
                 {
                 disableEditing();
@@ -779,6 +781,27 @@ namespace SystemInvoice.Documents.Forms
         private Table<IEmptyNumberSubstituteRow> dots;
         private HashSet<string> emptyNumbersHashSet;
 
+        private void clearDots()
+            {
+            if (dots.IsNull() || dots.RowsCount == 0) return;
+            var emptyNumber = dots[0].Substitute;
+
+            foreach (DataRow row in Invoice.Goods.Rows)
+                {
+                for (int rdNumberIndex = 0; rdNumberIndex < 5; rdNumberIndex++)
+                    {
+                    var docNumber = (row[_RDNumbers[rdNumberIndex]] as string).Trim();
+
+                    if (string.IsNullOrEmpty(docNumber)) continue;
+
+                    if (isNumberEmpty(docNumber.ToUpper()))
+                        {
+                        row[_RDNumbers[rdNumberIndex]] = emptyNumber;
+                        }
+                    }
+                }
+            }
+
         private void updateDots()
             {
             if (dots.IsNull())
@@ -815,7 +838,8 @@ namespace SystemInvoice.Documents.Forms
                     var docNumber = (row[_RDNumbers[rdNumberIndex]] as string).Trim();
 
                     if (string.IsNullOrEmpty(docNumber)) continue;
-                    if (!emptyNumbersHashSet.Contains(docNumber.ToUpper())) continue;
+
+                    if (!isNumberEmpty(docNumber.ToUpper())) continue;
 
                     var dateAndBaseNumber = (row[_RDDates[rdNumberIndex]] as string).Trim() + (row[_RDBaseNumbers[rdNumberIndex]] as string).Trim();
 
@@ -833,6 +857,15 @@ namespace SystemInvoice.Documents.Forms
                     row[_RDNumbers[rdNumberIndex]] = dots[index].Substitute;
                     }
                 }
+            }
+
+        private bool isNumberEmpty(string number)
+            {
+            foreach (var emptyNumber in emptyNumbersHashSet)
+                {
+                if (number.IndexOf(emptyNumber) >= 0) return true;
+                }
+            return false;
             }
 
         #endregion
@@ -922,6 +955,7 @@ namespace SystemInvoice.Documents.Forms
             cachedData.RefreshCache();
             syncronizationManager.AllowSyncronization();
             gridViewManager.RefreshChecking();
+            updateDots();
             }
 
         private void clearAllFiltersBtn_ItemClick(object sender, ItemClickEventArgs e)

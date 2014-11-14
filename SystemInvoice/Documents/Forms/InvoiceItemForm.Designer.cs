@@ -160,7 +160,7 @@
             this.ribbon.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemCheckEdit1});
             this.ribbon.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
-            this.ribbon.Size = new System.Drawing.Size(995, 27);
+            this.ribbon.Size = new System.Drawing.Size(995, 30);
             this.ribbon.StatusBar = this.GoodsButtonsBar;
             // 
             // btnOk
@@ -354,10 +354,10 @@
             this.ribbonStatusBar.ItemLinks.Add(this.barSubItem1);
             this.ribbonStatusBar.ItemLinks.Add(this.loadItemsToDocument);
             this.ribbonStatusBar.ItemLinks.Add(this.settingsBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 485);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 489);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 27);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(995, 23);
             // 
             // GoodsButtonsBar
             // 
@@ -602,7 +602,7 @@
             this.xtraTabPage1.Controls.Add(this.ExcelLoadingFormat);
             this.xtraTabPage1.Controls.Add(this.labelControl9);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(976, 83);
+            this.xtraTabPage1.Size = new System.Drawing.Size(977, 85);
             this.xtraTabPage1.Text = "Загрузка данных";
             // 
             // xtraTabPage2

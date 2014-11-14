@@ -93,7 +93,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.Files
             }
 
         /// <summary>
-        /// Получает выгружаемую таблицу из табличной части инфойса, сохраняет информацию о соответствии выгруженной таблицы и исходной
+        /// Получает выгружаемую таблицу из табличной части инвойса, сохраняет информацию о соответствии выгруженной таблицы и исходной
         /// </summary>
         private DataTable getItems( DataTable dataTable, Dictionary<int, int> unloadedIndexesDict, bool unloadAll )
             {

@@ -815,7 +815,11 @@ namespace SystemInvoice.SystemObjects
                     }
 
                 var approvalInfo = new ApprovalInfo(defaultApprovalDurationYears) { DocumentType = docType };
-                approvalInfo.Number = row[currentOffset + docNumberIndex].ToString().Trim();
+                var docnumber = row[currentOffset + docNumberIndex].ToString().Trim();
+
+                approvalInfo.Number = docnumber;
+                Trace.WriteLine(docnumber);
+
                 approvalInfo.StartDate = getDate(row[currentOffset + startDateIndex]);
 
                 var finishDateResultIndex = currentOffset + finishDateIndex;
