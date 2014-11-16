@@ -61,7 +61,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.mainView.EndSorting += mainView_EndSorting;
             this.mainView.ColumnFilterChanged += mainView_ColumnFilterChanged;
             this.mainView.MouseDown += mainView_MouseDown;
-            
+
             this.Invoice = invoice;
             this.invoiceChecker.ErrorsCountChanged += invoiceChecker_ErrorsCountChanged;
             this.invoiceChecker.CheckTable(false);
@@ -74,9 +74,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.resolveErrorsContextMenuManager.OnErrorResolved += resolveErrorsContextMenuManager_OnErrorResolved;
 
             this.mainView.CellValueChanging += mainView_CellValueChanging;
-            }
-
-
+           }
 
         /// <summary>
         /// Обновляет итоговые ячейки после каждого изменения значений в колонках по которым рассчитываются итоги
@@ -93,6 +91,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
                 {
                 DataRow targetRow = Invoice.Goods.Rows[this.filteredRowsSource.getSourceRow(e.RowHandle)];
+                if (Invoice.Contractor.SynchronizeQuantityAndPlacesQuantity
+                   && columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
+                    {
+                    targetRow[ProcessingConsts.ColumnNames.NUMBER_OF_PLACES_COLUMN_NAME] = e.Value.ToInt64(true).ToString();
+                    }
                 targetRow[columnName] = e.Value;
                 this.RefreshTotals();
                 this.mainView.UpdateTotalSummary();
