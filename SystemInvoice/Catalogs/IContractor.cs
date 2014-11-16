@@ -35,6 +35,9 @@ namespace SystemInvoice.Catalogs
         [DataField(Description = "Разрешить ручное заполнение")]
         bool AllowManualFilling { get; set; }
 
+        [DataField(Description = "Кол-во мест = Количество")]
+        bool SynchronizeQuantityAndPlacesQuantity { get; set; }
+
         [DataField(Description = "Не загружать сертификаты в инвойс")]
         bool Don_tLoadCertToInvoice { get; set; }
         }

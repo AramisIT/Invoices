@@ -144,6 +144,12 @@ namespace SystemInvoice.Documents.Forms
                 this.GoodsControl.Paint -= GoodsControl_Paint;
                 this.GoodsControl.EmbeddedNavigator.ButtonClick += EmbeddedNavigator_ButtonClick;
                 }
+
+            if (Invoice.Contractor.AllowManualFilling)
+                {
+                Invoice.TableRowAdded -= Invoice_TableRowAdded;
+                Invoice.TableRowAdded += Invoice_TableRowAdded;
+                }
             }
 
         void EmbeddedNavigator_ButtonClick(object sender, DevExpress.XtraEditors.NavigatorButtonClickEventArgs e)
@@ -1037,6 +1043,7 @@ namespace SystemInvoice.Documents.Forms
 
             row[invoice.NetWeight] = newRow.Net.ConvertToString();
             row[invoice.ItemGrossWeight] = newRow.Gross.ConvertToString();
+            row[invoice.OneItemGross] = newRow.GrossPerUnit.ConvertToString();
 
             row[invoice.ItemNumberOfPlaces] = newRow.PlacesCount.ToString();
 
