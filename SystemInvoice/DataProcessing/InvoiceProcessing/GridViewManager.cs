@@ -10,6 +10,7 @@ using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking;
 using SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction;
 using SystemInvoice.Documents;
 using DevExpress.XtraBars;
+using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
@@ -74,7 +75,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             this.resolveErrorsContextMenuManager.OnErrorResolved += resolveErrorsContextMenuManager_OnErrorResolved;
 
             this.mainView.CellValueChanging += mainView_CellValueChanging;
-           }
+            }
 
         /// <summary>
         /// Обновляет итоговые ячейки после каждого изменения значений в колонках по которым рассчитываются итоги
@@ -90,6 +91,9 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
               columnName.Equals(ProcessingConsts.ColumnNames.GROSS_WEIGHT_COLUMN_NAME) ||
                 columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
                 {
+                var editor = mainView.ActiveEditor as TextEdit;
+                var selectionStart = editor.SelectionStart;
+                var selectionLength = editor.SelectionLength;
                 DataRow targetRow = Invoice.Goods.Rows[this.filteredRowsSource.getSourceRow(e.RowHandle)];
                 if (Invoice.Contractor.SynchronizeQuantityAndPlacesQuantity
                    && columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
@@ -99,6 +103,13 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 targetRow[columnName] = e.Value;
                 this.RefreshTotals();
                 this.mainView.UpdateTotalSummary();
+                if (!editor.IsNull())
+                    {
+                    mainView.ShowEditor();
+
+                    editor.SelectionLength = selectionLength;
+                    editor.SelectionStart = selectionStart;
+                    }
                 }
             }
 
