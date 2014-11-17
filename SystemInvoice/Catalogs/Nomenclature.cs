@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SystemInvoice.DataProcessing.ApprovalsProcessing;
+using SystemInvoice.Documents;
 using Aramis.Core;
 using Aramis.Attributes;
 using Aramis.Enums;
@@ -103,7 +104,7 @@ namespace SystemInvoice.Catalogs
             }
 
         private bool z_WareFromCatalog;
-       
+
         #region (string) BarCode Штрих-Код
         [DataField(Description = "Штрих-Код", Size = 20)]
         public string BarCode
@@ -548,9 +549,23 @@ namespace SystemInvoice.Catalogs
             {
             this.OnRead += Nomenclature_OnRead;
             this.BeforeWriting += Nomenclature_BeforeWriting;
+            this.AfterWriting += Nomenclature_AfterWriting;
             this.TableRowChanged += Nomenclature_TableRowChanged;
             this.syncronizer = new AllFieldsSyncronizer(this);
             this.approvalsByNomenclatureUpdater = new ApprovalsByNomenclatureUpdater();
+            }
+
+        void Nomenclature_AfterWriting(DatabaseObject item)
+            {
+            if (Contractor.Approvals.RowsCount > 0)
+                {
+                var approval = findNecessaryApproval(Contractor.Approvals, GetRef("Manufacturer"), GetRef("CustomsCodeInternal"));
+                if (!approval.IsNull())
+                    {
+                    approval.AddWareId(Id);
+                    approval.Write();
+                    }
+                }
             }
 
         void Nomenclature_BeforeWriting(DatabaseObject item, ref bool cancel)
@@ -561,6 +576,19 @@ namespace SystemInvoice.Catalogs
                 approvalsByNomenclatureUpdater.RemoveNomenclatureFromSomeApprovals(this.Id);
                 initCustomsCodeId = customsCodeId;
                 }
+            }
+
+        private Approvals findNecessaryApproval(Table<IContractorApprovals> table, long producerId, long customsCodeId)
+            {
+            foreach (var row in table)
+                {
+                if (row.Producer.Id == producerId && row.CustomsCode.Id == customsCodeId)
+                    {
+                    return row.Approval.Id == 0 ? null : row.Approval.Item;
+                    }
+                }
+
+            return null;
             }
 
         /// <summary>

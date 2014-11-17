@@ -11,6 +11,7 @@ using Aramis.Core;
 using Aramis.DataBase;
 using Aramis.DatabaseConnector;
 using Aramis.SystemConfigurations;
+using Aramis.UI;
 using Aramis.UI.WinFormsDevXpress;
 using ReportView;
 using TableViewInterfaces;
@@ -745,6 +746,8 @@ namespace SystemInvoice.SystemObjects
 
         public override bool TryLoadApprovals(DataSet dataSet, Action<double> notifyProgress, int approvalDurationYears, out string errorDescription, out string errorHelpData)
             {
+            bool justUpdateWares = KeyBoard.CtrlAltShiftPressed() && "Только обновить необход. разрешительные?".Ask();
+
             errorDescription = string.Empty;
             errorHelpData = string.Empty;
             defaultApprovalDurationYears = approvalDurationYears;
@@ -773,12 +776,25 @@ namespace SystemInvoice.SystemObjects
                         continue;
                         }
 
-                    if (!loadApprovals(wareId, row, out  errorDescription))
+                    if (justUpdateWares)
                         {
-                        errorHelpData = A.New<Nomenclature>(wareId).Article;
-                        return false;
+                        var ware = A.New<Nomenclature>(wareId);
+                        ware.NotifyPropertyChanged("Code");
+                        var writtenResult = ware.Write();
+                        if (!writtenResult.IsSuccess())
+                            {
+                            string.Format("Не удалось обновить товар: {0}", ware).NotifyToUser(MessagesToUserTypes.Error);
+                            return false;
+                            }
                         }
-
+                    else
+                        {
+                        if (!loadApprovals(wareId, row, out errorDescription))
+                            {
+                            errorHelpData = A.New<Nomenclature>(wareId).Article;
+                            return false;
+                            }
+                        }
                     currentRowIndex++;
                     notifyProgress(((double)currentRowIndex) / totalRows);
                     }

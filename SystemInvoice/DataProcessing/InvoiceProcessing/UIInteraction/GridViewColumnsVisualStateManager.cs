@@ -177,6 +177,10 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
                 {
                 return 100;
                 }
+            if (fieldName.StartsWith("RDNumber"))
+                {
+                return 195;
+                }
             return 125;
             }
 

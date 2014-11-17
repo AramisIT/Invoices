@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemInvoice.Documents;
 using Aramis.Core;
 using Aramis.Attributes;
 using Aramis.Enums;
@@ -40,5 +41,20 @@ namespace SystemInvoice.Catalogs
 
         [DataField(Description = "Не загружать сертификаты в инвойс")]
         bool Don_tLoadCertToInvoice { get; set; }
+
+        [DataField(Description = "Обязательные резрешительные документы")]
+        Table<IContractorApprovals> Approvals { get; }
+        }
+
+    public interface IContractorApprovals : ITableRow
+        {
+        [DataField(Description = "Там. код")]
+        Ref<CustomsCode> CustomsCode { get; set; }
+
+        [DataField(Description = "Разреш. документ")]
+        Ref<Approvals> Approval { get; set; }
+
+        [DataField(Description = "Производитель")]
+        Ref<IManufacturer> Producer { get; set; }
         }
     }
