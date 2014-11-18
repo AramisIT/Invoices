@@ -89,18 +89,35 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
               columnName.Equals(ProcessingConsts.ColumnNames.NET_WEIGHT_COLUMN_NAME) ||
               columnName.Equals(ProcessingConsts.ColumnNames.NUMBER_OF_PLACES_COLUMN_NAME) ||
               columnName.Equals(ProcessingConsts.ColumnNames.GROSS_WEIGHT_COLUMN_NAME) ||
+              columnName.Equals(ProcessingConsts.ColumnNames.ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME) ||
                 columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
                 {
                 var editor = mainView.ActiveEditor as TextEdit;
                 var selectionStart = editor.SelectionStart;
                 var selectionLength = editor.SelectionLength;
                 DataRow targetRow = Invoice.Goods.Rows[this.filteredRowsSource.getSourceRow(e.RowHandle)];
-                if (Invoice.Contractor.SynchronizeQuantityAndPlacesQuantity
-                   && columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
-                    {
-                    targetRow[ProcessingConsts.ColumnNames.NUMBER_OF_PLACES_COLUMN_NAME] = e.Value.ToInt64(true).ToString();
-                    }
                 targetRow[columnName] = e.Value;
+
+                if (Invoice.Contractor.SynchronizeQuantityAndPlacesQuantity
+                   && (columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME)
+                   || columnName.Equals(ProcessingConsts.ColumnNames.ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME)
+                   || columnName.Equals(ProcessingConsts.ColumnNames.PRICE_COLUMN_NAME)
+                   || columnName.Equals(ProcessingConsts.ColumnNames.ITEM_NET_WEIGHT_COLUMN_NAME)))
+                    {
+                    var quantity = targetRow[ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME].ToDecimal(true);
+
+                    targetRow[ProcessingConsts.ColumnNames.NUMBER_OF_PLACES_COLUMN_NAME] = ((int)quantity).ToString();
+
+                    var gross = quantity * targetRow[ProcessingConsts.ColumnNames.ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME].ToDecimal(true);
+                    targetRow[ProcessingConsts.ColumnNames.GROSS_WEIGHT_COLUMN_NAME] = gross.ConvertToString();
+
+                    var net = quantity * targetRow[ProcessingConsts.ColumnNames.ITEM_NET_WEIGHT_COLUMN_NAME].ToDecimal(true);
+                    targetRow[ProcessingConsts.ColumnNames.NET_WEIGHT_COLUMN_NAME] = net.ConvertToString();
+
+                    var price = quantity * targetRow[ProcessingConsts.ColumnNames.PRICE_COLUMN_NAME].ToDecimal(true);
+                    targetRow[ProcessingConsts.ColumnNames.SUM_COLUMN_NAME] = price.ConvertToString();
+                    }
+
                 this.RefreshTotals();
                 this.mainView.UpdateTotalSummary();
                 if (!editor.IsNull())

@@ -74,6 +74,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.UIInteraction
                 GridColumn countColumn = mainView.Columns[countColumnName];
                 countColumn.SummaryItem.SummaryType = DevExpress.Data.SummaryItemType.Custom;
                 countColumn.SummaryItem.Tag = "Count";
+
+                var grossPerItem = mainView.Columns[ProcessingConsts.ColumnNames.ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME];
+                //grossPerItem.SummaryItem.SummaryType = DevExpress.Data.SummaryItemType.Custom;
+                //grossPerItem.SummaryItem.Tag = ProcessingConsts.ColumnNames.ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME;
+
                 mainView.CustomSummaryCalculate += mainView_CustomSummaryCalculate;
                 foouterInitialized = true;
                 }

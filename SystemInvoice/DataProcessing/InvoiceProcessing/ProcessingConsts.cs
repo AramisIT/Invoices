@@ -43,7 +43,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             private static string SubGroupOfGoodsColumnName = InvoiceColumnNames.SubGroupOfGoods.ToString();
             private static string groupCodeColumnName = InvoiceColumnNames.GroupCode.ToString();
             private static string priceColumnName = InvoiceColumnNames.Price.ToString();
-            private static string grossWeightColumnName = InvoiceColumnNames.ItemGrossWeight.ToString();
+            private static readonly string grossWeightColumnName = InvoiceColumnNames.ItemGrossWeight.ToString();
+            private static readonly string oneItemGrossColumnName = InvoiceColumnNames.OneItemGross.ToString();
             private static string countColumnName = InvoiceColumnNames.Count.ToString();
             private static string netWeightColumnName = InvoiceColumnNames.NetWeight.ToString();
             private static string sumColumnName = InvoiceColumnNames.Sum.ToString();
@@ -62,7 +63,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             private static string graf31ColumnName = InvoiceColumnNames.Graf31.ToString();
             public static string sizeOriginalColumnName = InvoiceColumnNames.SizeOriginal.ToString();
             private static string insoleLengthColumnName = InvoiceColumnNames.InsoleLength.ToString();
-                                              
+
             public static string CUSTOM_CODE_INTERNAL_COLUMN_NAME
                 {
                 get { return customCodeInternalColumnName; }
@@ -121,6 +122,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
             public static string GROSS_WEIGHT_COLUMN_NAME
                 {
                 get { return grossWeightColumnName; }
+                }
+
+            public static string ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME
+                {
+                get { return oneItemGrossColumnName; }
                 }
 
             public static string COUNT_COLUMN_NAME
@@ -209,7 +215,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 }
 
 
-            public static string INSOLE_LENGTH_COLUMN_NAME 
+            public static string INSOLE_LENGTH_COLUMN_NAME
                 {
                 get { return insoleLengthColumnName; }
                 }

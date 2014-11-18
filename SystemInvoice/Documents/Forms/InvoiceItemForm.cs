@@ -319,7 +319,8 @@ namespace SystemInvoice.Documents.Forms
                 columnName.Equals(ProcessingConsts.ColumnNames.NET_WEIGHT_COLUMN_NAME) ||
                 columnName.Equals(ProcessingConsts.ColumnNames.NUMBER_OF_PLACES_COLUMN_NAME) ||
                 columnName.Equals(ProcessingConsts.ColumnNames.GROSS_WEIGHT_COLUMN_NAME) ||
-                columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME))
+                columnName.Equals(ProcessingConsts.ColumnNames.COUNT_COLUMN_NAME) ||
+                columnName.Equals(ProcessingConsts.ColumnNames.ONE_ITEM_GROSS_WEIGHT_COLUMN_NAME))
                 {
                 if (gridViewManager != null)
                     {
