@@ -835,32 +835,114 @@ namespace SystemInvoice.Documents.Forms
                 _RDBaseNumbers = new List<DataColumn>() { Invoice.RD1BaseNumber, Invoice.RD2BaseNumber, Invoice.RD3BaseNumber, Invoice.RD4BaseNumber, Invoice.RD5BaseNumber };
                 }
 
-            var substitutesCache = new Dictionary<string, int>(new IgnoreCaseStringEqualityComparer());
+            // first dict key - date, second dict key - sert number, list - numbers substitutes
+            var substitutesCache = new Dictionary<string, Dictionary<string, List<string>>>();
 
             foreach (DataRow row in Invoice.Goods.Rows)
                 {
+                var sameDocsCount = new Dictionary<string, Dictionary<string, int>>();
+
                 for (int rdNumberIndex = 0; rdNumberIndex < 5; rdNumberIndex++)
                     {
                     var docNumber = (row[_RDNumbers[rdNumberIndex]] as string).Trim();
-
                     if (string.IsNullOrEmpty(docNumber)) continue;
-
                     if (!isNumberEmpty(docNumber.ToUpper())) continue;
 
-                    var dateAndBaseNumber = (row[_RDDates[rdNumberIndex]] as string).Trim() + (row[_RDBaseNumbers[rdNumberIndex]] as string).Trim();
+                    var date = (row[_RDDates[rdNumberIndex]] as string).Trim();
+                    var sertNumber = (row[_RDBaseNumbers[rdNumberIndex]] as string).Trim();
 
-                    int index = 0;
-                    if (substitutesCache.TryGetValue(dateAndBaseNumber, out index))
+                    Dictionary<string, int> countBySerts;
+                    if (!sameDocsCount.TryGetValue(date, out countBySerts))
                         {
-                        index++;
-                        substitutesCache[dateAndBaseNumber] = index;
+                        countBySerts = new Dictionary<string, int>();
+                        sameDocsCount.Add(date, countBySerts);
+                        }
+
+                    int sameDocsAmount;
+                    if (!countBySerts.TryGetValue(sertNumber, out sameDocsAmount))
+                        {
+                        sameDocsAmount = 1;
+                        countBySerts.Add(sertNumber, sameDocsAmount);
                         }
                     else
                         {
-                        substitutesCache.Add(dateAndBaseNumber, index);
+                        countBySerts[sertNumber] = sameDocsAmount + 1;
+                        }
+                    }
+
+                foreach (var kvp in sameDocsCount)
+                    {
+                    Dictionary<string, List<string>> numbersBySerts;
+                    if (!substitutesCache.TryGetValue(kvp.Key, out numbersBySerts))
+                        {
+                        numbersBySerts = new Dictionary<string, List<string>>();
+                        substitutesCache.Add(kvp.Key, numbersBySerts);
                         }
 
-                    row[_RDNumbers[rdNumberIndex]] = dots[index].Substitute;
+                    foreach (var countBySerts in kvp.Value)
+                        {
+                        List<string> numbers;
+                        if (!numbersBySerts.TryGetValue(countBySerts.Key, out numbers))
+                            {
+                            numbers = new List<string>();
+                            numbersBySerts.Add(countBySerts.Key, numbers);
+                            }
+
+                        while (numbers.Count < countBySerts.Value)
+                            {
+                            numbers.Add(string.Empty);
+                            }
+                        }
+                    }
+                }
+
+            foreach (var sertDictionary in substitutesCache.Values)
+                {
+                var substituteIndex = 0;
+                foreach (var substitutesList in sertDictionary.Values)
+                    {
+                    for (int index = 0; index < substitutesList.Count; index++)
+                        {
+                        substitutesList[index] = dots[substituteIndex].Substitute;
+                        substituteIndex++;
+                        }
+                    }
+                }
+
+            // seconds pass
+            foreach (DataRow row in Invoice.Goods.Rows)
+                {
+                var sameDocsCount = new Dictionary<string, Dictionary<string, int>>();
+
+                for (int rdNumberIndex = 0; rdNumberIndex < 5; rdNumberIndex++)
+                    {
+                    var docNumber = (row[_RDNumbers[rdNumberIndex]] as string).Trim();
+                    if (string.IsNullOrEmpty(docNumber)) continue;
+                    if (!isNumberEmpty(docNumber.ToUpper())) continue;
+
+                    var date = (row[_RDDates[rdNumberIndex]] as string).Trim();
+                    var sertNumber = (row[_RDBaseNumbers[rdNumberIndex]] as string).Trim();
+
+                    Dictionary<string, int> countBySerts;
+                    if (!sameDocsCount.TryGetValue(date, out countBySerts))
+                        {
+                        countBySerts = new Dictionary<string, int>();
+                        sameDocsCount.Add(date, countBySerts);
+                        }
+
+                    int sameDocsAmount;
+                    if (!countBySerts.TryGetValue(sertNumber, out sameDocsAmount))
+                        {
+                        sameDocsAmount = 1;
+                        countBySerts.Add(sertNumber, sameDocsAmount);
+                        }
+                    else
+                        {
+                        sameDocsAmount++;
+                        countBySerts[sertNumber] = sameDocsAmount;
+                        }
+
+                    row[_RDNumbers[rdNumberIndex]] = substitutesCache[date][sertNumber][sameDocsAmount - 1];
                     }
                 }
             }
