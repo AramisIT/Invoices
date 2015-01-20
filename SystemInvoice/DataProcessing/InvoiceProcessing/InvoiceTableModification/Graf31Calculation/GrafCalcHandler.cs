@@ -7,6 +7,7 @@ using System.Data;
 using SystemInvoice.Documents;
 using SystemInvoice.Catalogs;
 using SystemInvoice.Excel;
+using AramisInfostructure.Queries;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.Graf31Calculation
     {
@@ -769,7 +770,7 @@ join Nomenclature as nom on nom.Id = cont.ItemNomenclature
                 return string.Empty;
                 }
 
-            private static void fillItems(Aramis.DatabaseConnector.Query query, List<string> declarations, List<string> counts)
+            private static void fillItems(IQuery query, List<string> declarations, List<string> counts)
                 {
                 query.Foreach((res) =>
                 {

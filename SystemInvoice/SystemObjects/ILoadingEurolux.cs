@@ -18,6 +18,7 @@ using Aramis.DatabaseConnector;
 using System;
 using SystemInvoice.Catalogs;
 using SystemInvoice.Documents;
+using Aramis.Extensions;
 using Aramis.SystemConfigurations;
 using Aramis.UI.WinFormsDevXpress;
 using AramisWpfComponents.Excel;

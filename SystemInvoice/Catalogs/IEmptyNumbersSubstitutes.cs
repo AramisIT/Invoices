@@ -43,12 +43,12 @@ namespace Catalogs
             {
             O.AddPropertyChanged(O.Contractor, () => O.Description = O.Contractor.Description.Substring(0,
                 Math.Min(O.Contractor.Description.Length,
-                O.Configuration.FieldsDictionary[CatalogTable.DESCRIPTION_FIELD_NAME].Attr.Size)));
+                O.ObjInfo.FieldsDictionary[CatalogTable.DESCRIPTION_FIELD_NAME].Attr.Size)));
 
             O.BeforeWriting += O_BeforeWriting;
             }
 
-        void O_BeforeWriting(DatabaseObject item, ref bool cancel)
+        void O_BeforeWriting(IDatabaseObject item, ref bool cancel)
             {
             O.GetEmptyNumbersHashSet();
             }

@@ -278,7 +278,7 @@ namespace SystemInvoice
 
         private void accessControlBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
-            PlatformMethods.ObjectsPermissions();
+            UserInterface.Current.ShowPermitionsSettings();
             }
 
         private void MainForm_Load_1(object sender, EventArgs e)
@@ -286,8 +286,8 @@ namespace SystemInvoice
             CatalogUsers currentUser = SystemAramis.CurrentUser;
             if (currentUser != null)
                 {
-                UIConsts.Skin = currentUser.Skin;
-                administratorPage.Visible = currentUser.Ref == CatalogUsers.Admin;
+                UIConsts.NotifyUserSkinWasReviewed(currentUser.Skin);
+                administratorPage.Visible = currentUser.Ref.Equals(CatalogUsers.Admin);
                 }
             }
 

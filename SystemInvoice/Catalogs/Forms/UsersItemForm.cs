@@ -7,6 +7,7 @@ using Aramis.Platform;
 using Aramis.SystemConfigurations;
 using Aramis.UI;
 using Aramis.UI.WinFormsDevXpress;
+using AramisInfostructure.Queries;
 using Catalogs;
 using DevExpress.XtraBars;
 using DevExpress.XtraEditors;
@@ -14,7 +15,7 @@ using DevExpress.XtraEditors;
 namespace Aramis.CommonForms
     {
 
-    [Aramis.Attributes.View( DBObjectGuid = "AEBA6AB9-0677-4046-81D8-A784115993EA", ViewType = ViewFormType.CatalogItem )]
+    [Aramis.Attributes.View(DBObjectGuid = "AEBA6AB9-0677-4046-81D8-A784115993EA", ViewType = ViewFormType.CatalogItem)]
     public partial class UsersItemForm : DevExpress.XtraBars.Ribbon.RibbonForm, IItemForm
         {
 
@@ -32,7 +33,7 @@ namespace Aramis.CommonForms
                 }
             set
                 {
-                item = ( Users ) value;
+                item = (Users)value;
                 }
             }
 
@@ -40,7 +41,7 @@ namespace Aramis.CommonForms
             {
             get
                 {
-                return ( Users ) item;
+                return (Users)item;
                 }
             }
 
@@ -50,7 +51,7 @@ namespace Aramis.CommonForms
 
         private void Itemform_Load(object sender, EventArgs e)
             {
-            if ( !User.IsNew && User.MobilePhone > 0 )
+            if (!User.IsNew && User.MobilePhone > 0)
                 {
                 string mobileNum = User.MobilePhone.ToString();
                 stringMobilePhone.Text = string.Format("+{0} ({1}) {2}-{3}-{4}", mobileNum.Substring(0, 2), mobileNum.Substring(2, 3), mobileNum.Substring(5, 3), mobileNum.Substring(8, 2), mobileNum.Substring(10, 2));
@@ -69,15 +70,15 @@ namespace Aramis.CommonForms
 
         private void Itemform_KeyDown(object sender, KeyEventArgs e)
             {
-            if ( e.KeyCode == Keys.Escape )
+            if (e.KeyCode == Keys.Escape)
                 {
                 TryCancel();
                 }
-            else if ( e.KeyCode == Keys.Enter && e.Control )
+            else if (e.KeyCode == Keys.Enter && e.Control)
                 {
                 OK_ItemClick(null, null);
                 }
-            else if ( e.KeyCode == Keys.S && e.Control )
+            else if (e.KeyCode == Keys.S && e.Control)
                 {
                 Write_ItemClick(null, null);
                 }
@@ -88,7 +89,7 @@ namespace Aramis.CommonForms
 
         private bool Write()
             {
-            if ( !SetMobileNumber() )
+            if (!SetMobileNumber())
                 {
                 return false;
                 }
@@ -100,14 +101,14 @@ namespace Aramis.CommonForms
             {
             string mobileNum = stringMobilePhone.Text.Replace(" ", "").Replace("_", "").Replace("+", "").Replace("(", "").Replace(")", "").Replace("-", "");
 
-            if ( mobileNum.Length != 12 )
+            if (mobileNum.Length != 12)
                 {
                 User.MobilePhone = 0;
                 }
             else
                 {
                 long longMobile = Convert.ToInt64(mobileNum);
-                if ( phoneIsNotUnique(longMobile) )
+                if (phoneIsNotUnique(longMobile))
                     {
                     return false;
                     }
@@ -118,12 +119,12 @@ namespace Aramis.CommonForms
 
         private bool phoneIsNotUnique(long longMobile)
             {
-            Query query = DB.NewQuery("select top 1 cat.Description from Users as cat where cat.MobilePhone = @Phone and cat.Id <> @CurrentUserId");
+            IQuery query = DB.NewQuery("select top 1 cat.Description from Users as cat where cat.MobilePhone = @Phone and cat.Id <> @CurrentUserId");
             query.AddInputParameter("CurrentUserId", User.Id);
             query.AddInputParameter("Phone", longMobile);
 
             object result = query.SelectScalar();
-            if ( result == null )
+            if (result == null)
                 {
                 return false;
                 }
@@ -137,7 +138,7 @@ namespace Aramis.CommonForms
 
         private void OK_ItemClick(object sender, ItemClickEventArgs e)
             {
-            if ( Write() )
+            if (Write())
                 {
                 Close();
                 }
@@ -155,9 +156,9 @@ namespace Aramis.CommonForms
 
         private void UsersItemForm_FormClosed(object sender, FormClosedEventArgs e)
             {
-            if ( !User.IsNew && SystemAramis.CurrentUser.Ref == User.Ref )
+            if (!User.IsNew && SystemAramis.CurrentUser.Ref.Equals(User.Ref))
                 {
-                UIConsts.Skin = User.Skin;
+                UIConsts.NotifyUserSkinWasReviewed(User.Skin);
                 }
             }
 
@@ -169,7 +170,7 @@ namespace Aramis.CommonForms
 
         private void ClearControl(TextEdit textEdit)
             {
-            if ( textEdit.Text == CatalogUsers.EMPTY_PASSWORD && !textEdit.Properties.ReadOnly )
+            if (textEdit.Text == CatalogUsers.EMPTY_PASSWORD && !textEdit.Properties.ReadOnly)
                 {
                 textEdit.Text = "";
                 }
@@ -177,12 +178,12 @@ namespace Aramis.CommonForms
 
         private void Skin_Modified(object sender, EventArgs e)
             {
-            if ( !User.IsNew && SystemAramis.CurrentUser.Ref == User.Ref )
+            if (!User.IsNew && SystemAramis.CurrentUser.Ref.Equals(User.Ref))
                 {
-                UIConsts.Skin = ( Skins ) ( Skin.SelectedIndex );
+                UIConsts.NotifyUserSkinWasReviewed((Skins) (Skin.SelectedIndex));
 
-                UIConsts.WindowsManager.GetFormsList(AramisObjectType.Catalog, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
-                UIConsts.WindowsManager.GetFormsList(AramisObjectType.Document, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
+                UserInterface.WindowsManager.GetFormsList(AramisObjectType.Catalog, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
+                UserInterface.WindowsManager.GetFormsList(AramisObjectType.Document, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
                 }
             }
 
@@ -191,7 +192,7 @@ namespace Aramis.CommonForms
             MdiParent = null;
             }
 
-        private void GenerateSignatureKeysButton_ItemClick( object sender, ItemClickEventArgs e )
+        private void GenerateSignatureKeysButton_ItemClick(object sender, ItemClickEventArgs e)
             {
             //((Users)Item).GenerateSignatureKeysPair();
             }

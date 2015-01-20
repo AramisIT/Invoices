@@ -10,6 +10,7 @@ using Aramis.Enums;
 using System.Data;
 using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
+using AramisInfostructure.Queries;
 
 namespace SystemInvoice.Catalogs
     {
@@ -555,7 +556,7 @@ namespace SystemInvoice.Catalogs
             this.approvalsByNomenclatureUpdater = new ApprovalsByNomenclatureUpdater();
             }
 
-        void Nomenclature_AfterWriting(DatabaseObject item)
+        void Nomenclature_AfterWriting(IDatabaseObject item)
             {
             if (Contractor.Approvals.RowsCount > 0)
                 {
@@ -568,7 +569,7 @@ namespace SystemInvoice.Catalogs
                 }
             }
 
-        void Nomenclature_BeforeWriting(DatabaseObject item, ref bool cancel)
+        void Nomenclature_BeforeWriting(IDatabaseObject item, ref bool cancel)
             {
             long customsCodeId = this.CustomsCodeInternal.Id;
             if (initCustomsCodeId != customsCodeId && initCustomsCodeId != 0)
@@ -681,7 +682,7 @@ where appr.MarkForDeleting = 0  and nom.ItemNomenclature = @nomenclatureId;";
         public void FillApprovals()
             {
             this.Approvals.Rows.Clear();
-            Query q = DB.NewQuery(fillApprovalsStr);
+            IQuery q = DB.NewQuery(fillApprovalsStr);
             q.AddInputParameter("nomenclatureId", this.Id);
             DataTable resultsTable = q.SelectToTable();
             for (int rowNumber = 0; rowNumber < resultsTable.Rows.Count; rowNumber++)

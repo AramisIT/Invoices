@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using SystemInvoice.Catalogs;
+﻿using Aramis.Core;
+using Aramis.DatabaseConnector;
+using AramisInfostructure.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using SystemInvoice.Catalogs;
 using SystemInvoice.DataProcessing.ApprovalsProcessing.ByNomenclatureUpdating;
 using SystemInvoice.Documents;
-using Aramis.Core;
-using Aramis.DatabaseConnector;
 
 namespace SystemInvoice.DataProcessing.ApprovalsProcessing
     {
@@ -106,7 +105,7 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
             {
             updatedApprovals.Clear();
             deletedApprovals.Clear();
-            Query query = DB.NewQuery(queryText);
+            IQuery query = DB.NewQuery(queryText);
             query.AddInputParameter("nomenclatureId", nomenclatureId);
             query.Foreach((row) => this.processRow(row, nomenclatureId));
             }
@@ -132,7 +131,7 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
         /// <summary>
         /// Обрабатывает строку с результатом об удалении РД
         /// </summary>
-        private void processRow(QueryResult rowResult, long nomenclatureId)
+        private void processRow(IQueryResult rowResult, long nomenclatureId)
             {
             //сохраняем удаленные/измененные разрешительные
             long approvalId = (long)rowResult[approvalIdInResultColumnName];
@@ -152,7 +151,7 @@ namespace SystemInvoice.DataProcessing.ApprovalsProcessing
         /// <summary>
         /// Записывает в справочник об истории удаленных номенклатур информацию о разрешительном из которого была удалена номенклатура
         /// </summary>
-        private void addToRemoveHistory(QueryResult rowResult, long nomenclatureId)
+        private void addToRemoveHistory(IQueryResult rowResult, long nomenclatureId)
             {
             long documentTypeId = (long)rowResult[documentTypeColumnName];
             DateTime dateFrom = (DateTime)rowResult[dateFromColumnName];

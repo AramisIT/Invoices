@@ -7,6 +7,7 @@ using Aramis.Core;
 using Aramis.Attributes;
 using Aramis.DatabaseConnector;
 using Aramis.Enums;
+using AramisInfostructure.Queries;
 using Core;
 
 namespace SystemInvoice.Catalogs
@@ -29,7 +30,7 @@ namespace SystemInvoice.Catalogs
             FilteredByContractor
             }
 
-        public override Query GetQuery(int listId, IAramisModel aramisObject)
+        public override IQuery GetQuery(int listId, IAramisModel aramisObject)
             {
             var newGoodsRow = aramisObject as INewGoodsRow;
             if (newGoodsRow == null) return null;

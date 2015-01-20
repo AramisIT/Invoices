@@ -38,7 +38,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TrademarkContractorSubGroupOfGoodsSyncronizer(Aramis.Core.DatabaseObject dbObject)
+        public TrademarkContractorSubGroupOfGoodsSyncronizer(Aramis.Core.IDatabaseObject dbObject)
             : base(dbObject)
             {
             this.goodsDataSource = dbObject as ITradeMarkContractorSubGroupOfGoodsSource;

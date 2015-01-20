@@ -11,7 +11,7 @@ namespace SystemInvoice.PropsSyncronization
     public class TradeMarkContractorSyncronizer
         {
         ITradeMarkContractorSource tradeMarkContractorSource = null;
-        Aramis.Core.DatabaseObject dbObject = null;
+        Aramis.Core.IDatabaseObject dbObject = null;
 
         protected IContractor Contractor
             {
@@ -39,7 +39,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorSyncronizer(Aramis.Core.DatabaseObject dbObject)
+        public TradeMarkContractorSyncronizer(Aramis.Core.IDatabaseObject dbObject)
             {
             tradeMarkContractorSource = dbObject as ITradeMarkContractorSource;
             this.dbObject = dbObject;

@@ -25,7 +25,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorExcelLoadingFormatSyncronizer(DatabaseObject dbObject)
+        public TradeMarkContractorExcelLoadingFormatSyncronizer(IDatabaseObject dbObject)
             : base(dbObject)
             {
             this.excelLoadingSource = dbObject as ITradeMarkContractorExcelLoadFormatSource;

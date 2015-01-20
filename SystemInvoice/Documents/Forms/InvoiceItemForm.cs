@@ -234,7 +234,7 @@ namespace SystemInvoice.Documents.Forms
                 }
             }
 
-        private DatabaseObject item = null;
+        private IDatabaseObject item = null;
         public IDatabaseObject Item
             {
             get { return item; }

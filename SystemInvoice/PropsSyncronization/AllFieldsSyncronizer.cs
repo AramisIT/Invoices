@@ -11,7 +11,7 @@ namespace SystemInvoice.PropsSyncronization
         {
         private TrademarkContractorSubGroupOfGoodsSyncronizer SubGroupOfGoodsSyncronizer = null;
 
-        public AllFieldsSyncronizer( DatabaseObject dbObject )
+        public AllFieldsSyncronizer( IDatabaseObject dbObject )
             : base( dbObject )
             {
             SubGroupOfGoodsSyncronizer = new TrademarkContractorSubGroupOfGoodsSyncronizer( dbObject );

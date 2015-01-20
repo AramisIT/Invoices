@@ -12,8 +12,10 @@ using SystemInvoice.Catalogs;
 using System.Data;
 using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
+using Aramis.Extensions;
 using Aramis.Platform;
 using Aramis.UI.WinFormsDevXpress;
+using AramisInfostructure.Queries;
 using Catalogs;
 using Documents;
 using AramisCatalogs = Catalogs;
@@ -337,7 +339,7 @@ namespace SystemInvoice.Documents
                 return;
                 }
             string queryText = @"select max(ID) as id from ApprovalsLoadFormat where TradeMark = @tradeMark and Contractor = @contractor having COUNT(*) = 1;";
-            Query query = DB.NewQuery(queryText);
+            IQuery query = DB.NewQuery(queryText);
             query.AddInputParameter("contractor", this.Contractor.Id);
             query.AddInputParameter("tradeMark", this.TradeMark.Id);
             object value = query.SelectScalar();

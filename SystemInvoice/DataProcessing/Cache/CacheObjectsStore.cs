@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using Aramis.DatabaseConnector;
+using AramisInfostructure.Queries;
 
 namespace SystemInvoice.DataProcessing.Cache
     {
@@ -99,7 +100,7 @@ namespace SystemInvoice.DataProcessing.Cache
 
         private long GetMayCachedCount()
             {
-            Query query = DB.NewQuery(LastProcessedCountQuery);
+            IQuery query = DB.NewQuery(LastProcessedCountQuery);
             object result = query.SelectScalar();
             if (result is long)
                 {
@@ -114,7 +115,7 @@ namespace SystemInvoice.DataProcessing.Cache
 
         protected virtual DateTime GetLastModifiedDate()
             {
-            Query query = DB.NewQuery(LatModifiedDateQuery);
+            IQuery query = DB.NewQuery(LatModifiedDateQuery);
             object result = query.SelectScalar();
             if (result is DateTime)
                 {
@@ -337,7 +338,7 @@ namespace SystemInvoice.DataProcessing.Cache
 
             if (!string.IsNullOrEmpty(queryText))
                 {
-                Query query = DB.NewQuery(queryText);
+                IQuery query = DB.NewQuery(queryText);
                 DataTable table = query.SelectToTable();
                 return table;
                 }

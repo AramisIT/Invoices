@@ -25,7 +25,7 @@ namespace SystemInvoice.PropsSyncronization
                 }
             }
 
-        public TradeMarkContractorManufacturerSyncronizer(DatabaseObject dbObj)
+        public TradeMarkContractorManufacturerSyncronizer(IDatabaseObject dbObj)
             : base(dbObj)
             {
             this.manufacturerDataSource = dbObj as ITradeMarkContractorManufacturerSource;

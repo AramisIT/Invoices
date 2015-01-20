@@ -8,6 +8,7 @@ using System.Data;
 using SystemInvoice.SystemObjects;
 using Aramis.Core;
 using Aramis.DatabaseConnector;
+using Aramis.Extensions;
 using Aramis.UI.WinFormsDevXpress;
 
 namespace SystemInvoice.DataProcessing.Cache.ApprovalsCache

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Aramis.Core;
 using Aramis.DatabaseConnector;
+using AramisInfostructure.Queries;
 
 namespace SystemInvoice.DataProcessing.Cache
     {
@@ -85,7 +86,7 @@ namespace SystemInvoice.DataProcessing.Cache
         /// <param name="queryText"></param>
         protected void ExceuteQuery(string queryText)
             {
-            Query query = DB.NewQuery(queryText);
+            IQuery query = DB.NewQuery(queryText);
             query.Execute();
             }
 

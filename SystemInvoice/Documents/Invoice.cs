@@ -13,6 +13,7 @@ using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
 using Aramis.Platform;
 using Aramis.SystemConfigurations;
+using AramisInfostructure.Queries;
 using Catalogs;
 using AramisCatalogs = Catalogs;
 
@@ -1394,7 +1395,7 @@ namespace SystemInvoice.Documents
             get { return haveToBeWritten; }
             }
 
-        void Invoice_BeforeWriting(DatabaseObject item, ref bool cancel)
+        void Invoice_BeforeWriting(IDatabaseObject item, ref bool cancel)
             {
             saveFromMainToPartialTable();
             if (checkTableForAllowedSize())
@@ -1527,7 +1528,7 @@ namespace SystemInvoice.Documents
                 return;
                 }
             string queryText = @"select max(ID) as id from ExcelLoadingFormat where TradeMark = @tradeMark and Contractor = @contractor having COUNT(*) = 1;";
-            Query query = DB.NewQuery(queryText);
+            IQuery query = DB.NewQuery(queryText);
             query.AddInputParameter("contractor", this.Contractor.Id);
             query.AddInputParameter("tradeMark", this.TradeMark.Id);
             object value = query.SelectScalar();

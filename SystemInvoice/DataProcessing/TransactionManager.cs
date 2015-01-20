@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Aramis.DatabaseConnector;
+using AramisInfostructure.Queries;
 
 namespace SystemInvoice.DataProcessing
     {
@@ -77,7 +78,7 @@ delete from transactionsSysInvoice where TransactionId = @tranID;";
                 while (true)
                     {
                     DateTime criticalTime = DateTime.Now - TRANSACTION_MAX_ALIVE_PERIOD;
-                    Query query = DB.NewQuery( GET_TRANSACTION_TEXT );
+                    IQuery query = DB.NewQuery( GET_TRANSACTION_TEXT );
                     query.AddInputParameter( "criticalTime", criticalTime );
                     object result = query.SelectScalar();
                     if (result != null && result != DBNull.Value && result is Guid)
@@ -103,7 +104,7 @@ delete from transactionsSysInvoice where TransactionId = @tranID;";
             lock (locker)
                 {
              //   Console.WriteLine( "get tran state" );
-                Query query = DB.NewQuery( CHECK_TRANSACTION_TEXT );
+                IQuery query = DB.NewQuery( CHECK_TRANSACTION_TEXT );
                 query.AddInputParameter( "tranID", tranID );
                 object result = query.SelectScalar();
                 if (result != null && result != DBNull.Value && result is Int32)
@@ -122,7 +123,7 @@ delete from transactionsSysInvoice where TransactionId = @tranID;";
           //  return;
             lock (locker)
                 {
-                Query query = DB.NewQuery( COMPLETE_TRANSACTION_TEXT );
+                IQuery query = DB.NewQuery( COMPLETE_TRANSACTION_TEXT );
                 query.AddInputParameter( "tranID", tranID );
                 query.SelectScalar();
                 tranID = Guid.NewGuid();
