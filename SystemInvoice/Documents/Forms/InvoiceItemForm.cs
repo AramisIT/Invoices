@@ -16,6 +16,7 @@ using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.Sp
 using SystemInvoice.SystemObjects;
 using Aramis.DataBase;
 using Aramis.UI;
+using AramisInfostructure.UI;
 using Catalogs;
 using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Columns;
@@ -1083,7 +1084,7 @@ namespace SystemInvoice.Documents.Forms
             newRow.Contractor = A.New<IContractor>(Invoice.Contractor.Id);
             var form = new NewGoodsRowForm() { Item = newRow };
             var dialogResult = UserInterface.Current.ShowSystemObject(newRow, form, true);
-            if (dialogResult != DialogResult.OK)
+            if (dialogResult != OperationResult.OK)
                 {
                 dataTable.Rows.Remove(currentRow);
                 return;

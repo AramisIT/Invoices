@@ -43,7 +43,7 @@ namespace Catalogs
             {
             O.AddPropertyChanged(O.Contractor, () => O.Description = O.Contractor.Description.Substring(0,
                 Math.Min(O.Contractor.Description.Length,
-                O.ObjInfo.FieldsDictionary[CatalogTable.DESCRIPTION_FIELD_NAME].Attr.Size)));
+                O.ObjInfo.FieldsDictionary[CONSTS.DESCRIPTION_FIELD_NAME].Attr.Size)));
 
             O.BeforeWriting += O_BeforeWriting;
             }

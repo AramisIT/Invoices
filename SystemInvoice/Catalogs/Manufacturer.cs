@@ -2,6 +2,7 @@
 using Aramis.Core;
 using Aramis.DatabaseConnector;
 using Aramis.Enums;
+using Aramis.Extensions;
 using AramisInfostructure.Queries;
 using Core;
 using SystemInvoice.SystemObjects;
@@ -25,12 +26,12 @@ namespace SystemInvoice.Catalogs
             FilteredByContractor
             }
 
-        public override IQuery GetQuery(int listId, IAramisModel aramisObject)
+        public override IQuery GetQuery(IFixedListsParameters parameters)
             {
-            var newGoodsRow = aramisObject as INewGoodsRow;
+            var newGoodsRow = parameters.AramisObject as INewGoodsRow;
             if (newGoodsRow == null) return null;
 
-            var listType = (ManufacturerListsTypes)listId;
+            var listType = (ManufacturerListsTypes)parameters.GetSelectorId();
             switch (listType)
                 {
                 case ManufacturerListsTypes.FilteredByContractor:

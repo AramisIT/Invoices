@@ -62,8 +62,8 @@
     <Reference Include="AramisDesktopUserInterface">
       <HintPath>..\..\Aramis.NET\AramisDesktopUI\bin\Release\AramisDesktopUserInterface.dll</HintPath>
     </Reference>
-    <Reference Include="AramisInfostructure">
-      <HintPath>..\..\Aramis.NET\AramisInfostructure\bin\Release\AramisInfostructure.dll</HintPath>
+    <Reference Include="AramisInfrastructure">
+      <HintPath>..\..\Aramis.NET\AramisInfrastructure\bin\Release\AramisInfrastructure.dll</HintPath>
     </Reference>
     <Reference Include="AramisWpfComponents, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
