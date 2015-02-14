@@ -18,6 +18,7 @@ using Aramis.UI.WinFormsDevXpress;
 using AramisInfostructure.Queries;
 using Catalogs;
 using Documents;
+using ReportView;
 using AramisCatalogs = Catalogs;
 using SystemInvoice.SystemObjects;
 
@@ -258,6 +259,19 @@ namespace SystemInvoice.Documents
             this.syncronizer = new TradeMarkContractorAprovalsLoadFormatSyncronizer(this);
             ColorConverter colorConverter = new ColorConverter();
             errorColor = (Color)colorConverter.ConvertFromString(ProcessingConsts.CELL_ERROR_COLOR);
+            BeforeWriting += Approvals_BeforeWriting;
+            }
+
+        void Approvals_BeforeWriting(IDatabaseObject item, ref bool cancel)
+            {
+            if (this.GetRef("Contractor") == ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR.Id)
+                {
+                const string withoutNumber = "б/н";
+                if (this.DocumentNumber.ToLower().Contains(withoutNumber))
+                    {
+                    this.DocumentNumber = withoutNumber;
+                    }
+                }
             }
 
         #endregion
