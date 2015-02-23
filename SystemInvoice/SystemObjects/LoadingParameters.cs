@@ -278,7 +278,7 @@ namespace SystemInvoice.SystemObjects
                     var date = row.Row.GetDate(currentColumnOffset + approvalDateIndex);
                     if (date.IsEmpty())
                         {
-                        var error = string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name, row.RowNumber);
+                        var error = string.Format("\r\nОшибка получения даты в строке № {1}; страница {0}", row.Sheet.Name, row.RowNumber);
                         Warnings.AppendLine(error);
                         //if (!error.Ask())
                         //    {

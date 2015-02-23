@@ -289,7 +289,7 @@ namespace SystemInvoice.SystemObjects
                         var date = row.GetDate(loadingParameters.DateIndex);
                         if (date.IsEmpty())
                             {
-                            var error = string.Format("Ошибка получения даты в строке № {1}; страница {0}", sheet.Name,
+                            var error = string.Format("\r\nОшибка получения даты в строке № {1}; страница {0}", sheet.Name,
                                 (rowIndex + 1));
 
                             warnings.AppendLine(error);
