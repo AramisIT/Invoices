@@ -13,6 +13,7 @@ using Aramis.DatabaseConnector;
 using SystemInvoice.PropsSyncronization;
 using Aramis.Platform;
 using Aramis.SystemConfigurations;
+using AramisInfostructure.Core;
 using AramisInfostructure.Queries;
 using Catalogs;
 using AramisCatalogs = Catalogs;
@@ -1563,10 +1564,38 @@ namespace SystemInvoice.Documents
                 {
                 return true;
                 }
-            string errorMessage = "Найдены следующие ошибки в табличной части инвойса:" + Environment.NewLine +
-                string.Concat(errors.Select(error => string.Format(@"Максимально допустимый размер текстового поля колонки ""{0}"" -  {1}, в то время как максимальное значение в таблице - {2}.{3}",
-                    InvoiceColumnNames[error.ColumnName], error.AllowedSize, error.CurrentSize, Environment.NewLine))) + Environment.NewLine + "Документ не может быть сохранен.";
-            errorMessage.AlertBox();
+            var errorMessage = new StringBuilder("Найдены следующие ошибки в табличной части инвойса:" + Environment.NewLine);
+
+
+            errors.ForEach(error =>
+                {
+                    string columnName;
+                    if (!InvoiceColumnNames.TryGetValue(error.ColumnName, out columnName))
+                        {
+                        IInfoOfSubTableField infoOfSubTableField;
+                        foreach (var table in this.ObjInfo.InfoSubTables.Values)
+                            {
+                            if (table.SubtableFields.TryGetValue(error.ColumnName, out infoOfSubTableField))
+                                {
+                                columnName = infoOfSubTableField.Attr.Description;
+                                break;
+                                }
+                            }
+                        if (string.IsNullOrEmpty(columnName))
+                            {
+                            columnName = error.ColumnName;
+                            }
+                        }
+
+                    var errorText = string.Format(@"Максимально допустимый размер текстового поля колонки ""{0}"" -  {1}, в то время как максимальное значение в таблице - {2}.{3}",
+                        columnName, error.AllowedSize, error.CurrentSize, Environment.NewLine);
+
+                    errorMessage.AppendLine(errorText);
+                });
+
+            errorMessage.AppendLine(Environment.NewLine + "Документ не может быть сохранен.");
+
+            errorMessage.ToString().AlertBox();
             return false;
             }
 
