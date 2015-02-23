@@ -278,11 +278,12 @@ namespace SystemInvoice.SystemObjects
                     var date = row.Row.GetDate(currentColumnOffset + approvalDateIndex);
                     if (date.IsEmpty())
                         {
-                        if (!string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name,
-                            row.RowNumber).Ask())
-                            {
-                            return false;
-                            }
+                        var error = string.Format("Ошибка получения даты в строке № {1}; страница {0}", row.Sheet.Name, row.RowNumber);
+                        Warnings.AppendLine(error);
+                        //if (!error.Ask())
+                        //    {
+                        //    return false;
+                        //    }
                         break;
                         }
 

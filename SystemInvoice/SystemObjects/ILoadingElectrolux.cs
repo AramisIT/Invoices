@@ -127,7 +127,7 @@ namespace SystemInvoice.SystemObjects
 
             public long Cert { get; set; }
             }
-        
+
         public LoadingEuroluxBehaviour(ILoadingElectrolux item)
             : base(item)
             {
@@ -271,6 +271,7 @@ namespace SystemInvoice.SystemObjects
                         current++;
                         var row = sheet[rowIndex];
                         var model = row.GetString(loadingParameters.ModelIndex);
+
                         var article = row.GetString(loadingParameters.ArticleIndex);
 
                         if (string.IsNullOrEmpty(article))
@@ -283,11 +284,16 @@ namespace SystemInvoice.SystemObjects
                             continue;
                             }
 
+                        //if (!"ZOB35712WK".Equals(model)) continue;
+
                         var date = row.GetDate(loadingParameters.DateIndex);
                         if (date.IsEmpty())
                             {
-                            string.Format("Ошибка получения даты в строке № {1}; страница {0}", sheet.Name, (rowIndex + 1)).WarningBox();
-                            return;
+                            var error = string.Format("Ошибка получения даты в строке № {1}; страница {0}", sheet.Name,
+                                (rowIndex + 1));
+
+                            warnings.AppendLine(error);
+                            continue;
                             }
 
                         var cache = string.Format("{0}$#^#${1}", model, article);
@@ -336,9 +342,12 @@ namespace SystemInvoice.SystemObjects
 
                 docRow.Article = row.Article;
 
-                if (!loadingParameters.ProcessExcelRow(row, docRow, approvalDocuments)) return;
+                if (!loadingParameters.ProcessExcelRow(row, docRow, approvalDocuments))
+                    {
+                    //return;
+                    }
 
-                if (docRow.LineNumber < 1) continue;
+                if (docRow.LineNumber < 1 || approvalDocuments.Count == 0) continue;
 
                 approvalsDocuments.Add(docRow.LineNumber, approvalDocuments);
 
@@ -430,9 +439,10 @@ namespace SystemInvoice.SystemObjects
                     continue;
                     }
 
-                if (approvalsDocuments.Count > 0)
+                List<ApprovalDocumentInfo> docsList;
+                if (approvalsDocuments.Count > 0 && approvalsDocuments.TryGetValue(row.LineNumber, out docsList))
                     {
-                    foreach (var approvalDoc in approvalsDocuments[row.LineNumber])
+                    foreach (var approvalDoc in docsList)
                         {
                         if (newWare)
                             {
@@ -441,8 +451,10 @@ namespace SystemInvoice.SystemObjects
                         else
                             {
                             var docContainsWare = false;
-                            foreach (DataRow docRow in approvalDoc.ApprovalsDocument.Nomenclatures.Rows)
+                            var docRows = approvalDoc.ApprovalsDocument.Nomenclatures.Rows;
+                            for (int lineNumber = 1; lineNumber <= docRows.Count; lineNumber++)
                                 {
+                                var docRow = docRows[lineNumber - 1];
                                 if (ware.Id.Equals(docRow[approvalDoc.ApprovalsDocument.ItemNomenclature]))
                                     {
                                     docContainsWare = true;
@@ -471,6 +483,9 @@ namespace SystemInvoice.SystemObjects
                     return false;
                     }
                 }
+
+            A.Query("update [Approvals] set [DateTo] = @date where [Contractor] = @Contractor",
+                new { O.Contractor, date = new DateTime(2100, 1, 1) }).Execute();
 
             "Данные загружены в базу!".NotifyToUser();
 

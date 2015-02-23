@@ -41,7 +41,7 @@ namespace SystemInvoice.Utils.Excel
 
             if (!(value is string))
                 {
-                var dec = value.ToDecimal();
+                var dec = value.ToDecimal(true);
                 if (dec > Int32.MaxValue) return DateTime.MinValue;
 
                 TimeSpan datefromexcel = new TimeSpan(Convert.ToInt32(dec) - 2, 0, 0, 0);
