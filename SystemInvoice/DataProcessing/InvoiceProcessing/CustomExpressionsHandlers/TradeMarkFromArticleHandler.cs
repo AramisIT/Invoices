@@ -36,7 +36,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
                 return string.Empty;
                 }
 
-            var q = DB.NewQuery(@"select top 1 rtrim(tm.Description) TradeMark, n.Article
+            var q = DB.NewQuery(@"select top 1 rtrim(tm.Description) TradeMark
 	from Nomenclature n
 	join TradeMark tm on tm.Id = n.TradeMark and n.Contractor = @Contractor and n.Article = @Article");
             q.AddInputParameter("Contractor", contractor.Id);

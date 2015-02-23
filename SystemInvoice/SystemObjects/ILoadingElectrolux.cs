@@ -44,7 +44,7 @@ namespace SystemInvoice.SystemObjects
         NomenclatureDatabase
         }
 
-    public interface ILoadingEurolux : IAramisModel
+    public interface ILoadingElectrolux : IAramisModel
         {
         ElectroluxLoadingTypes LoadingType { get; set; }
 
@@ -108,7 +108,7 @@ namespace SystemInvoice.SystemObjects
         string ErrorHelpData { get; set; }
         }
 
-    public class LoadingEuroluxBehaviour : Behaviour<ILoadingEurolux>
+    public class LoadingEuroluxBehaviour : Behaviour<ILoadingElectrolux>
         {
         public class ApprovalDocumentInfo
             {
@@ -128,7 +128,7 @@ namespace SystemInvoice.SystemObjects
             public long Cert { get; set; }
             }
         
-        public LoadingEuroluxBehaviour(ILoadingEurolux item)
+        public LoadingEuroluxBehaviour(ILoadingElectrolux item)
             : base(item)
             {
             O.ApprovalDurationYears = 2;

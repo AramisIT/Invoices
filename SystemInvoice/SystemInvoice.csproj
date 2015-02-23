@@ -500,7 +500,7 @@
     <Compile Include="SystemObjects\LoadingEuroluxForm.Designer.cs">
       <DependentUpon>LoadingEuroluxForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SystemObjects\ILoadingEurolux.cs" />
+    <Compile Include="SystemObjects\ILoadingElectrolux.cs" />
     <Compile Include="SystemObjects\LoadingParameters.cs" />
     <Compile Include="SystemObjects\NewGoodsRowForm.cs">
       <SubType>Form</SubType>

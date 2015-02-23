@@ -333,7 +333,7 @@ namespace SystemInvoice
 
         private static void loadElectrolux(ElectroluxLoadingTypes loadingType, LoadingParameters loadingParameters)
             {
-            var loadingEurolux = A.New<ILoadingEurolux>();
+            var loadingEurolux = A.New<ILoadingElectrolux>();
             loadingEurolux.GetBehaviour<LoadingEuroluxBehaviour>().SetLoadingParameters(loadingParameters);
             loadingEurolux.LoadingType = loadingType;
 

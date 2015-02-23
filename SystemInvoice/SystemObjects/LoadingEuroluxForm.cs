@@ -25,14 +25,14 @@ namespace SystemInvoice.Catalogs.Forms
     {
     public partial class LoadingEuroluxForm : DevExpress.XtraBars.Ribbon.RibbonForm
         {
-        private ILoadingEurolux item;
+        private ILoadingElectrolux item;
 
         private LoadingEuroluxBehaviour itemBehaviour
             {
             get { return Item.GetBehaviour<LoadingEuroluxBehaviour>(); }
             }
 
-        public ILoadingEurolux Item
+        public ILoadingElectrolux Item
             {
             get { return item; }
             set
