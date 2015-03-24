@@ -32,8 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ribbon = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.applicationMenu2 = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
-            this.barButtonItem44 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem45 = new DevExpress.XtraBars.BarButtonItem();
             this.openCatalogsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.openDocumentsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
@@ -76,6 +74,7 @@
             this.btnSettings = new DevExpress.XtraBars.BarButtonItem();
             this.openMaterialTypesBtn = new DevExpress.XtraBars.BarButtonItem();
             this.openMaterialsTypesMappings = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem54 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
             this.custsomsCodeBtn = new DevExpress.XtraBars.BarButtonItem();
             this.documentTypesBtn = new DevExpress.XtraBars.BarButtonItem();
@@ -158,7 +157,6 @@
             this.barButtonItem40 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem41 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem54 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu1)).BeginInit();
@@ -228,8 +226,6 @@
             this.openMaterialTypesBtn,
             this.openMaterialsTypesMappings,
             this.starterFilesUpload,
-            this.barButtonItem44,
-            this.barButtonItem45,
             this.barButtonItem46,
             this.barSubItem3,
             this.barButtonItem47,
@@ -249,31 +245,13 @@
             this.ribbonPage1,
             this.administratorPage,
             this.ribbonPage2});
-            this.ribbon.Size = new System.Drawing.Size(875, 147);
+            this.ribbon.Size = new System.Drawing.Size(875, 144);
             this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // applicationMenu2
             // 
-            this.applicationMenu2.ItemLinks.Add(this.barButtonItem44);
-            this.applicationMenu2.ItemLinks.Add(this.barButtonItem45);
             this.applicationMenu2.Name = "applicationMenu2";
             this.applicationMenu2.Ribbon = this.ribbon;
-            // 
-            // barButtonItem44
-            // 
-            this.barButtonItem44.Caption = "Выход";
-            this.barButtonItem44.Glyph = global::SystemInvoice.Properties.Resources.exit;
-            this.barButtonItem44.Id = 78;
-            this.barButtonItem44.Name = "barButtonItem44";
-            this.barButtonItem44.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem44_ItemClick);
-            // 
-            // barButtonItem45
-            // 
-            this.barButtonItem45.Caption = "Перезагрузить систему";
-            this.barButtonItem45.Glyph = global::SystemInvoice.Properties.Resources.restart;
-            this.barButtonItem45.Id = 79;
-            this.barButtonItem45.Name = "barButtonItem45";
-            this.barButtonItem45.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem45_ItemClick);
             // 
             // openCatalogsListBtn
             // 
@@ -582,6 +560,13 @@
             this.openMaterialsTypesMappings.Name = "openMaterialsTypesMappings";
             this.openMaterialsTypesMappings.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.openMaterialsTypesMappings_ItemClick);
             // 
+            // barButtonItem54
+            // 
+            this.barButtonItem54.Caption = "Замены пустых номеров";
+            this.barButtonItem54.Id = 92;
+            this.barButtonItem54.Name = "barButtonItem54";
+            this.barButtonItem54.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem54_ItemClick);
+            // 
             // barSubItem2
             // 
             this.barSubItem2.Caption = "Загрузка из Excel";
@@ -844,10 +829,10 @@
             // 
             // ribbonStatusBar
             // 
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 426);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 418);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(875, 23);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(875, 31);
             // 
             // defaultLookAndFeel
             // 
@@ -1137,13 +1122,6 @@
             this.barButtonItem42.Id = 19;
             this.barButtonItem42.Name = "barButtonItem42";
             // 
-            // barButtonItem54
-            // 
-            this.barButtonItem54.Caption = "Замены пустых номеров";
-            this.barButtonItem54.Id = 92;
-            this.barButtonItem54.Name = "barButtonItem54";
-            this.barButtonItem54.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem54_ItemClick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1281,8 +1259,6 @@
         private DevExpress.XtraBars.BarButtonItem openMaterialsTypesMappings;
         private DevExpress.XtraBars.BarButtonItem starterFilesUpload;
         private DevExpress.XtraBars.Ribbon.ApplicationMenu applicationMenu2;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem44;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem45;
         private DevExpress.XtraBars.BarButtonItem barButtonItem46;
         private DevExpress.XtraBars.BarSubItem barSubItem3;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup9;

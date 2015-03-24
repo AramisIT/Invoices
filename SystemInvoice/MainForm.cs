@@ -311,16 +311,6 @@ namespace SystemInvoice
             PlatformMethods.UploadLoaderFiles(true);
             }
 
-        private void barButtonItem44_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            SystemAramis.SystemStop();
-            }
-
-        private void barButtonItem45_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            SystemAramis.SystemStop(true);
-            }
-
         private void barButtonItem46_ItemClick(object sender, ItemClickEventArgs e)
             {
             PlatformMethods.UpdateDB(false);
