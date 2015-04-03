@@ -35,8 +35,6 @@
             this.openCatalogsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.openDocumentsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
-            this.updateSolutionBtn = new DevExpress.XtraBars.BarButtonItem();
-            this.updateDBBtn = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             this.loadCustomsCodesBtn = new DevExpress.XtraBars.BarButtonItem();
             this.loadDocumentTypesBtn = new DevExpress.XtraBars.BarButtonItem();
@@ -84,10 +82,7 @@
             this.barButtonItem59 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem60 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem43 = new DevExpress.XtraBars.BarButtonItem();
-            this.accessControlBtn = new DevExpress.XtraBars.BarButtonItem();
             this.loadNomenclatureBtn = new DevExpress.XtraBars.BarButtonItem();
-            this.starterFilesUpload = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem46 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem3 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem47 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem48 = new DevExpress.XtraBars.BarButtonItem();
@@ -101,7 +96,6 @@
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.administratorPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup9 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -175,8 +169,6 @@
             this.openCatalogsListBtn,
             this.openDocumentsListBtn,
             this.barButtonItem1,
-            this.updateSolutionBtn,
-            this.updateDBBtn,
             this.barButtonItem2,
             this.loadCustomsCodesBtn,
             this.loadDocumentTypesBtn,
@@ -219,14 +211,11 @@
             this.barButtonItem59,
             this.barButtonItem60,
             this.barButtonItem43,
-            this.accessControlBtn,
             this.btnSettings,
             this.loadNomenclatureBtn,
             this.nomenclatureLoadBtn,
             this.openMaterialTypesBtn,
             this.openMaterialsTypesMappings,
-            this.starterFilesUpload,
-            this.barButtonItem46,
             this.barSubItem3,
             this.barButtonItem47,
             this.barButtonItem48,
@@ -275,20 +264,6 @@
             this.barButtonItem1.Caption = "barButtonItem1";
             this.barButtonItem1.Id = 3;
             this.barButtonItem1.Name = "barButtonItem1";
-            // 
-            // updateSolutionBtn
-            // 
-            this.updateSolutionBtn.Caption = "Обновить решение";
-            this.updateSolutionBtn.Id = 4;
-            this.updateSolutionBtn.Name = "updateSolutionBtn";
-            this.updateSolutionBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.updateSolutionBtn_ItemClick);
-            // 
-            // updateDBBtn
-            // 
-            this.updateDBBtn.Caption = "Обновить БД";
-            this.updateDBBtn.Id = 5;
-            this.updateDBBtn.Name = "updateDBBtn";
-            this.updateDBBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.updateDBBtn_ItemClick);
             // 
             // barButtonItem2
             // 
@@ -632,31 +607,10 @@
             this.barButtonItem43.Id = 69;
             this.barButtonItem43.Name = "barButtonItem43";
             // 
-            // accessControlBtn
-            // 
-            this.accessControlBtn.Caption = "Права доступа";
-            this.accessControlBtn.Id = 70;
-            this.accessControlBtn.Name = "accessControlBtn";
-            this.accessControlBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.accessControlBtn_ItemClick);
-            // 
             // loadNomenclatureBtn
             // 
             this.loadNomenclatureBtn.Id = 74;
             this.loadNomenclatureBtn.Name = "loadNomenclatureBtn";
-            // 
-            // starterFilesUpload
-            // 
-            this.starterFilesUpload.Caption = "Загрузка файлов стартера";
-            this.starterFilesUpload.Id = 77;
-            this.starterFilesUpload.Name = "starterFilesUpload";
-            this.starterFilesUpload.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.starterFilesUpload_ItemClick);
-            // 
-            // barButtonItem46
-            // 
-            this.barButtonItem46.Caption = "Быстрое обновление";
-            this.barButtonItem46.Id = 80;
-            this.barButtonItem46.Name = "barButtonItem46";
-            this.barButtonItem46.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem46_ItemClick);
             // 
             // barSubItem3
             // 
@@ -752,24 +706,13 @@
             // administratorPage
             // 
             this.administratorPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-            this.ribbonPageGroup3,
             this.ribbonPageGroup2,
             this.ribbonPageGroup9});
             this.administratorPage.Name = "administratorPage";
             this.administratorPage.Text = "Администрирование";
             // 
-            // ribbonPageGroup3
-            // 
-            this.ribbonPageGroup3.ItemLinks.Add(this.accessControlBtn);
-            this.ribbonPageGroup3.Name = "ribbonPageGroup3";
-            this.ribbonPageGroup3.Text = "Подключение к SQL";
-            // 
             // ribbonPageGroup2
             // 
-            this.ribbonPageGroup2.ItemLinks.Add(this.updateSolutionBtn);
-            this.ribbonPageGroup2.ItemLinks.Add(this.updateDBBtn);
-            this.ribbonPageGroup2.ItemLinks.Add(this.starterFilesUpload);
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem46);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem51);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "Обновление";
@@ -1153,9 +1096,7 @@
         private DevExpress.XtraBars.BarButtonItem openCatalogsListBtn;
         private DevExpress.XtraBars.BarButtonItem openDocumentsListBtn;
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
-        private DevExpress.XtraBars.BarButtonItem updateSolutionBtn;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
-        private DevExpress.XtraBars.BarButtonItem updateDBBtn;
         private DevExpress.XtraBars.BarButtonItem barButtonItem2;
         private DevExpress.XtraBars.BarButtonItem loadCustomsCodesBtn;
         private DevExpress.XtraBars.BarButtonItem loadDocumentTypesBtn;
@@ -1249,17 +1190,13 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem59;
         private DevExpress.XtraBars.BarButtonItem barButtonItem60;
         private DevExpress.XtraBars.BarButtonItem barButtonItem43;
-        private DevExpress.XtraBars.BarButtonItem accessControlBtn;
         private DevExpress.XtraBars.Ribbon.RibbonPage administratorPage;
-        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup3;
         private DevExpress.XtraBars.BarButtonItem btnSettings;
         private DevExpress.XtraBars.BarButtonItem loadNomenclatureBtn;
         private DevExpress.XtraBars.BarButtonItem nomenclatureLoadBtn;
         private DevExpress.XtraBars.BarButtonItem openMaterialTypesBtn;
         private DevExpress.XtraBars.BarButtonItem openMaterialsTypesMappings;
-        private DevExpress.XtraBars.BarButtonItem starterFilesUpload;
         private DevExpress.XtraBars.Ribbon.ApplicationMenu applicationMenu2;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem46;
         private DevExpress.XtraBars.BarSubItem barSubItem3;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup9;
         private DevExpress.XtraBars.BarButtonItem barButtonItem47;

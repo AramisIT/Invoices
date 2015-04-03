@@ -1,41 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using SystemInvoice.Catalogs.Forms;
-using SystemInvoice.DataProcessing.CatalogsProcessing;
-using SystemInvoice.Documents;
-using SystemInvoice.SystemObjects;
-using Aramis.CommonForms;
+﻿using Aramis.CommonForms;
 using Aramis.Core;
-using Aramis.DatabaseConnector;
 using Aramis.Enums;
-using Aramis.NET;
 using Aramis.Platform;
-using Aramis.Reports;
-using Aramis.Reports.Forms;
 using Aramis.SystemConfigurations;
 using Aramis.UI;
-using Aramis.UI.DBObjectsListFilter;
-using Aramis.UI.WinFormsDevXpress.Forms;
-using Aramis.UI.WinFormsDevXpress.Forms.Documents;
 using Catalogs;
 using DevExpress.LookAndFeel;
 using DevExpress.Utils;
 using DevExpress.XtraBars;
-using DevExpress.XtraBars.Ribbon;
-using DevExpress.XtraEditors;
-using Documents;
-using SystemInvoice.Catalogs;
-using SystemInvoice.DataProcessing;
+using System;
+using System.Windows.Forms;
+using SystemInvoice.Catalogs.Forms;
 using SystemInvoice.Constants;
-
+using SystemInvoice.DataProcessing.CatalogsProcessing;
+using SystemInvoice.Documents;
+using SystemInvoice.SystemObjects;
 
 namespace SystemInvoice
     {
@@ -110,16 +89,6 @@ namespace SystemInvoice
         private void openDocumentsListBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             UserInterface.Current.ShowObjectSelectingView(AramisObjectType.Document);
-            }
-
-        private void updateDBBtn_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            Aramis.Platform.PlatformMethods.UpdateDB(true);
-            }
-
-        private void updateSolutionBtn_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            PlatformMethods.UpdateSolution();
             }
 
         private void processFile(Action<string> processFileDelegate)
@@ -276,11 +245,6 @@ namespace SystemInvoice
             UserInterface.Current.ShowList(typeof(SystemInvoice.Catalogs.UnitOfMeasure));
             }
 
-        private void accessControlBtn_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            UserInterface.Current.ShowPermitionsSettings();
-            }
-
         private void MainForm_Load_1(object sender, EventArgs e)
             {
             CatalogUsers currentUser = SystemAramis.CurrentUser;
@@ -304,16 +268,6 @@ namespace SystemInvoice
         private void openMaterialsTypesMappings_ItemClick(object sender, ItemClickEventArgs e)
             {
             UserInterface.Current.ShowList(typeof(SystemInvoice.Documents.MaterialTypeMapping));
-            }
-
-        private void starterFilesUpload_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            PlatformMethods.UploadLoaderFiles(true);
-            }
-
-        private void barButtonItem46_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            PlatformMethods.UpdateDB(false);
             }
 
         private void barButtonItem47_ItemClick(object sender, ItemClickEventArgs e)
