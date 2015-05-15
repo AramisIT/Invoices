@@ -501,7 +501,9 @@
       <DependentUpon>LoadingEuroluxForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SystemObjects\ILoadingElectrolux.cs" />
-    <Compile Include="SystemObjects\LoadingParameters.cs" />
+    <Compile Include="SystemObjects\LoadingParameters\ElectroluxLoadingParameters.cs" />
+    <Compile Include="SystemObjects\LoadingParameters\LoadingParameters.cs" />
+    <Compile Include="SystemObjects\LoadingParameters\WhirlpoolLoadingParameters.cs" />
     <Compile Include="SystemObjects\NewGoodsRowForm.cs">
       <SubType>Form</SubType>
     </Compile>

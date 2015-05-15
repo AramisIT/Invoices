@@ -21,6 +21,7 @@ using SystemInvoice.Documents;
 using Aramis.Extensions;
 using Aramis.SystemConfigurations;
 using Aramis.UI.WinFormsDevXpress;
+using AramisInfrastructure.UI;
 using AramisWpfComponents.Excel;
 using Excel;
 using NPOI.HSSF.Record.Formula.Functions;
@@ -136,7 +137,7 @@ namespace SystemInvoice.SystemObjects
 
         private bool loaderIsInitiated;
 
-        public override void InitItemBeforeShowing()
+        public override void InitItemBeforeShowing(IItemViewModeParameters viewModeParameters)
             {
             O.Contractor = loadingParameters.Contractor;
             }

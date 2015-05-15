@@ -4,6 +4,7 @@ using Aramis.DatabaseConnector;
 using System;
 using SystemInvoice.Catalogs;
 using SystemInvoice.Documents;
+using AramisInfrastructure.UI;
 
 namespace SystemInvoice.SystemObjects
     {
@@ -102,7 +103,7 @@ namespace SystemInvoice.SystemObjects
             O.PlacesCount = (int)O.Amount;
             }
 
-        public override void InitItemBeforeShowing()
+        public override void InitItemBeforeShowing(IItemViewModeParameters viewModeParameters)
             {
             var q = DB.NewQuery(@"select rtrim(n.Article) Article, rtrim(n.Description) [Description], n.Id
 	from Nomenclature n
