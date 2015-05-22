@@ -15,6 +15,7 @@ using SystemInvoice.Constants;
 using SystemInvoice.DataProcessing.CatalogsProcessing;
 using SystemInvoice.Documents;
 using SystemInvoice.SystemObjects;
+using DevExpress.XtraEditors;
 
 namespace SystemInvoice
     {
@@ -34,6 +35,34 @@ namespace SystemInvoice
                 {
                 LoadedForm();
                 }
+
+            if (SolutionRoles.ElectroluxLoader)
+                {
+                Ribbon.AddMenuItem("Загрузить базу товаров Электролюкс",
+                    () => loadFromExcel(CatalogBaseLoadingTypes.NomenclatureDatabase, new ElectroluxLoadingParameters()));
+
+                Ribbon.AddMenuItem("Удалить все данные (номенклатура и разрешительные документы) по Электролюкс", removeElectrolux);
+                }
+            }
+
+        private void removeElectrolux()
+            {
+            if (!"Все товары и все разрешительные документы по Электролюксу будут изъяты из системы. Продолжить?".Ask()) return;
+
+            var q = A.Query(@"
+DELETE SubApprovalsNomenclatures 
+FROM   SubApprovalsNomenclatures n
+INNER JOIN
+Approvals a  on a.Id = n.IdDoc
+and a.Contractor = @Contractor;
+
+delete from Approvals where Contractor = @Contractor;
+
+DELETE FROM [Nomenclature]    WHERE Contractor = @Contractor", new { Contractor = ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR });
+
+            q.Execute();
+
+            "Удаление завершено!".NotifyToUser(q.ThrowedException == null);
             }
 
         #region IMainForm members
@@ -272,12 +301,12 @@ namespace SystemInvoice
 
         private void barButtonItem47_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase, new ElectroluxLoadingParameters());
+            loadFromExcel(CatalogBaseLoadingTypes.NomenclatureDatabase, new ElectroluxLoadingParameters());
             }
 
-        private static void loadElectrolux(ElectroluxLoadingTypes loadingType, LoadingParameters loadingParameters)
+        private static void loadFromExcel(CatalogBaseLoadingTypes loadingType, LoadingParameters loadingParameters)
             {
-            var loadingEurolux = A.New<ILoadingElectrolux>();
+            var loadingEurolux = A.New<ILoadingCatalogsFromExcel>();
             loadingEurolux.GetBehaviour<LoadingEuroluxBehaviour>().SetLoadingParameters(loadingParameters);
             loadingEurolux.LoadingType = loadingType;
 
@@ -288,12 +317,12 @@ namespace SystemInvoice
 
         private void barButtonItem48_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.Approvals, new ElectroluxLoadingParameters());
+            loadFromExcel(CatalogBaseLoadingTypes.Approvals, new ElectroluxLoadingParameters());
             }
 
         private void barButtonItem49_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.Nomenclature, new ElectroluxLoadingParameters());
+            loadFromExcel(CatalogBaseLoadingTypes.Nomenclature, new ElectroluxLoadingParameters());
             }
 
         private void barButtonItem50_ItemClick(object sender, ItemClickEventArgs e)
@@ -324,12 +353,12 @@ namespace SystemInvoice
 
         private void barButtonItem52_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.NomenclatureDatabase, new WhirlpoolLoadingParameters());
+            loadFromExcel(CatalogBaseLoadingTypes.NomenclatureDatabase, new WhirlpoolLoadingParameters());
             }
 
         private void barButtonItem53_ItemClick(object sender, ItemClickEventArgs e)
             {
-            loadElectrolux(ElectroluxLoadingTypes.Approvals, new WhirlpoolLoadingParameters());
+            loadFromExcel(CatalogBaseLoadingTypes.Approvals, new WhirlpoolLoadingParameters());
             }
 
         private void barButtonItem54_ItemClick(object sender, ItemClickEventArgs e)

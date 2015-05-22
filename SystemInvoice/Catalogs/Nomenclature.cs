@@ -569,7 +569,7 @@ namespace SystemInvoice.Catalogs
                 }
             }
 
-        void Nomenclature_BeforeWriting(IDatabaseObject item, ref bool cancel)
+        void Nomenclature_BeforeWriting(IDatabaseObject item, IDBObjectWritingOptions writingOptions, ref bool cancel)
             {
             long customsCodeId = this.CustomsCodeInternal.Id;
             if (initCustomsCodeId != customsCodeId && initCustomsCodeId != 0)

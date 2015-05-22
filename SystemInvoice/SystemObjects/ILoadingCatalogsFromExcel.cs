@@ -33,7 +33,7 @@ using Row = AramisWpfComponents.Excel.Row;
 
 namespace SystemInvoice.SystemObjects
     {
-    public enum ElectroluxLoadingTypes
+    public enum CatalogBaseLoadingTypes
         {
         [DataField(Description = "Новые модели")]
         Nomenclature,
@@ -45,9 +45,9 @@ namespace SystemInvoice.SystemObjects
         NomenclatureDatabase
         }
 
-    public interface ILoadingElectrolux : IAramisModel
+    public interface ILoadingCatalogsFromExcel : IAramisModel
         {
-        ElectroluxLoadingTypes LoadingType { get; set; }
+        CatalogBaseLoadingTypes LoadingType { get; set; }
 
         [DataField(Description = "Контрагент", ReadOnly = true)]
         IContractor Contractor { get; set; }
@@ -109,7 +109,7 @@ namespace SystemInvoice.SystemObjects
         string ErrorHelpData { get; set; }
         }
 
-    public class LoadingEuroluxBehaviour : Behaviour<ILoadingElectrolux>
+    public class LoadingEuroluxBehaviour : Behaviour<ILoadingCatalogsFromExcel>
         {
         public class ApprovalDocumentInfo
             {
@@ -117,22 +117,31 @@ namespace SystemInvoice.SystemObjects
             public DateTime StartDate { get; set; }
             public string DocumentNumber { get; set; }
 
-            public Approvals ApprovalsDocument { get; set; }
-
-            internal void AddWare(long wareId)
-                {
-                var dataRow = ApprovalsDocument.Nomenclatures.GetNewRow(ApprovalsDocument);
-                dataRow[ApprovalsDocument.ItemNomenclature] = wareId;
-                dataRow.AddRowToTable(ApprovalsDocument);
-                }
+            //public Approvals ApprovalsDocument { get; set; }
 
             public long Cert { get; set; }
+
+            public override bool Equals(object obj)
+                {
+                var item = obj as ApprovalDocumentInfo;
+                if (item == null) return false;
+
+                return item.DocumentType == DocumentType
+                       && item.Cert == Cert
+                       && item.DocumentNumber.Equals(DocumentNumber)
+                       && item.StartDate.Date.Equals(StartDate.Date);
+                }
             }
 
-        public LoadingEuroluxBehaviour(ILoadingElectrolux item)
+        public class ExistsApprovalInfo : ApprovalDocumentInfo
+            {
+            public long Id { get; set; }
+            }
+
+        public LoadingEuroluxBehaviour(ILoadingCatalogsFromExcel item)
             : base(item)
             {
-            O.ApprovalDurationYears = 2;
+            O.ApprovalDurationYears = 100;
             }
 
         private bool loaderIsInitiated;
@@ -148,7 +157,7 @@ namespace SystemInvoice.SystemObjects
 
             loadingParameters.ApprovalsTypes = new CatalogCacheCreator<IDocumentType>().GetDescriptionIdCache(descriptionFieldName: "QualifierCodeName");
 
-            if (O.LoadingType != ElectroluxLoadingTypes.Approvals)
+            if (O.LoadingType != CatalogBaseLoadingTypes.Approvals)
                 {
                 loadingParameters.CustomsCodes = new CatalogCacheCreator<CustomsCode>().GetDescriptionIdCache();
                 loadingParameters.ApprovalsCertTypes = new CatalogCacheCreator<Approvals>().GetDescriptionIdCache(descriptionFieldName: "DocumentNumber",
@@ -159,11 +168,11 @@ namespace SystemInvoice.SystemObjects
                 loadingParameters.Producers = new CatalogCacheCreator<IManufacturer>().GetDescriptionItemCache(new { Contractor = O.Contractor });
                 loadingParameters.TradeMarks = new CatalogCacheCreator<ITradeMark>().GetDescriptionItemCache(new { Contractor = O.Contractor });
 
-                if (O.LoadingType == ElectroluxLoadingTypes.NomenclatureDatabase)
+                if (O.LoadingType == CatalogBaseLoadingTypes.NomenclatureDatabase)
                     {
                     loadingParameters.ApprovalsCache = getApprovalCache();
                     }
-                else if (O.LoadingType == ElectroluxLoadingTypes.Nomenclature)
+                else if (O.LoadingType == CatalogBaseLoadingTypes.Nomenclature)
                     {
                     if (string.IsNullOrEmpty(O.FindArticleAndModelRegEx))
                         {
@@ -430,8 +439,6 @@ namespace SystemInvoice.SystemObjects
                 ware.NameDecl = row.NameDecl;
                 ware.NameInvoice = row.NameInvoice;
 
-                var newWare = ware.IsNew;
-
                 var writtenResult = ware.Write();
                 if (writtenResult != WritingResult.Success)
                     {
@@ -441,40 +448,24 @@ namespace SystemInvoice.SystemObjects
                     }
 
                 List<ApprovalDocumentInfo> docsList;
-                if (approvalsDocuments.Count > 0 && approvalsDocuments.TryGetValue(row.LineNumber, out docsList))
+                if (approvalsDocuments.TryGetValue(row.LineNumber, out docsList))
                     {
-                    foreach (var approvalDoc in docsList)
+                    if (!checkApprovals(ware.Id, docsList, out errorDescription))
                         {
-                        if (newWare)
-                            {
-                            approvalDoc.AddWare(ware.Id);
-                            }
-                        else
-                            {
-                            var docContainsWare = false;
-                            var docRows = approvalDoc.ApprovalsDocument.Nomenclatures.Rows;
-                            for (int lineNumber = 1; lineNumber <= docRows.Count; lineNumber++)
-                                {
-                                var docRow = docRows[lineNumber - 1];
-                                if (ware.Id.Equals(docRow[approvalDoc.ApprovalsDocument.ItemNomenclature]))
-                                    {
-                                    docContainsWare = true;
-                                    break;
-                                    }
-                                }
-                            if (!docContainsWare)
-                                {
-                                approvalDoc.AddWare(ware.Id);
-                                }
-                            }
-
-                        writtenResult = approvalDoc.ApprovalsDocument.Write();
-                        if (writtenResult != WritingResult.Success)
-                            {
-                            errorDescription = "Не удалось записать разреш. документ: " + approvalDoc.ToString();
-                            return false;
-                            }
+                        return false;
                         }
+
+                    //foreach (ApprovalDocumentInfo approvalDoc in docsList)
+                    //    {
+                    //    approvalDoc.ApprovalsDocument.AddWareId(ware.Id);
+
+                    //    writtenResult = approvalDoc.ApprovalsDocument.Write();
+                    //    if (writtenResult != WritingResult.Success)
+                    //        {
+                    //        errorDescription = "Не удалось записать разреш. документ: " + approvalDoc.ToString();
+                    //        return false;
+                    //        }
+                    //    }
                     }
                 notifyProgress((double)itemIndex / (double)rowsCount);
 
@@ -504,6 +495,101 @@ namespace SystemInvoice.SystemObjects
             return true;
             }
 
+        private bool checkApprovals(long wareId, List<ApprovalDocumentInfo> requaredDocuments, out string errorDescription)
+            {
+            errorDescription = null;
+            var existsDocuments = new List<ExistsApprovalInfo>();
+            A.Query(@"select cap.BaseApproval Cert, cap.Id, rtrim(cap.DocumentNumber) Number, cap.DateFrom StartDate, cap.DocumentType
+	from SubApprovalsNomenclatures s
+	join Approvals cap on cap.Id = s.IdDoc 
+		and cap.Contractor = @contractor and cap.MarkForDeleting = 0
+		and s.ItemNomenclature = @wareId and cap.DocumentCode = '5112'", new { wareId, O.Contractor }).Foreach(qResult =>
+                {
+                    existsDocuments.Add(new ExistsApprovalInfo()
+                        {
+                            Id = qResult["Id"].ToInt64(),
+                            Cert = qResult["Cert"].ToInt64(),
+                            DocumentType = qResult["DocumentType"].ToInt64(),
+                            DocumentNumber = qResult["Number"].ToString(),
+                            StartDate = ((DateTime)qResult["StartDate"]).Date
+                        });
+                });
+
+            foreach (var requaredDocument in requaredDocuments)
+                {
+                if (!checkApproval(requaredDocument, existsDocuments, wareId, out errorDescription))
+                    {
+                    return false;
+                    }
+                }
+
+            foreach (var existsApprovalInfo in existsDocuments)
+                {
+                var existApproval = A.New<Approvals>(existsApprovalInfo.Id);
+                existApproval.RemoveWareId(wareId);
+                if (!existApproval.Write().IsSuccess())
+                    {
+                    errorDescription = string.Format("Не удаляется ном-ра из разрешит. док-та ({1}):\r\n{0}", existApproval.LastWrittingError, existApproval.Id);
+                    return false;
+                    }
+                }
+
+            return true;
+            }
+
+        private bool checkApproval(ApprovalDocumentInfo requaredDocument, List<ExistsApprovalInfo> existsDocuments, long wareId, out string errorDescription)
+            {
+            errorDescription = null;
+
+            for (int docIndex = existsDocuments.Count - 1; docIndex >= 0; docIndex -= 1)
+                {
+                var existsApproval = existsDocuments[docIndex];
+                if (requaredDocument.Equals(existsApproval))
+                    {
+                    existsDocuments.RemoveAt(docIndex);
+                    return true;
+                    }
+                }
+
+            var approval = A.New<Approvals>(findAppropriateApproval(requaredDocument, wareId));
+
+            if (approval.IsNew)
+                {
+                approval.DateFrom = requaredDocument.StartDate.Equals(DateTime.MinValue) ? DateTime.Now : requaredDocument.StartDate;
+                approval.DateTo = approval.DateFrom.AddYears(100);
+                approval.Date = DateTime.Now;
+                if (requaredDocument.Cert > 0)
+                    {
+                    approval.SetRef("BaseApproval", requaredDocument.Cert);
+                    }
+                approval.DocumentNumber = requaredDocument.DocumentNumber;
+                approval.Contractor = O.Contractor;
+                approval.SetRef("DocumentType", requaredDocument.DocumentType);
+                }
+
+            approval.AddWareId(wareId);
+
+            if (!approval.Write().IsSuccess())
+                {
+                errorDescription = string.Format("Не удалось записать разреш. документ ({1}):\r\n{0}", approval.LastWrittingError, approval.Id);
+                return false;
+                }
+
+            return true;
+            }
+
+        private long findAppropriateApproval(ApprovalDocumentInfo requaredDocument, long wareId)
+            {
+            return A.Query(@"select top 1 cap.Id
+	from Approvals cap 
+	left join SubApprovalsNomenclatures s on cap.Id = s.IdDoc 
+		and s.ItemNomenclature = @wareId 
+		
+	where cap.Contractor = @contractor and cap.MarkForDeleting = 0 and cap.DocumentCode = '5112'	and s.LineNumber is null
+		and cap.DocumentNumber = @DocumentNumber and cast(cap.DateFrom as date) = @StartDate and cap.DocumentType = @DocumentType and cap.BaseApproval = @Cert
+	order by cap.DateFrom", new { wareId, O.Contractor, requaredDocument.DocumentType, requaredDocument.Cert, requaredDocument.StartDate, requaredDocument.DocumentNumber }).SelectInt64();
+            }
+
         private Nomenclature getWare(string article, string model)
             {
             var q = DB.NewQuery(@"select top 1 Id
@@ -520,7 +606,7 @@ namespace SystemInvoice.SystemObjects
             return result;
             }
 
-        private Dictionary<long, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<long, List<ApprovalDocumentInfo>>();
+        private Dictionary<int, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<int, List<ApprovalDocumentInfo>>();
         private StringBuilder warnings;
 
         private bool getDate(Cell cell, int rowIndex, Sheet sheet, out DateTime date)
@@ -625,7 +711,7 @@ namespace SystemInvoice.SystemObjects
                 return false;
                 }
 
-            var fileLoadingHandler = O.LoadingType == ElectroluxLoadingTypes.Nomenclature
+            var fileLoadingHandler = O.LoadingType == CatalogBaseLoadingTypes.Nomenclature
               ? new TryLoadExcelDataFromExcelFileDelegate(tryLoadNewWaresFromExcelFile) :
               new TryLoadExcelDataFromExcelFileDelegate(tryLoadApprovalsFromExcelFile);
 

@@ -48,7 +48,7 @@ namespace Catalogs
             O.BeforeWriting += O_BeforeWriting;
             }
 
-        void O_BeforeWriting(IDatabaseObject item, ref bool cancel)
+        void O_BeforeWriting(IDatabaseObject item, IDBObjectWritingOptions writingOptions, ref bool cancel)
             {
             O.GetEmptyNumbersHashSet();
             }

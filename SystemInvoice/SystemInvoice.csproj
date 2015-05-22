@@ -494,13 +494,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolutionRoles.cs" />
     <Compile Include="SystemObjects\LoadingEuroluxForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SystemObjects\LoadingEuroluxForm.Designer.cs">
       <DependentUpon>LoadingEuroluxForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SystemObjects\ILoadingElectrolux.cs" />
+    <Compile Include="SystemObjects\ILoadingCatalogsFromExcel.cs" />
     <Compile Include="SystemObjects\LoadingParameters\ElectroluxLoadingParameters.cs" />
     <Compile Include="SystemObjects\LoadingParameters\LoadingParameters.cs" />
     <Compile Include="SystemObjects\LoadingParameters\WhirlpoolLoadingParameters.cs" />

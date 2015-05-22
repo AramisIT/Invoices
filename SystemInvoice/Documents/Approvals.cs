@@ -262,7 +262,7 @@ namespace SystemInvoice.Documents
             BeforeWriting += Approvals_BeforeWriting;
             }
 
-        void Approvals_BeforeWriting(IDatabaseObject item, ref bool cancel)
+        void Approvals_BeforeWriting(IDatabaseObject item, IDBObjectWritingOptions writingOptions, ref bool cancel)
             {
             if (this.GetRef("Contractor") == ElectroluxLoadingParameters.ELECTROLUX_CONTRACTOR.Id)
                 {
@@ -580,6 +580,24 @@ namespace SystemInvoice.Documents
             newRow[ItemNomenclature] = wareId;
             newRow.AddRowToTable(this);
             SetSubtableModified("Nomenclatures");
+            }
+
+        internal void RemoveWareId(long wareId)
+            {
+            var tableWasModified = false;
+            for (int rowIndex = Nomenclatures.Rows.Count - 1; rowIndex >= 0; rowIndex -= 1)
+                {
+                if (wareId.Equals(Nomenclatures.Rows[rowIndex][ItemNomenclature]))
+                    {
+                    Nomenclatures.Rows.RemoveAt(rowIndex);
+                    tableWasModified = true;
+                    }
+                }
+
+            if (tableWasModified)
+                {
+                SetSubtableModified("Nomenclatures");
+                }
             }
         }
     }

@@ -225,46 +225,49 @@ namespace SystemInvoice.SystemObjects
                     }
                 }
 
-            fillApprovals(approvalDocuments);
+            // fillApprovals(approvalDocuments);
 
             return true;
             }
 
-        private void fillApprovals(List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> approvalDocuments)
-            {
-            var tasks = new Dictionary<DateTime, Dictionary<string, List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>>>();
+        //private void fillApprovals(List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> approvalDocuments)
+        //    {
+        //    var tasks = new Dictionary<DateTime, Dictionary<string, List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>>>();
 
-            foreach (var doc in approvalDocuments)
-                {
-                Dictionary<string, List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>> subDict;
-                if (!tasks.TryGetValue(doc.StartDate, out subDict))
-                    {
-                    subDict = new Dictionary<string, List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>>(new IgnoreCaseStringEqualityComparer());
-                    tasks.Add(doc.StartDate, subDict);
-                    }
+        //    foreach (var doc in approvalDocuments)
+        //        {
+        //        Dictionary<string, List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>> subDict;
+        //        if (!tasks.TryGetValue(doc.StartDate, out subDict))
+        //            {
+        //            subDict = new Dictionary<string, List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>>(new IgnoreCaseStringEqualityComparer());
+        //            tasks.Add(doc.StartDate, subDict);
+        //            }
 
-                List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> documents;
-                if (!subDict.TryGetValue(doc.DocumentNumber, out documents))
-                    {
-                    documents = new List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>();
-                    subDict.Add(doc.DocumentNumber, documents);
-                    }
+        //        List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> documents;
+        //        if (!subDict.TryGetValue(doc.DocumentNumber, out documents))
+        //            {
+        //            documents = new List<LoadingEuroluxBehaviour.ApprovalDocumentInfo>();
+        //            subDict.Add(doc.DocumentNumber, documents);
+        //            }
 
-                documents.Add(doc);
-                }
+        //        documents.Add(doc);
+        //        }
 
-            foreach (var kvp in tasks)
-                {
-                var date = kvp.Key;
-                foreach (var kvpNumber in kvp.Value)
-                    {
-                    var number = kvpNumber.Key;
-                    List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> documents = kvpNumber.Value;
-                    var cachedDocs = getApprovalsDocument(date, number);
-                    checkExistsDocuments(documents, cachedDocs);
-                    }
-                }
-            }
+        //    foreach (var kvp in tasks)
+        //        {
+        //        var date = kvp.Key;
+        //        var docsByNumber = kvp.Value;
+
+        //        foreach (var kvpNumber in docsByNumber)
+        //            {
+        //            var number = kvpNumber.Key;
+        //            List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> documents = kvpNumber.Value;
+
+        //            var cachedDocs = getApprovalsDocument(date, number);
+        //            checkExistsDocuments(documents, cachedDocs);
+        //            }
+        //        }
+        //    }
 
         private List<Approvals> getApprovalsDocument(DateTime dateTime, string docNumber)
             {
@@ -285,7 +288,8 @@ namespace SystemInvoice.SystemObjects
             return docs;
             }
 
-        private Approvals getApprovalsDocument(List<Approvals> existDocs, int docIndex, LoadingEuroluxBehaviour.ApprovalDocumentInfo requaredDoc)
+        private Approvals getApprovalsDocument(List<Approvals> existDocs, int docIndex,
+            LoadingEuroluxBehaviour.ApprovalDocumentInfo requaredDoc)
             {
             if (docIndex < existDocs.Count)
                 {
@@ -294,7 +298,7 @@ namespace SystemInvoice.SystemObjects
 
             var newDoc = A.New<Approvals>();
             newDoc.DateFrom = requaredDoc.StartDate.Equals(DateTime.MinValue) ? DateTime.Now : requaredDoc.StartDate;
-            newDoc.DateTo = newDoc.DateFrom.AddYears(2);
+            newDoc.DateTo = newDoc.DateFrom.AddYears(100);
             newDoc.Date = DateTime.Now;
             if (requaredDoc.Cert > 0)
                 {
@@ -308,14 +312,15 @@ namespace SystemInvoice.SystemObjects
             return newDoc;
             }
 
-        private void checkExistsDocuments(List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> requaredDocuments, List<Approvals> existDocs)
-            {
-            for (int docIndex = 0; docIndex < requaredDocuments.Count; docIndex++)
-                {
-                var requaredDoc = requaredDocuments[docIndex];
-                requaredDoc.ApprovalsDocument = getApprovalsDocument(existDocs, docIndex, requaredDoc);
-                }
-            }
+        //private void checkExistsDocuments(List<LoadingEuroluxBehaviour.ApprovalDocumentInfo> requaredDocuments, List<Approvals> existDocs)
+        //    {
+        //    for (int docIndex = 0; docIndex < requaredDocuments.Count; docIndex += 1)
+        //        {
+        //        var requaredDoc = requaredDocuments[docIndex];
+
+        //        requaredDoc.ApprovalsDocument = getApprovalsDocument(existDocs, docIndex, requaredDoc);
+        //        }
+        //    }
 
         private long getCertificate(string certNumber, DateTime date)
             {

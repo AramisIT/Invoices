@@ -25,14 +25,14 @@ namespace SystemInvoice.Catalogs.Forms
     {
     public partial class LoadingEuroluxForm : DevExpress.XtraBars.Ribbon.RibbonForm
         {
-        private ILoadingElectrolux item;
+        private ILoadingCatalogsFromExcel item;
 
         private LoadingEuroluxBehaviour itemBehaviour
             {
             get { return Item.GetBehaviour<LoadingEuroluxBehaviour>(); }
             }
 
-        public ILoadingElectrolux Item
+        public ILoadingCatalogsFromExcel Item
             {
             get { return item; }
             set
@@ -66,7 +66,7 @@ namespace SystemInvoice.Catalogs.Forms
             {
             switch (Item.LoadingType)
                 {
-                case ElectroluxLoadingTypes.NomenclatureDatabase:
+                case CatalogBaseLoadingTypes.NomenclatureDatabase:
                     string fileName;
                     if (!AramisIO.ChooseExcel97_2003File(out fileName)) return;
 
@@ -75,8 +75,8 @@ namespace SystemInvoice.Catalogs.Forms
                     itemBehaviour.LoadWaresDatabaseFromExcel(fileName, notifyPercentChanged);
                     break;
 
-                case ElectroluxLoadingTypes.Nomenclature:
-                case ElectroluxLoadingTypes.Approvals:
+                case CatalogBaseLoadingTypes.Nomenclature:
+                case CatalogBaseLoadingTypes.Approvals:
                     OpenFileFolderDialogResult selectingResult;
                     if (!AramisIO.ChooseFilesOrFolder(AramisIO.FilesTypesFilters.Excel, out selectingResult)) return;
                     var files = selectingResult.GetAllFiles();

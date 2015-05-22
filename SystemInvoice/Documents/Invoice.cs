@@ -1396,7 +1396,7 @@ namespace SystemInvoice.Documents
             get { return haveToBeWritten; }
             }
 
-        void Invoice_BeforeWriting(IDatabaseObject item, ref bool cancel)
+        void Invoice_BeforeWriting(IDatabaseObject item, IDBObjectWritingOptions writingOptions, ref bool cancel)
             {
             saveFromMainToPartialTable();
             if (checkTableForAllowedSize())
