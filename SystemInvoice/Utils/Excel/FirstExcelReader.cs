@@ -48,7 +48,7 @@ namespace SystemInvoice.Utils.Excel
                 DateTime inputdate = new DateTime(1900, 1, 1).Add(datefromexcel);
                 return inputdate;
                 }
-            var strValue = value.ToString();
+            var strValue = value.ToString().Trim();
             try
                 {
                 if (strValue.Contains('/'))

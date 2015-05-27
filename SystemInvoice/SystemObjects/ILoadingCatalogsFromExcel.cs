@@ -608,40 +608,7 @@ namespace SystemInvoice.SystemObjects
 
         private Dictionary<int, List<ApprovalDocumentInfo>> approvalsDocuments = new Dictionary<int, List<ApprovalDocumentInfo>>();
         private StringBuilder warnings;
-
-        private bool getDate(Cell cell, int rowIndex, Sheet sheet, out DateTime date)
-            {
-            try
-                {
-                date = cell.CELL.DateCellValue.Date;
-                }
-            catch
-                {
-                try
-                    {
-                    var strValue = cell.Value.ToString();
-                    if (strValue.Contains('/'))
-                        {
-                        var parts = strValue.Split('/');
-                        date = new DateTime(2000 + parts[2].ToInt32(), parts[0].ToInt32(), parts[1].ToInt32());
-                        }
-                    else
-                        {
-                        date = strValue.ConvertToDateTime("dd.MM.yyyy").Date;
-                        }
-                    }
-                catch
-                    {
-                    string.Format("Ошибка получения даты в строке № {1}; страница {0}",
-                        sheet.SheetName, (rowIndex + 1)).WarningBox();
-                    date = DateTime.MinValue;
-                    return false;
-                    }
-                }
-
-            return true;
-            }
-
+        
         private Regex findArticleAndModelRegEx;
 
         internal void LoadExcelFiles(List<string> files, Action<double> notifyProgress)
