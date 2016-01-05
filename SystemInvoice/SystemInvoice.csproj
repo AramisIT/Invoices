@@ -649,6 +649,7 @@
     <None Include="Resources\reports.png" />
     <Content Include="TraceAramis.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

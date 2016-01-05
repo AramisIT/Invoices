@@ -16,6 +16,7 @@ using Aramis.Extensions;
 using Aramis.Platform;
 using Aramis.UI.WinFormsDevXpress;
 using AramisInfostructure.Queries;
+using AramisInfrastructure.UI;
 using Catalogs;
 using Documents;
 using ReportView;
@@ -189,7 +190,7 @@ namespace SystemInvoice.Documents
             }
         #endregion
 
-        [DataField(Description = "Основание")]
+        [DataField(Description = "Основание", AllowOpenItem = true)]
         public Approvals BaseApproval
             {
             get
@@ -417,9 +418,9 @@ namespace SystemInvoice.Documents
             return syncronizer.GetFuncGetCustomFilter(propertyName);
             }
 
-        public override Func<DataRow, System.Drawing.Color> GetFuncGetRowColor()
+        public override Func<IDataRow, Color> GetFuncGetRowColor()
             {
-            return new Func<DataRow, System.Drawing.Color>((row) =>
+            return new Func<IDataRow, System.Drawing.Color>((row) =>
                 {
                     return getColorForRow(row);
                 });
@@ -461,7 +462,7 @@ namespace SystemInvoice.Documents
                 }
             }
 
-        private System.Drawing.Color getColorForRow(DataRow row)
+        private System.Drawing.Color getColorForRow(IDataRow row)
             {
             if (checkApprovalsToDateIsAfterCriticalDate(row))
                 {
@@ -470,12 +471,21 @@ namespace SystemInvoice.Documents
             return System.Drawing.Color.White;
             }
 
-        private bool checkApprovalsToDateIsAfterCriticalDate(DataRow row)
+        private bool checkApprovalsToDateIsAfterCriticalDate(IDataRow row)
             {
-            bool isRowContainsToDateValue = row.Table.Columns.Contains(DATE_TO_COLUMN_NAME) && row[DATE_TO_COLUMN_NAME] != DBNull.Value;
-            if (isRowContainsToDateValue)
+            object dateValue;
+            try
                 {
-                DateTime approvalsToDate = getApprovalsToDate(row);
+                dateValue = row[DATE_TO_COLUMN_NAME];
+                }
+            catch
+                {
+                return false;
+                }
+
+            if (dateValue is DateTime)
+                {
+                DateTime approvalsToDate = getApprovalsToDate((DateTime)dateValue);
                 DateTime criticalDate = getCriticalCheckingDate();
                 if (approvalsToDate < criticalDate)
                     {
@@ -492,9 +502,8 @@ namespace SystemInvoice.Documents
             return criticalTime;
             }
 
-        private DateTime getApprovalsToDate(DataRow row)
+        private DateTime getApprovalsToDate(DateTime rowDateTime)
             {
-            DateTime rowDateTime = (DateTime)row[DATE_TO_COLUMN_NAME];
             if (rowDateTime == DateTime.MinValue)
                 {
                 rowDateTime = DateTime.Today.AddMonths(1 - DateTime.Now.Month).AddDays(1 - DateTime.Now.Day).AddYears(1).AddMilliseconds(-1);

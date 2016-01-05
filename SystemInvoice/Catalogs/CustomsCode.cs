@@ -7,6 +7,7 @@ using Aramis.Attributes;
 using Aramis.Enums;
 using System.Data;
 using System.Drawing;
+using AramisInfrastructure.UI;
 
 namespace SystemInvoice.Catalogs
     {
@@ -72,7 +73,7 @@ namespace SystemInvoice.Catalogs
             return base.Write();
             }
 
-        public override Func<System.Data.DataRow, System.Drawing.Color> GetFuncGetRowColor()
+        public override Func<IDataRow, System.Drawing.Color> GetFuncGetRowColor()
             {
             return (row) =>
                 {
