@@ -117,7 +117,7 @@ namespace SystemInvoice.SystemObjects
                 }
 
             throw new Exception(string.Format("Не удалось получить поле {0}",
-                    SystemConfiguration.DBConfigurationTree[typeof(T).GetTableName()].Description));
+                    SystemConfiguration.Current[typeof(T).GetTableName()].Description));
             }
 
         public abstract bool TryLoadApprovals(System.Data.DataSet dataSet, Action<double> notifyProgress,

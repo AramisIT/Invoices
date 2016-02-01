@@ -332,7 +332,7 @@ DELETE FROM [Nomenclature]    WHERE Contractor = @Contractor", new { Contractor 
 
         private void barButtonItem51_ItemClick(object sender, ItemClickEventArgs e)
             {
-            var info = SystemConfiguration.DBConfigurationTree[typeof(Invoice).GetTableName()];
+            var info = SystemConfiguration.Current[typeof(Invoice).GetTableName()];
             foreach (var subtableInfo in info.InfoSubTables.Values)
                 {
                 var length = 0;
