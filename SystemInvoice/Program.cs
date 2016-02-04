@@ -2,6 +2,7 @@
 using Aramis.Platform;
 using AramisDesktopUserInterface;
 using System;
+using Catalogs;
 
 namespace SystemInvoice
     {
@@ -14,7 +15,7 @@ namespace SystemInvoice
             {
             if (runOrTest)
                 {
-                SystemAramis.SystemStart(args, new DesktopUserInterfaceEngine(typeof(MainForm)));
+                SystemAramis.SystemStart(args, new DesktopUserInterfaceEngine(typeof(MainForm), typeof(Users)));
                 }
             else
                 {
