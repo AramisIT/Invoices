@@ -155,20 +155,7 @@ DELETE FROM [Nomenclature]    WHERE Contractor = @Contractor", new { Contractor 
             {
             UserInterface.Current.ShowList(typeof(SystemInvoice.Documents.Approvals));
             }
-
-
-        private void helpBtn_ItemClick(object sender, ItemClickEventArgs e)
-            {
-            ShowHelp();
-            }
-
-        private void ShowHelp()
-            {
-            CatalogsViewer viewer = new CatalogsViewer("InterfacePages", Ribbon.SelectedPage.Text);
-            var page = A.New<InterfacePages>(viewer.Id);
-            new HelpForm().ShowPage(String.Format("{0}\\Help\\{1}", SystemAramis.APPLICATION_PATH, page.HelpFile.FileName));
-            }
-
+        
         private void propertyTypesBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             processFile((fileName) => excelConverter.LoadPropertyTypes(fileName));
@@ -276,11 +263,11 @@ DELETE FROM [Nomenclature]    WHERE Contractor = @Contractor", new { Contractor 
 
         private void MainForm_Load_1(object sender, EventArgs e)
             {
-            CatalogUsers currentUser = SystemAramis.CurrentUser;
+            var currentUser = SystemAramis.CurrentUser;
             if (currentUser != null)
                 {
                 UIConsts.NotifyUserSkinWasReviewed(currentUser.Skin);
-                administratorPage.Visible = currentUser.Ref.Equals(CatalogUsers.Admin);
+                administratorPage.Visible = SystemAramis.CurrentUserAdmin;
                 }
             }
 

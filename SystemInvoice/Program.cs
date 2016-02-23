@@ -15,7 +15,7 @@ namespace SystemInvoice
             {
             if (runOrTest)
                 {
-                SystemAramis.SystemStart(args, new DesktopUserInterfaceEngine(typeof(MainForm), typeof(Users)));
+                SystemAramis.SystemStart(args, new DesktopUserInterfaceEngine(typeof(MainForm), typeof(IUsers)));
                 }
             else
                 {

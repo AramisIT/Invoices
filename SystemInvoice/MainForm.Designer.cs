@@ -47,7 +47,6 @@
             this.approvalsListBtn = new DevExpress.XtraBars.BarButtonItem();
             this.approvalsCreateBtn = new DevExpress.XtraBars.BarButtonItem();
             this.showApprovalsListBtn = new DevExpress.XtraBars.BarButtonItem();
-            this.helpBtn = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonGroup1 = new DevExpress.XtraBars.BarButtonGroup();
             this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
             this.creatInvoiceBtn2 = new DevExpress.XtraBars.BarButtonItem();
@@ -103,7 +102,6 @@
             this.ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup10 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.defaultLookAndFeel = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.applicationMenu1 = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
@@ -181,7 +179,6 @@
             this.approvalsListBtn,
             this.approvalsCreateBtn,
             this.showApprovalsListBtn,
-            this.helpBtn,
             this.barButtonGroup1,
             this.barButtonItem4,
             this.creatInvoiceBtn2,
@@ -336,15 +333,6 @@
             this.showApprovalsListBtn.LargeGlyph = global::SystemInvoice.Properties.Resources.Documents;
             this.showApprovalsListBtn.Name = "showApprovalsListBtn";
             this.showApprovalsListBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.showApprovalsListBtn_ItemClick);
-            // 
-            // helpBtn
-            // 
-            this.helpBtn.Caption = "Помощь";
-            this.helpBtn.Id = 23;
-            this.helpBtn.LargeGlyph = global::SystemInvoice.Properties.Resources._1306484724_gnome_help;
-            this.helpBtn.LargeImageIndex = 21;
-            this.helpBtn.Name = "helpBtn";
-            this.helpBtn.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.helpBtn_ItemClick);
             // 
             // barButtonGroup1
             // 
@@ -730,8 +718,7 @@
             this.ribbonPageGroup5,
             this.ribbonPageGroup6,
             this.ribbonPageGroup7,
-            this.ribbonPageGroup10,
-            this.ribbonPageGroup8});
+            this.ribbonPageGroup10});
             this.ribbonPage2.Name = "ribbonPage2";
             this.ribbonPage2.Text = "Обработка инвойса";
             // 
@@ -762,13 +749,6 @@
             this.ribbonPageGroup10.ItemLinks.Add(this.barSubItem4);
             this.ribbonPageGroup10.Name = "ribbonPageGroup10";
             this.ribbonPageGroup10.Text = "Отчеты";
-            // 
-            // ribbonPageGroup8
-            // 
-            this.ribbonPageGroup8.AllowTextClipping = false;
-            this.ribbonPageGroup8.ItemLinks.Add(this.helpBtn);
-            this.ribbonPageGroup8.Name = "ribbonPageGroup8";
-            this.ribbonPageGroup8.Text = "Помощь";
             // 
             // ribbonStatusBar
             // 
@@ -1113,12 +1093,10 @@
         private DevExpress.XtraBars.BarButtonItem approvalsListBtn;
         private DevExpress.XtraBars.BarButtonItem approvalsCreateBtn;
         private DevExpress.XtraBars.BarButtonItem showApprovalsListBtn;
-        private DevExpress.XtraBars.BarButtonItem helpBtn;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage2;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup5;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup6;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup7;
-        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup8;
         private DevExpress.XtraBars.BarButtonGroup barButtonGroup1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem4;
         private DevExpress.XtraBars.BarButtonItem creatInvoiceBtn2;

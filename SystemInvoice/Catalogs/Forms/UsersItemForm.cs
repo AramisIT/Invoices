@@ -23,7 +23,7 @@ namespace Aramis.CommonForms
 
         #region Поля и свойства
 
-        private Users item;
+        private IUsers item;
 
         public IDatabaseObject Item
             {
@@ -33,15 +33,15 @@ namespace Aramis.CommonForms
                 }
             set
                 {
-                item = (Users)value;
+                item = (IUsers)value;
                 }
             }
 
-        public Users User
+        public IUsers User
             {
             get
                 {
-                return (Users)item;
+                return (IUsers)item;
                 }
             }
 
@@ -170,7 +170,7 @@ namespace Aramis.CommonForms
 
         private void ClearControl(TextEdit textEdit)
             {
-            if (textEdit.Text == CatalogUsers.EMPTY_PASSWORD && !textEdit.Properties.ReadOnly)
+            if (textEdit.Text == CatalogUsersBehaviour.EMPTY_PASSWORD && !textEdit.Properties.ReadOnly)
                 {
                 textEdit.Text = "";
                 }
@@ -180,7 +180,7 @@ namespace Aramis.CommonForms
             {
             if (!User.IsNew && SystemAramis.CurrentUser.Ref.Equals(User.Ref))
                 {
-                UIConsts.NotifyUserSkinWasReviewed((Skins) (Skin.SelectedIndex));
+                UIConsts.NotifyUserSkinWasReviewed((Skins)(Skin.SelectedIndex));
 
                 UserInterface.WindowsManager.GetFormsList(AramisObjectType.Catalog, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
                 UserInterface.WindowsManager.GetFormsList(AramisObjectType.Document, true).ForEach(ItemFormTuner.ComplateFormSkinUpdating);
