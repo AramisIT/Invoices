@@ -167,7 +167,6 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 result = result.Replace("розміром 42 або більше", "");
                 }
             return result;
-            //throw new NotImplementedException();
             }
 
         private string getRowsFooter(List<DataRow> currentRowsGroup)
@@ -199,7 +198,8 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             {
             string wordPrepared = customsCodeDescription.Replace(".", " .").Replace(",", " ,").Replace(":", " :").Replace(";", " ;").Replace("-", " -");
             string[] parts = wordPrepared.Split(new string[] { " ", "\t", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            StringBuilder resultBuilder = new StringBuilder();
+
+            var resultBuilder = new StringBuilder(invoice.ExcelLoadingFormat.Graph31Prefix.TrimEnd());
             for (int i = 0; i < parts.Length; i++)
                 {
                 string part = parts[i];

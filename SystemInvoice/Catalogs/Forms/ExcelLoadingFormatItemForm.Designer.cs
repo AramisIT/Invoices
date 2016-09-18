@@ -35,8 +35,8 @@
             this.btnOk = new DevExpress.XtraBars.BarButtonItem();
             this.btnWrite = new DevExpress.XtraBars.BarButtonItem();
             this.btnCancel = new DevExpress.XtraBars.BarButtonItem();
-            this.ColumnsMappingsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.ColumnsMappingsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.SubGroupOfGoods = new Aramis.AramisSearchLookUpEdit();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.Contractor = new Aramis.AramisSearchLookUpEdit();
@@ -68,6 +68,8 @@
             this.DateFormatStr = new DevExpress.XtraEditors.TextEdit();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
+            this.Graph31Prefix = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SubGroupOfGoods.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -87,6 +89,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DateFormatStr.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -102,7 +105,7 @@
             this.ribbon.MaxItemId = 4;
             this.ribbon.Name = "ribbon";
             this.ribbon.Size = new System.Drawing.Size(786, 27);
-            this.ribbon.StatusBar = this.ribbonStatusBar;
+            this.ribbon.StatusBar = this.ColumnsMappingsButtonsBar;
             // 
             // btnOk
             // 
@@ -130,14 +133,6 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
-            // ColumnsMappingsButtonsBar
-            // 
-            this.ColumnsMappingsButtonsBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ColumnsMappingsButtonsBar.Location = new System.Drawing.Point(2, 2);
-            this.ColumnsMappingsButtonsBar.Name = "ColumnsMappingsButtonsBar";
-            this.ColumnsMappingsButtonsBar.Ribbon = this.ribbon;
-            this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(782, 27);
-            // 
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
@@ -147,6 +142,14 @@
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
             this.ribbonStatusBar.Size = new System.Drawing.Size(786, 31);
+            // 
+            // ColumnsMappingsButtonsBar
+            // 
+            this.ColumnsMappingsButtonsBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ColumnsMappingsButtonsBar.Location = new System.Drawing.Point(2, 2);
+            this.ColumnsMappingsButtonsBar.Name = "ColumnsMappingsButtonsBar";
+            this.ColumnsMappingsButtonsBar.Ribbon = this.ribbon;
+            this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(782, 27);
             // 
             // SubGroupOfGoods
             // 
@@ -169,9 +172,9 @@
             // 
             // labelControl6
             // 
-            this.labelControl6.Location = new System.Drawing.Point(14, 70);
+            this.labelControl6.Location = new System.Drawing.Point(8, 70);
             this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(74, 13);
+            this.labelControl6.Size = new System.Drawing.Size(75, 13);
             this.labelControl6.TabIndex = 178;
             this.labelControl6.Text = "Группа товара";
             // 
@@ -196,7 +199,7 @@
             // 
             // labelControl5
             // 
-            this.labelControl5.Location = new System.Drawing.Point(14, 18);
+            this.labelControl5.Location = new System.Drawing.Point(8, 18);
             this.labelControl5.Name = "labelControl5";
             this.labelControl5.Size = new System.Drawing.Size(60, 13);
             this.labelControl5.TabIndex = 176;
@@ -223,7 +226,7 @@
             // 
             // labelControl4
             // 
-            this.labelControl4.Location = new System.Drawing.Point(14, 44);
+            this.labelControl4.Location = new System.Drawing.Point(8, 44);
             this.labelControl4.Name = "labelControl4";
             this.labelControl4.Size = new System.Drawing.Size(80, 13);
             this.labelControl4.TabIndex = 174;
@@ -238,7 +241,7 @@
             // 
             // desc
             // 
-            this.desc.Location = new System.Drawing.Point(15, 96);
+            this.desc.Location = new System.Drawing.Point(9, 96);
             this.desc.Name = "desc";
             this.desc.Size = new System.Drawing.Size(73, 13);
             this.desc.TabIndex = 180;
@@ -335,7 +338,7 @@
             // 
             this.labelControl1.Location = new System.Drawing.Point(553, 18);
             this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(93, 13);
+            this.labelControl1.Size = new System.Drawing.Size(94, 13);
             this.labelControl1.TabIndex = 215;
             this.labelControl1.Text = "Загрузить из Excel";
             // 
@@ -343,7 +346,7 @@
             // 
             this.labelControl2.Location = new System.Drawing.Point(553, 44);
             this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(90, 13);
+            this.labelControl2.Size = new System.Drawing.Size(91, 13);
             this.labelControl2.TabIndex = 216;
             this.labelControl2.Text = "Выгрузить в Excel";
             // 
@@ -351,7 +354,7 @@
             // 
             this.labelControl7.Location = new System.Drawing.Point(292, 148);
             this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(254, 13);
+            this.labelControl7.Size = new System.Drawing.Size(255, 13);
             this.labelControl7.TabIndex = 222;
             this.labelControl7.Text = "Значение в колонке фильтра графы 31 для обуви";
             // 
@@ -366,25 +369,25 @@
             // 
             this.ColumnIndexForGrafShoes.Location = new System.Drawing.Point(156, 146);
             this.ColumnIndexForGrafShoes.Name = "ColumnIndexForGrafShoes";
-            this.ColumnIndexForGrafShoes.Size = new System.Drawing.Size(130, 20);
+            this.ColumnIndexForGrafShoes.Size = new System.Drawing.Size(119, 20);
             this.ColumnIndexForGrafShoes.TabIndex = 228;
             // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(14, 149);
+            this.labelControl3.Location = new System.Drawing.Point(8, 149);
             this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(105, 13);
+            this.labelControl3.Size = new System.Drawing.Size(106, 13);
             this.labelControl3.TabIndex = 227;
             this.labelControl3.Text = "№  для обуви (Гр31)";
             // 
             // UseMaxBordersWithNomenclatureCreating
             // 
-            this.UseMaxBordersWithNomenclatureCreating.Location = new System.Drawing.Point(14, 120);
+            this.UseMaxBordersWithNomenclatureCreating.Location = new System.Drawing.Point(8, 120);
             this.UseMaxBordersWithNomenclatureCreating.MenuManager = this.ribbon;
             this.UseMaxBordersWithNomenclatureCreating.Name = "UseMaxBordersWithNomenclatureCreating";
             this.UseMaxBordersWithNomenclatureCreating.Properties.AutoWidth = true;
             this.UseMaxBordersWithNomenclatureCreating.Properties.Caption = "Использовать максимальные рамки нетто при создании номенклатуры";
-            this.UseMaxBordersWithNomenclatureCreating.Size = new System.Drawing.Size(383, 19);
+            this.UseMaxBordersWithNomenclatureCreating.Size = new System.Drawing.Size(384, 19);
             this.UseMaxBordersWithNomenclatureCreating.TabIndex = 232;
             // 
             // OrderInvoiceColumns
@@ -394,7 +397,7 @@
             this.OrderInvoiceColumns.Name = "OrderInvoiceColumns";
             this.OrderInvoiceColumns.Properties.AutoWidth = true;
             this.OrderInvoiceColumns.Properties.Caption = "Упорядочивать столбцы в документе";
-            this.OrderInvoiceColumns.Size = new System.Drawing.Size(215, 19);
+            this.OrderInvoiceColumns.Size = new System.Drawing.Size(216, 19);
             this.OrderInvoiceColumns.TabIndex = 236;
             // 
             // SaveOriginalRowsSet
@@ -404,7 +407,7 @@
             this.SaveOriginalRowsSet.Name = "SaveOriginalRowsSet";
             this.SaveOriginalRowsSet.Properties.AutoWidth = true;
             this.SaveOriginalRowsSet.Properties.Caption = "Сохранять начальный набор строк";
-            this.SaveOriginalRowsSet.Size = new System.Drawing.Size(201, 19);
+            this.SaveOriginalRowsSet.Size = new System.Drawing.Size(202, 19);
             toolTipTitleItem1.Text = "Не группировать и не изменять порядок исходных строк Excel";
             superToolTip1.Items.Add(toolTipTitleItem1);
             this.SaveOriginalRowsSet.SuperTip = superToolTip1;
@@ -412,6 +415,8 @@
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.Graph31Prefix);
+            this.panelControl1.Controls.Add(this.labelControl9);
             this.panelControl1.Controls.Add(this.DateFormatStr);
             this.panelControl1.Controls.Add(this.labelControl8);
             this.panelControl1.Controls.Add(this.labelControl5);
@@ -452,7 +457,7 @@
             // 
             this.labelControl8.Location = new System.Drawing.Point(292, 176);
             this.labelControl8.Name = "labelControl8";
-            this.labelControl8.Size = new System.Drawing.Size(254, 13);
+            this.labelControl8.Size = new System.Drawing.Size(255, 13);
             this.labelControl8.TabIndex = 241;
             this.labelControl8.Text = "Формат даты при выгрузке в Excel (разр. док-ты)";
             // 
@@ -465,6 +470,21 @@
             this.panelControl2.Name = "panelControl2";
             this.panelControl2.Size = new System.Drawing.Size(786, 135);
             this.panelControl2.TabIndex = 245;
+            // 
+            // Graph31Prefix
+            // 
+            this.Graph31Prefix.Location = new System.Drawing.Point(156, 172);
+            this.Graph31Prefix.Name = "Graph31Prefix";
+            this.Graph31Prefix.Size = new System.Drawing.Size(119, 20);
+            this.Graph31Prefix.TabIndex = 244;
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(8, 176);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(139, 13);
+            this.labelControl9.TabIndex = 243;
+            this.labelControl9.Text = "Префикс в шапке графы 31";
             // 
             // ExcelLoadingFormatItemForm
             // 
@@ -500,6 +520,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DateFormatStr.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).EndInit();
             this.panelControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).EndInit();
             this.ResumeLayout(false);
 
             }
@@ -543,5 +564,7 @@
         private DevExpress.XtraEditors.TextEdit DateFormatStr;
         private DevExpress.XtraEditors.LabelControl labelControl8;
         private DevExpress.XtraEditors.PanelControl panelControl2;
+        private DevExpress.XtraEditors.TextEdit Graph31Prefix;
+        private DevExpress.XtraEditors.LabelControl labelControl9;
         }
     }

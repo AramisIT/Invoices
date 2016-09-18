@@ -126,6 +126,26 @@ namespace SystemInvoice.Catalogs
             }
         private bool z_SaveOriginalRowsSet;
 
+        [DataField(Description = "Сохранять начальный набор строк", Size = 5, FixedSize = false)]
+        public string Graph31Prefix
+            {
+            get
+                {
+                return z_Graph31Prefix;
+                }
+            set
+                {
+                if (z_Graph31Prefix.Equals(value))
+                    {
+                    return;
+                    }
+
+                z_Graph31Prefix = value;
+                NotifyPropertyChanged("Graph31Prefix");
+                }
+            }
+        private string z_Graph31Prefix = "";
+
         #region (Contractor) Contractor Контрагент
         [DataField(Description = "Контрагент", NotEmpty = true, ShowInList = true)]
         public IContractor Contractor

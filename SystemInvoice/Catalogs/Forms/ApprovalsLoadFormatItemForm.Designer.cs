@@ -67,7 +67,7 @@
             this.ribbon.Location = new System.Drawing.Point(0, 0);
             this.ribbon.MaxItemId = 4;
             this.ribbon.Name = "ribbon";
-            this.ribbon.Size = new System.Drawing.Size(679, 54);
+            this.ribbon.Size = new System.Drawing.Size(679, 49);
             this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // okBtn
@@ -99,20 +99,20 @@
             this.ColumnsMappingsButtonsBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ColumnsMappingsButtonsBar.Dock = System.Windows.Forms.DockStyle.None;
-            this.ColumnsMappingsButtonsBar.Location = new System.Drawing.Point(0, 156);
+            this.ColumnsMappingsButtonsBar.Location = new System.Drawing.Point(0, 152);
             this.ColumnsMappingsButtonsBar.Name = "ColumnsMappingsButtonsBar";
             this.ColumnsMappingsButtonsBar.Ribbon = this.ribbon;
-            this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(679, 23);
+            this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(679, 27);
             // 
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.okBtn);
             this.ribbonStatusBar.ItemLinks.Add(this.WriteBtn);
             this.ribbonStatusBar.ItemLinks.Add(this.CancelBtn);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 447);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 439);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(679, 23);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(679, 31);
             // 
             // ColumnsMappingsControl
             // 
@@ -181,6 +181,7 @@
             this.Contractor.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.Contractor.Properties.EditFormat.FormatString = "d";
             this.Contractor.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.Contractor.Properties.FirstPopUp = null;
             this.Contractor.Properties.NullText = "";
             this.Contractor.Size = new System.Drawing.Size(253, 20);
             this.Contractor.TabIndex = 198;
@@ -209,6 +210,7 @@
             this.TradeMark.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.TradeMark.Properties.EditFormat.FormatString = "d";
             this.TradeMark.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.TradeMark.Properties.FirstPopUp = null;
             this.TradeMark.Properties.NullText = "";
             this.TradeMark.Size = new System.Drawing.Size(253, 20);
             this.TradeMark.TabIndex = 196;
