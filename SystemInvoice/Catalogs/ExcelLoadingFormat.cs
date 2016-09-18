@@ -66,6 +66,26 @@ namespace SystemInvoice.Catalogs
             }
         private bool z_UseMaxBordersWithNomenclatureCreating;
 
+        [DataField(Description = "Использовать максимальные рамки нетто при создании номенклатуры")]
+        public bool EliminateRowsFooter
+            {
+            get
+                {
+                return z_EliminateRowsFooter;
+                }
+            set
+                {
+                if (z_EliminateRowsFooter == value)
+                    {
+                    return;
+                    }
+
+                z_EliminateRowsFooter = value;
+                NotifyPropertyChanged("EliminateRowsFooter");
+                }
+            }
+        private bool z_EliminateRowsFooter;
+
         [DataField(Description = "Упорядочивать строки в документе")]
         public bool OrderInvoiceColumns
             {

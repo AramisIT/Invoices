@@ -171,6 +171,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
 
         private string getRowsFooter(List<DataRow> currentRowsGroup)
             {
+            if (invoice.ExcelLoadingFormat.EliminateRowsFooter) return string.Empty;
             int acc = 0;
             int currentAcc = 0;
             foreach (DataRow row in currentRowsGroup)

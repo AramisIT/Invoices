@@ -35,8 +35,8 @@
             this.btnOk = new DevExpress.XtraBars.BarButtonItem();
             this.btnWrite = new DevExpress.XtraBars.BarButtonItem();
             this.btnCancel = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ColumnsMappingsButtonsBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
+            this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.SubGroupOfGoods = new Aramis.AramisSearchLookUpEdit();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.Contractor = new Aramis.AramisSearchLookUpEdit();
@@ -65,11 +65,12 @@
             this.OrderInvoiceColumns = new DevExpress.XtraEditors.CheckEdit();
             this.SaveOriginalRowsSet = new DevExpress.XtraEditors.CheckEdit();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.Graph31Prefix = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.DateFormatStr = new DevExpress.XtraEditors.TextEdit();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
-            this.Graph31Prefix = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
+            this.EliminateRowsFooter = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SubGroupOfGoods.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -86,10 +87,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.SaveOriginalRowsSet.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DateFormatStr.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -105,7 +107,7 @@
             this.ribbon.MaxItemId = 4;
             this.ribbon.Name = "ribbon";
             this.ribbon.Size = new System.Drawing.Size(786, 27);
-            this.ribbon.StatusBar = this.ColumnsMappingsButtonsBar;
+            this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
             // btnOk
             // 
@@ -133,16 +135,6 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
-            // ribbonStatusBar
-            // 
-            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
-            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 364);
-            this.ribbonStatusBar.Name = "ribbonStatusBar";
-            this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(786, 31);
-            // 
             // ColumnsMappingsButtonsBar
             // 
             this.ColumnsMappingsButtonsBar.Dock = System.Windows.Forms.DockStyle.Top;
@@ -150,6 +142,16 @@
             this.ColumnsMappingsButtonsBar.Name = "ColumnsMappingsButtonsBar";
             this.ColumnsMappingsButtonsBar.Ribbon = this.ribbon;
             this.ColumnsMappingsButtonsBar.Size = new System.Drawing.Size(782, 27);
+            // 
+            // ribbonStatusBar
+            // 
+            this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
+            this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 418);
+            this.ribbonStatusBar.Name = "ribbonStatusBar";
+            this.ribbonStatusBar.Ribbon = this.ribbon;
+            this.ribbonStatusBar.Size = new System.Drawing.Size(786, 31);
             // 
             // SubGroupOfGoods
             // 
@@ -271,7 +273,7 @@
             this.ColumnsMappingsControl.Location = new System.Drawing.Point(2, 29);
             this.ColumnsMappingsControl.MainView = this.gridView1;
             this.ColumnsMappingsControl.Name = "ColumnsMappingsControl";
-            this.ColumnsMappingsControl.Size = new System.Drawing.Size(782, 104);
+            this.ColumnsMappingsControl.Size = new System.Drawing.Size(782, 133);
             this.ColumnsMappingsControl.TabIndex = 191;
             this.ColumnsMappingsControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -352,7 +354,7 @@
             // 
             // labelControl7
             // 
-            this.labelControl7.Location = new System.Drawing.Point(292, 148);
+            this.labelControl7.Location = new System.Drawing.Point(292, 174);
             this.labelControl7.Name = "labelControl7";
             this.labelControl7.Size = new System.Drawing.Size(255, 13);
             this.labelControl7.TabIndex = 222;
@@ -360,21 +362,21 @@
             // 
             // GrafSwitchValue
             // 
-            this.GrafSwitchValue.Location = new System.Drawing.Point(553, 145);
+            this.GrafSwitchValue.Location = new System.Drawing.Point(553, 171);
             this.GrafSwitchValue.Name = "GrafSwitchValue";
             this.GrafSwitchValue.Size = new System.Drawing.Size(223, 20);
             this.GrafSwitchValue.TabIndex = 223;
             // 
             // ColumnIndexForGrafShoes
             // 
-            this.ColumnIndexForGrafShoes.Location = new System.Drawing.Point(156, 146);
+            this.ColumnIndexForGrafShoes.Location = new System.Drawing.Point(156, 172);
             this.ColumnIndexForGrafShoes.Name = "ColumnIndexForGrafShoes";
             this.ColumnIndexForGrafShoes.Size = new System.Drawing.Size(119, 20);
             this.ColumnIndexForGrafShoes.TabIndex = 228;
             // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(8, 149);
+            this.labelControl3.Location = new System.Drawing.Point(9, 175);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(106, 13);
             this.labelControl3.TabIndex = 227;
@@ -415,6 +417,7 @@
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.EliminateRowsFooter);
             this.panelControl1.Controls.Add(this.Graph31Prefix);
             this.panelControl1.Controls.Add(this.labelControl9);
             this.panelControl1.Controls.Add(this.DateFormatStr);
@@ -443,19 +446,34 @@
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControl1.Location = new System.Drawing.Point(0, 27);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(786, 202);
+            this.panelControl1.Size = new System.Drawing.Size(786, 227);
             this.panelControl1.TabIndex = 244;
+            // 
+            // Graph31Prefix
+            // 
+            this.Graph31Prefix.Location = new System.Drawing.Point(156, 196);
+            this.Graph31Prefix.Name = "Graph31Prefix";
+            this.Graph31Prefix.Size = new System.Drawing.Size(119, 20);
+            this.Graph31Prefix.TabIndex = 244;
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(9, 200);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(139, 13);
+            this.labelControl9.TabIndex = 243;
+            this.labelControl9.Text = "Префикс в шапке графы 31";
             // 
             // DateFormatStr
             // 
-            this.DateFormatStr.Location = new System.Drawing.Point(553, 172);
+            this.DateFormatStr.Location = new System.Drawing.Point(553, 196);
             this.DateFormatStr.Name = "DateFormatStr";
             this.DateFormatStr.Size = new System.Drawing.Size(223, 20);
             this.DateFormatStr.TabIndex = 242;
             // 
             // labelControl8
             // 
-            this.labelControl8.Location = new System.Drawing.Point(292, 176);
+            this.labelControl8.Location = new System.Drawing.Point(292, 200);
             this.labelControl8.Name = "labelControl8";
             this.labelControl8.Size = new System.Drawing.Size(255, 13);
             this.labelControl8.TabIndex = 241;
@@ -466,32 +484,27 @@
             this.panelControl2.Controls.Add(this.ColumnsMappingsControl);
             this.panelControl2.Controls.Add(this.ColumnsMappingsButtonsBar);
             this.panelControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl2.Location = new System.Drawing.Point(0, 229);
+            this.panelControl2.Location = new System.Drawing.Point(0, 254);
             this.panelControl2.Name = "panelControl2";
-            this.panelControl2.Size = new System.Drawing.Size(786, 135);
+            this.panelControl2.Size = new System.Drawing.Size(786, 164);
             this.panelControl2.TabIndex = 245;
             // 
-            // Graph31Prefix
+            // EliminateRowsFooter
             // 
-            this.Graph31Prefix.Location = new System.Drawing.Point(156, 172);
-            this.Graph31Prefix.Name = "Graph31Prefix";
-            this.Graph31Prefix.Size = new System.Drawing.Size(119, 20);
-            this.Graph31Prefix.TabIndex = 244;
-            // 
-            // labelControl9
-            // 
-            this.labelControl9.Location = new System.Drawing.Point(8, 176);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(139, 13);
-            this.labelControl9.TabIndex = 243;
-            this.labelControl9.Text = "Префикс в шапке графы 31";
+            this.EliminateRowsFooter.Location = new System.Drawing.Point(8, 145);
+            this.EliminateRowsFooter.MenuManager = this.ribbon;
+            this.EliminateRowsFooter.Name = "EliminateRowsFooter";
+            this.EliminateRowsFooter.Properties.AutoWidth = true;
+            this.EliminateRowsFooter.Properties.Caption = "Не добавлять приставку \"Разом\" в конце группы графы 31";
+            this.EliminateRowsFooter.Size = new System.Drawing.Size(323, 19);
+            this.EliminateRowsFooter.TabIndex = 245;
             // 
             // ExcelLoadingFormatItemForm
             // 
             this.AllowDisplayRibbon = false;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(786, 395);
+            this.ClientSize = new System.Drawing.Size(786, 449);
             this.Controls.Add(this.panelControl2);
             this.Controls.Add(this.panelControl1);
             this.Controls.Add(this.ribbonStatusBar);
@@ -517,10 +530,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DateFormatStr.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).EndInit();
             this.panelControl2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).EndInit();
             this.ResumeLayout(false);
 
             }
@@ -566,5 +580,6 @@
         private DevExpress.XtraEditors.PanelControl panelControl2;
         private DevExpress.XtraEditors.TextEdit Graph31Prefix;
         private DevExpress.XtraEditors.LabelControl labelControl9;
+        private DevExpress.XtraEditors.CheckEdit EliminateRowsFooter;
         }
     }
