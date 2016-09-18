@@ -1,43 +1,32 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using SystemInvoice.Catalogs.Forms;
-using SystemInvoice.DataProcessing.InvoiceProcessing.Filtering;
-using SystemInvoice.DataProcessing.InvoiceProcessing.Filtering.Dialog;
-using SystemInvoice.DataProcessing.InvoiceProcessing.Helpers;
-using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification;
-using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.CatalogsInTableSearch;
-using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.SpecificCachesManagement;
-using SystemInvoice.SystemObjects;
+﻿using Aramis.Core;
 using Aramis.DataBase;
+using Aramis.DatabaseConnector;
+using Aramis.Enums;
 using Aramis.UI;
+using Aramis.UI.WinFormsDevXpress;
 using AramisInfostructure.UI;
 using Catalogs;
 using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
-using Aramis.Attributes;
-using Aramis.Core;
-using Aramis.Enums;
-using Aramis.UI.WinFormsDevXpress;
-using System.IO;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
-using SystemInvoice.Excel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using SystemInvoice.Catalogs;
-using Aramis.DatabaseConnector;
-using SystemInvoice.DataProcessing;
+using SystemInvoice.Catalogs.Forms;
+using SystemInvoice.DataProcessing.ApprovalsProcessing;
+using SystemInvoice.DataProcessing.ApprovalsProcessing.ByNomenclatureUpdating;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.DataProcessing.InvoiceProcessing;
+using SystemInvoice.DataProcessing.InvoiceProcessing.Filtering;
 using SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking;
-using SystemInvoice.DataProcessing.ApprovalsProcessing.ByNomenclatureUpdating;
-using SystemInvoice.DataProcessing.ApprovalsProcessing;
-using DevExpress.XtraGrid;
-using TableViewInterfaces;
+using SystemInvoice.SystemObjects;
 
 namespace SystemInvoice.Documents.Forms
     {
@@ -669,8 +658,10 @@ namespace SystemInvoice.Documents.Forms
             if (this.filesManager.TryProcessNewDocument(filePath, lastUnloadUnprocessedFileName))
                 {
                 gridViewManager.SetLoaded();
-                //    isDocumentLoaded = true;
-                disableEditing();
+                if (!Invoice.ExcelLoadingFormat.ExportToCheckExcelManually)
+                    {
+                    disableEditing();
+                    }
                 }
             else
                 {

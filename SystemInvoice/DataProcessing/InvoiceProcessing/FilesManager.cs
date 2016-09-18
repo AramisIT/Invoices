@@ -24,9 +24,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         UnloadItemsInfo currentUnloadFileInfo = null;
         SystemInvoiceDBCache dbCache = null;
         InvoiceChecker checker = null;
+        private Invoice invoice;
 
         public FilesManager(Invoice invoice, SystemInvoiceDBCache dbCache, InvoiceChecker invoiceChecker, InvoiceLoadedDocumentHandler loadedDocumentHandler)
             {
+            this.invoice = invoice;
             this.dbCache = dbCache;
             this.checker = invoiceChecker;
             newDocumentLoader = new NewDocumentLoader(invoice, dbCache);
@@ -100,7 +102,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
                 if (isRelease)
                     {
                     this.checker.CheckTable(true);
-                    return unloadUnprocessed(saveFilePath, true);
+                    return invoice.ExcelLoadingFormat.ExportToCheckExcelManually || unloadUnprocessed(saveFilePath, true);
                     }
                 else
                     {

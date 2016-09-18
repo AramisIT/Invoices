@@ -71,6 +71,7 @@
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
             this.EliminateRowsFooter = new DevExpress.XtraEditors.CheckEdit();
+            this.ExportToCheckExcelManually = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SubGroupOfGoods.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -92,6 +93,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ExportToCheckExcelManually.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -417,6 +419,7 @@
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.ExportToCheckExcelManually);
             this.panelControl1.Controls.Add(this.EliminateRowsFooter);
             this.panelControl1.Controls.Add(this.Graph31Prefix);
             this.panelControl1.Controls.Add(this.labelControl9);
@@ -499,6 +502,16 @@
             this.EliminateRowsFooter.Size = new System.Drawing.Size(323, 19);
             this.EliminateRowsFooter.TabIndex = 245;
             // 
+            // ExportToCheckExcelManually
+            // 
+            this.ExportToCheckExcelManually.Location = new System.Drawing.Point(484, 145);
+            this.ExportToCheckExcelManually.MenuManager = this.ribbon;
+            this.ExportToCheckExcelManually.Name = "ExportToCheckExcelManually";
+            this.ExportToCheckExcelManually.Properties.AutoWidth = true;
+            this.ExportToCheckExcelManually.Properties.Caption = "Ручной режим выгрузки в Excel для корректировок";
+            this.ExportToCheckExcelManually.Size = new System.Drawing.Size(285, 19);
+            this.ExportToCheckExcelManually.TabIndex = 246;
+            // 
             // ExcelLoadingFormatItemForm
             // 
             this.AllowDisplayRibbon = false;
@@ -535,6 +548,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).EndInit();
             this.panelControl2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ExportToCheckExcelManually.Properties)).EndInit();
             this.ResumeLayout(false);
 
             }
@@ -581,5 +595,6 @@
         private DevExpress.XtraEditors.TextEdit Graph31Prefix;
         private DevExpress.XtraEditors.LabelControl labelControl9;
         private DevExpress.XtraEditors.CheckEdit EliminateRowsFooter;
+        private DevExpress.XtraEditors.CheckEdit ExportToCheckExcelManually;
         }
     }

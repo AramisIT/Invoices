@@ -66,7 +66,7 @@ namespace SystemInvoice.Catalogs
             }
         private bool z_UseMaxBordersWithNomenclatureCreating;
 
-        [DataField(Description = "Использовать максимальные рамки нетто при создании номенклатуры")]
+        [DataField(Description = "")]
         public bool EliminateRowsFooter
             {
             get
@@ -85,6 +85,26 @@ namespace SystemInvoice.Catalogs
                 }
             }
         private bool z_EliminateRowsFooter;
+
+        [DataField(Description = "")]
+        public bool ExportToCheckExcelManually
+            {
+            get
+                {
+                return z_ExportToCheckExcelManually;
+                }
+            set
+                {
+                if (z_ExportToCheckExcelManually == value)
+                    {
+                    return;
+                    }
+
+                z_ExportToCheckExcelManually = value;
+                NotifyPropertyChanged("ExportToCheckExcelManually");
+                }
+            }
+        private bool z_ExportToCheckExcelManually;
 
         [DataField(Description = "Упорядочивать строки в документе")]
         public bool OrderInvoiceColumns
