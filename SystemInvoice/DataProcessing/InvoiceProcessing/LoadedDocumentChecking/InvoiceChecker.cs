@@ -148,7 +148,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
             raiseErorCountChanged();
             }
 
-        
+
         private bool isRowLoaded(int rowIndex)
             {
             return errors.IsRowLoaded(rowIndex);
@@ -255,6 +255,34 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
                     }
                 }
             return columnErrorsCount;
+            }
+
+        public bool PriceAndInternalCodeIsCorrect()
+            {
+            var priceColumnName = InvoiceColumnNames.Price.ToString();
+            var wareCodeColumnName = InvoiceColumnNames.CustomsCodeIntern.ToString();
+
+            foreach (var kvp in errors)
+                {
+                RowColumnsErrors rowColumnError = kvp.Value;
+                var rowNumber = kvp.Key + 1;
+
+                if (rowColumnError.ContainsKey(priceColumnName))
+                    {
+                    string.Format(@"Ошибка в цене, стр. № {0}.
+Данный формат загрузки запрещает выгрузку с неверной ценой!", rowNumber).ErrorBox();
+                    return false;
+                    }
+
+                if (rowColumnError.ContainsKey(wareCodeColumnName))
+                    {
+                    string.Format(@"Ошибка в коде товара, стр. № {0}.
+Данный формат загрузки запрещает выгрузку с неверным кодом товара!", rowNumber).ErrorBox();
+                    return false;
+                    }
+                }
+
+            return true;
             }
 
         public int GetTotalErrorsCount()

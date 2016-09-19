@@ -79,6 +79,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             Dictionary<DataRow, string> headers = this.getGrafRowHeaders(tableToProcess);
             Dictionary<DataRow, string> footers = this.getGrafRowHFooters(tableToProcess);
             List<ResultBuilder> currentBuilders = null;
+            var eliminateEmptySize = invoice.ExcelLoadingFormat.EliminateEmptySize;
             foreach (DataRow row in tableToProcess.Rows)
                 {
                 string filterGrafStrValue = row.TrySafeGetColumnValue<string>(Graf31SwitchColumnName, "");
@@ -91,6 +92,18 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     currentBuilders = builders;
                     }
                 string graf31Content = this.getGrafContent(footers, headers, currentBuilders, row);
+
+                if (eliminateEmptySize)
+                    {
+                    const string STRING_TO_ELIMINATE = " розмір NOSIZE";
+                    var pos = graf31Content.IndexOf(STRING_TO_ELIMINATE, StringComparison.OrdinalIgnoreCase);
+                    if (pos >= 0)
+                        {
+                        graf31Content = graf31Content.Substring(0, pos) +
+                                        graf31Content.Substring(pos + STRING_TO_ELIMINATE.Length);
+                        }
+                    }
+
                 row[InvoiceColumnNames.Graf31.ToString()] = graf31Content;
                 }
             }

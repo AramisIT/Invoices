@@ -407,6 +407,12 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing
         /// </summary>
         public void onCellSelect()
             {
+            if (lastFocusedRow >= Invoice.Goods.Rows.Count)
+                {
+                lastFocusedRow = Invoice.Goods.Rows.Count > 0 ? 0 : -1;
+                return;
+                }
+
             if (invoiceChecker == null || mainView == null || Invoice == null)
                 {
                 return;

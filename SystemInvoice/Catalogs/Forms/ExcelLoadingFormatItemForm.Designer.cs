@@ -65,13 +65,15 @@
             this.OrderInvoiceColumns = new DevExpress.XtraEditors.CheckEdit();
             this.SaveOriginalRowsSet = new DevExpress.XtraEditors.CheckEdit();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.CheckPriceCodeBeforeExport = new DevExpress.XtraEditors.CheckEdit();
+            this.ExportToCheckExcelManually = new DevExpress.XtraEditors.CheckEdit();
+            this.EliminateRowsFooter = new DevExpress.XtraEditors.CheckEdit();
             this.Graph31Prefix = new DevExpress.XtraEditors.TextEdit();
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.DateFormatStr = new DevExpress.XtraEditors.TextEdit();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
-            this.EliminateRowsFooter = new DevExpress.XtraEditors.CheckEdit();
-            this.ExportToCheckExcelManually = new DevExpress.XtraEditors.CheckEdit();
+            this.EliminateEmptySize = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SubGroupOfGoods.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Contractor.Properties)).BeginInit();
@@ -88,12 +90,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.SaveOriginalRowsSet.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckPriceCodeBeforeExport.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ExportToCheckExcelManually.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DateFormatStr.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).BeginInit();
             this.panelControl2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ExportToCheckExcelManually.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EliminateEmptySize.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // ribbon
@@ -150,7 +154,7 @@
             this.ribbonStatusBar.ItemLinks.Add(this.btnOk);
             this.ribbonStatusBar.ItemLinks.Add(this.btnWrite);
             this.ribbonStatusBar.ItemLinks.Add(this.btnCancel);
-            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 418);
+            this.ribbonStatusBar.Location = new System.Drawing.Point(0, 477);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
             this.ribbonStatusBar.Size = new System.Drawing.Size(786, 31);
@@ -275,7 +279,7 @@
             this.ColumnsMappingsControl.Location = new System.Drawing.Point(2, 29);
             this.ColumnsMappingsControl.MainView = this.gridView1;
             this.ColumnsMappingsControl.Name = "ColumnsMappingsControl";
-            this.ColumnsMappingsControl.Size = new System.Drawing.Size(782, 133);
+            this.ColumnsMappingsControl.Size = new System.Drawing.Size(782, 166);
             this.ColumnsMappingsControl.TabIndex = 191;
             this.ColumnsMappingsControl.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1,
@@ -356,7 +360,7 @@
             // 
             // labelControl7
             // 
-            this.labelControl7.Location = new System.Drawing.Point(292, 174);
+            this.labelControl7.Location = new System.Drawing.Point(292, 200);
             this.labelControl7.Name = "labelControl7";
             this.labelControl7.Size = new System.Drawing.Size(255, 13);
             this.labelControl7.TabIndex = 222;
@@ -364,21 +368,21 @@
             // 
             // GrafSwitchValue
             // 
-            this.GrafSwitchValue.Location = new System.Drawing.Point(553, 171);
+            this.GrafSwitchValue.Location = new System.Drawing.Point(553, 197);
             this.GrafSwitchValue.Name = "GrafSwitchValue";
             this.GrafSwitchValue.Size = new System.Drawing.Size(223, 20);
             this.GrafSwitchValue.TabIndex = 223;
             // 
             // ColumnIndexForGrafShoes
             // 
-            this.ColumnIndexForGrafShoes.Location = new System.Drawing.Point(156, 172);
+            this.ColumnIndexForGrafShoes.Location = new System.Drawing.Point(156, 198);
             this.ColumnIndexForGrafShoes.Name = "ColumnIndexForGrafShoes";
             this.ColumnIndexForGrafShoes.Size = new System.Drawing.Size(119, 20);
             this.ColumnIndexForGrafShoes.TabIndex = 228;
             // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(9, 175);
+            this.labelControl3.Location = new System.Drawing.Point(9, 201);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(106, 13);
             this.labelControl3.TabIndex = 227;
@@ -419,6 +423,8 @@
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.EliminateEmptySize);
+            this.panelControl1.Controls.Add(this.CheckPriceCodeBeforeExport);
             this.panelControl1.Controls.Add(this.ExportToCheckExcelManually);
             this.panelControl1.Controls.Add(this.EliminateRowsFooter);
             this.panelControl1.Controls.Add(this.Graph31Prefix);
@@ -449,58 +455,18 @@
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControl1.Location = new System.Drawing.Point(0, 27);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(786, 227);
+            this.panelControl1.Size = new System.Drawing.Size(786, 253);
             this.panelControl1.TabIndex = 244;
             // 
-            // Graph31Prefix
+            // CheckPriceCodeBeforeExport
             // 
-            this.Graph31Prefix.Location = new System.Drawing.Point(156, 196);
-            this.Graph31Prefix.Name = "Graph31Prefix";
-            this.Graph31Prefix.Size = new System.Drawing.Size(119, 20);
-            this.Graph31Prefix.TabIndex = 244;
-            // 
-            // labelControl9
-            // 
-            this.labelControl9.Location = new System.Drawing.Point(9, 200);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(139, 13);
-            this.labelControl9.TabIndex = 243;
-            this.labelControl9.Text = "Префикс в шапке графы 31";
-            // 
-            // DateFormatStr
-            // 
-            this.DateFormatStr.Location = new System.Drawing.Point(553, 196);
-            this.DateFormatStr.Name = "DateFormatStr";
-            this.DateFormatStr.Size = new System.Drawing.Size(223, 20);
-            this.DateFormatStr.TabIndex = 242;
-            // 
-            // labelControl8
-            // 
-            this.labelControl8.Location = new System.Drawing.Point(292, 200);
-            this.labelControl8.Name = "labelControl8";
-            this.labelControl8.Size = new System.Drawing.Size(255, 13);
-            this.labelControl8.TabIndex = 241;
-            this.labelControl8.Text = "Формат даты при выгрузке в Excel (разр. док-ты)";
-            // 
-            // panelControl2
-            // 
-            this.panelControl2.Controls.Add(this.ColumnsMappingsControl);
-            this.panelControl2.Controls.Add(this.ColumnsMappingsButtonsBar);
-            this.panelControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl2.Location = new System.Drawing.Point(0, 254);
-            this.panelControl2.Name = "panelControl2";
-            this.panelControl2.Size = new System.Drawing.Size(786, 164);
-            this.panelControl2.TabIndex = 245;
-            // 
-            // EliminateRowsFooter
-            // 
-            this.EliminateRowsFooter.Location = new System.Drawing.Point(8, 145);
-            this.EliminateRowsFooter.MenuManager = this.ribbon;
-            this.EliminateRowsFooter.Name = "EliminateRowsFooter";
-            this.EliminateRowsFooter.Properties.AutoWidth = true;
-            this.EliminateRowsFooter.Properties.Caption = "Не добавлять приставку \"Разом\" в конце группы графы 31";
-            this.EliminateRowsFooter.Size = new System.Drawing.Size(323, 19);
-            this.EliminateRowsFooter.TabIndex = 245;
+            this.CheckPriceCodeBeforeExport.Location = new System.Drawing.Point(8, 170);
+            this.CheckPriceCodeBeforeExport.MenuManager = this.ribbon;
+            this.CheckPriceCodeBeforeExport.Name = "CheckPriceCodeBeforeExport";
+            this.CheckPriceCodeBeforeExport.Properties.AutoWidth = true;
+            this.CheckPriceCodeBeforeExport.Properties.Caption = "Запрет на выгрузку при ошибках в цене или внутр. коде";
+            this.CheckPriceCodeBeforeExport.Size = new System.Drawing.Size(315, 19);
+            this.CheckPriceCodeBeforeExport.TabIndex = 247;
             // 
             // ExportToCheckExcelManually
             // 
@@ -512,12 +478,72 @@
             this.ExportToCheckExcelManually.Size = new System.Drawing.Size(285, 19);
             this.ExportToCheckExcelManually.TabIndex = 246;
             // 
+            // EliminateRowsFooter
+            // 
+            this.EliminateRowsFooter.Location = new System.Drawing.Point(8, 145);
+            this.EliminateRowsFooter.MenuManager = this.ribbon;
+            this.EliminateRowsFooter.Name = "EliminateRowsFooter";
+            this.EliminateRowsFooter.Properties.AutoWidth = true;
+            this.EliminateRowsFooter.Properties.Caption = "Не добавлять приставку \"Разом\" в конце группы графы 31";
+            this.EliminateRowsFooter.Size = new System.Drawing.Size(323, 19);
+            this.EliminateRowsFooter.TabIndex = 245;
+            // 
+            // Graph31Prefix
+            // 
+            this.Graph31Prefix.Location = new System.Drawing.Point(156, 222);
+            this.Graph31Prefix.Name = "Graph31Prefix";
+            this.Graph31Prefix.Size = new System.Drawing.Size(119, 20);
+            this.Graph31Prefix.TabIndex = 244;
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(9, 226);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(139, 13);
+            this.labelControl9.TabIndex = 243;
+            this.labelControl9.Text = "Префикс в шапке графы 31";
+            // 
+            // DateFormatStr
+            // 
+            this.DateFormatStr.Location = new System.Drawing.Point(553, 222);
+            this.DateFormatStr.Name = "DateFormatStr";
+            this.DateFormatStr.Size = new System.Drawing.Size(223, 20);
+            this.DateFormatStr.TabIndex = 242;
+            // 
+            // labelControl8
+            // 
+            this.labelControl8.Location = new System.Drawing.Point(292, 226);
+            this.labelControl8.Name = "labelControl8";
+            this.labelControl8.Size = new System.Drawing.Size(255, 13);
+            this.labelControl8.TabIndex = 241;
+            this.labelControl8.Text = "Формат даты при выгрузке в Excel (разр. док-ты)";
+            // 
+            // panelControl2
+            // 
+            this.panelControl2.Controls.Add(this.ColumnsMappingsControl);
+            this.panelControl2.Controls.Add(this.ColumnsMappingsButtonsBar);
+            this.panelControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelControl2.Location = new System.Drawing.Point(0, 280);
+            this.panelControl2.Name = "panelControl2";
+            this.panelControl2.Size = new System.Drawing.Size(786, 197);
+            this.panelControl2.TabIndex = 245;
+            // 
+            // EliminateEmptySize
+            // 
+            this.EliminateEmptySize.Location = new System.Drawing.Point(484, 170);
+            this.EliminateEmptySize.MenuManager = this.ribbon;
+            this.EliminateEmptySize.Name = "EliminateEmptySize";
+            this.EliminateEmptySize.Properties.AutoWidth = true;
+            this.EliminateEmptySize.Properties.Caption = "Не добавлять размер \"NOSIZE\"";
+            this.EliminateEmptySize.Size = new System.Drawing.Size(180, 19);
+            this.EliminateEmptySize.TabIndex = 248;
+            // 
             // ExcelLoadingFormatItemForm
             // 
             this.AllowDisplayRibbon = false;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(786, 449);
+            this.ClientSize = new System.Drawing.Size(786, 508);
             this.Controls.Add(this.panelControl2);
             this.Controls.Add(this.panelControl1);
             this.Controls.Add(this.ribbonStatusBar);
@@ -543,12 +569,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckPriceCodeBeforeExport.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ExportToCheckExcelManually.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Graph31Prefix.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DateFormatStr.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl2)).EndInit();
             this.panelControl2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.EliminateRowsFooter.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ExportToCheckExcelManually.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EliminateEmptySize.Properties)).EndInit();
             this.ResumeLayout(false);
 
             }
@@ -596,5 +624,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl9;
         private DevExpress.XtraEditors.CheckEdit EliminateRowsFooter;
         private DevExpress.XtraEditors.CheckEdit ExportToCheckExcelManually;
+        private DevExpress.XtraEditors.CheckEdit CheckPriceCodeBeforeExport;
+        private DevExpress.XtraEditors.CheckEdit EliminateEmptySize;
         }
     }

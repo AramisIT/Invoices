@@ -567,6 +567,9 @@ namespace SystemInvoice.Documents.Forms
 
         private void unloadProcessedBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
+            if (Invoice.ExcelLoadingFormat.CheckPriceCodeBeforeExport
+               && !invoiceChecker.PriceAndInternalCodeIsCorrect()) return;
+
             string appendix = "_обработан.xls";
             string loadPath = this.ExcelFilePathSource.Text;
             string savePath = getSubFileName(appendix, loadPath);
@@ -690,6 +693,10 @@ namespace SystemInvoice.Documents.Forms
                 {
                 return;
                 }
+
+            if (Invoice.ExcelLoadingFormat.CheckPriceCodeBeforeExport
+                && !invoiceChecker.PriceAndInternalCodeIsCorrect()) return;
+
             clearDots();
             if (this.filesManager.TrySaveErrorsToEdit(lastUnloadUnprocessedFileName))
                 {

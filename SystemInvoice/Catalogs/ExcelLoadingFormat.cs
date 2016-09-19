@@ -66,6 +66,28 @@ namespace SystemInvoice.Catalogs
             }
         private bool z_UseMaxBordersWithNomenclatureCreating;
 
+
+
+        [DataField(Description = "")]
+        public bool CheckPriceCodeBeforeExport
+            {
+            get
+                {
+                return z_CheckPriceCodeBeforeExport;
+                }
+            set
+                {
+                if (z_CheckPriceCodeBeforeExport == value)
+                    {
+                    return;
+                    }
+
+                z_CheckPriceCodeBeforeExport = value;
+                NotifyPropertyChanged("CheckPriceCodeBeforeExport");
+                }
+            }
+        private bool z_CheckPriceCodeBeforeExport;
+
         [DataField(Description = "")]
         public bool EliminateRowsFooter
             {
@@ -85,6 +107,27 @@ namespace SystemInvoice.Catalogs
                 }
             }
         private bool z_EliminateRowsFooter;
+
+        [DataField(Description = "")]
+        public bool EliminateEmptySize
+            {
+            get
+                {
+                return z_EliminateEmptySize;
+                }
+            set
+                {
+                if (z_EliminateEmptySize == value)
+                    {
+                    return;
+                    }
+
+                z_EliminateEmptySize = value;
+                NotifyPropertyChanged("EliminateEmptySize");
+                }
+            }
+        private bool z_EliminateEmptySize;
+
 
         [DataField(Description = "")]
         public bool ExportToCheckExcelManually
