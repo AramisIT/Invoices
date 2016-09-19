@@ -77,8 +77,34 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
             return finalContent;
             }
 
+        private static string checkSpaceBars(string input)
+            {
+            var result = new StringBuilder();
+            const char spaceBar = ' ';
+            const char comma = ',';
+
+            char lastChar = spaceBar;
+            foreach (var _char in input)
+                {
+                if (Char.IsDigit(_char))
+                    {
+                    if (Char.IsLetter(lastChar))
+                        {
+                        result.Append(comma);
+                        result.Append(spaceBar);
+                        }
+                    }
+
+                result.Append(_char);
+                lastChar = _char;
+                }
+
+            return result.ToString();
+            }
+
         private string[] getContentParts(string content)
             {
+            content = checkSpaceBars(content).Replace(',', ' ');
             string[] splitted = content.Split(new string[] { " ", "\r", "\t" }, StringSplitOptions.RemoveEmptyEntries);
             List<string> parts = new List<string>();
             foreach (string splitPart in splitted)
