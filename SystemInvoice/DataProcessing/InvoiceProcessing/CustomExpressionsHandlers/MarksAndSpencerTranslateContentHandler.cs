@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using SystemInvoice.DataProcessing.Cache;
 using SystemInvoice.DataProcessing.Cache.PropertyTypesCache;
 
@@ -43,7 +44,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
                     string next = splitted[j];
                     foreach (char c in next)
                         {
-                        if (!Char.IsDigit(c) && !c.Equals('%'))
+                        if (!Char.IsDigit(c) && !c.Equals('%') && !c.Equals('.'))
                             {
                             isNextNumeric = false;
                             break;
@@ -104,15 +105,24 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
 
         private string[] getContentParts(string content)
             {
-            content = checkSpaceBars(content).Replace(',', ' ');
+            content = checkSpaceBars(content);
+
+            content = Regex.Replace(content, @"(\d+[,]\d+)", delegate(Match match)
+            {
+                string val = match.ToString();
+                return val.Replace(',', '.');
+            });
+
             string[] splitted = content.Split(new string[] { " ", "\r", "\t" }, StringSplitOptions.RemoveEmptyEntries);
             List<string> parts = new List<string>();
             foreach (string splitPart in splitted)
                 {
+                var isPercent = splitPart.EndsWith("%");
                 int i = 0;
                 for (; i < splitPart.Length; i++)
                     {
-                    if (!Char.IsDigit(splitPart[i]))
+                    if (!Char.IsDigit(splitPart[i])
+                        && (!isPercent || (splitPart[i] != '.' && splitPart[i] != ',')))
                         {
                         break;
                         }
@@ -121,11 +131,13 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
                 string contentPart = splitPart.Substring(i, splitPart.Length - i);
                 if (!string.IsNullOrEmpty(digitPart))
                     {
-                    parts.Add(digitPart);
+                    parts.Add(digitPart.Replace(',', '.'));
                     }
                 if (!string.IsNullOrEmpty(contentPart) && !contentPart.Equals("%"))
                     {
-                    parts.Add(contentPart.Replace(",", "").Replace(";", "").Replace(".", ""));
+                    parts.Add(contentPart
+                        .Replace(",", "")
+                        .Replace(";", "").Replace(".", ""));
                     }
                 }
             return parts.ToArray();

@@ -1,35 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Aramis.Attributes;
+using Aramis.Core;
+using Aramis.DataBase;
+using Aramis.DatabaseConnector;
+using AramisInfrastructure.UI;
+using Excel;
+using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModification.ApprovalsModification;
-using SystemInvoice.Excel;
-using SystemInvoice.Utils;
-using SystemInvoice.Utils.Excel;
-using Aramis.Attributes;
-using Aramis.Core;
-using Aramis.DataBase;
-using Aramis.DatabaseConnector;
-using System;
 using SystemInvoice.Catalogs;
 using SystemInvoice.Documents;
-using Aramis.Extensions;
-using Aramis.SystemConfigurations;
-using Aramis.UI.WinFormsDevXpress;
-using AramisInfrastructure.UI;
-using AramisWpfComponents.Excel;
-using Excel;
-using NPOI.HSSF.Record.Formula.Functions;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
+using SystemInvoice.Utils;
+using SystemInvoice.Utils.Excel;
 using TableViewInterfaces;
-using Cell = AramisWpfComponents.Excel.Cell;
-using Row = AramisWpfComponents.Excel.Row;
 
 namespace SystemInvoice.SystemObjects
     {
