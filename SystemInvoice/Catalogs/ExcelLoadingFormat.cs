@@ -67,7 +67,6 @@ namespace SystemInvoice.Catalogs
         private bool z_UseMaxBordersWithNomenclatureCreating;
 
 
-
         [DataField(Description = "")]
         public bool CheckPriceCodeBeforeExport
             {
@@ -149,7 +148,7 @@ namespace SystemInvoice.Catalogs
             }
         private bool z_ExportToCheckExcelManually;
 
-        [DataField(Description = "Упорядочивать строки в документе")]
+        [DataField(Description = "Упорядочивать столбцы в документе")]
         public bool OrderInvoiceColumns
             {
             get

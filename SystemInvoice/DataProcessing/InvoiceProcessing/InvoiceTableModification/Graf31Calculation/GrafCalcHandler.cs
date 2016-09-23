@@ -213,7 +213,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             string wordPrepared = customsCodeDescription.Replace(".", " .").Replace(",", " ,").Replace(":", " :").Replace(";", " ;").Replace("-", " -");
             string[] parts = wordPrepared.Split(new string[] { " ", "\t", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            var resultBuilder = new StringBuilder(invoice.ExcelLoadingFormat.Graph31Prefix.TrimEnd());
+            var resultBuilder = new StringBuilder();
             for (int i = 0; i < parts.Length; i++)
                 {
                 string part = parts[i];
@@ -242,18 +242,15 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                     }
                 resultBuilder.Append(part);
                 }
-            string upperCaseStr = resultBuilder.ToString().TrimStart();
-            string upperPart = string.Empty;
-            string lowerPart = string.Empty;
-            if (upperCaseStr.Length >= 1)
+
+            resultBuilder = new StringBuilder(resultBuilder.ToString().TrimStart());
+            if (resultBuilder.Length > 0)
                 {
-                upperPart = upperCaseStr.Substring(0, 1).ToUpper();
+                resultBuilder[0] = resultBuilder[0].ToString().ToUpper()[0];
                 }
-            if (upperCaseStr.Length > 1)
-                {
-                lowerPart = upperCaseStr.Substring(1, upperCaseStr.Length - 1).ToLower();
-                }
-            return string.Concat(upperPart, lowerPart);
+
+            resultBuilder.Insert(0, invoice.ExcelLoadingFormat.Graph31Prefix.TrimEnd());
+            return resultBuilder.ToString();
             }
 
         private int checkContentWords(int i, string[] parts, StringBuilder resultBuilder, HashSet<string> existedWords)

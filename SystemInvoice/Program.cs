@@ -1,8 +1,8 @@
 ﻿using Aramis;
 using Aramis.Platform;
 using AramisDesktopUserInterface;
-using System;
 using Catalogs;
+using System;
 
 namespace SystemInvoice
     {

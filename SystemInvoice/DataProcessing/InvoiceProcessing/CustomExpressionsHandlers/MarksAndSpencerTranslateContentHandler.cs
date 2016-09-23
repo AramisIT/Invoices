@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using SystemInvoice.DataProcessing.Cache;
-using SystemInvoice.DataProcessing.Cache.PropertyTypesCache;
 
 namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandlers
     {
