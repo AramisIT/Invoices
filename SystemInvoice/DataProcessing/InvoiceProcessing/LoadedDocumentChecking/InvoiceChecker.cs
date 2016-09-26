@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using SystemInvoice.DataProcessing.Cache;
 using System.Data;
 using SystemInvoice.Excel;
@@ -262,6 +263,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
             var priceColumnName = InvoiceColumnNames.Price.ToString();
             var wareCodeColumnName = InvoiceColumnNames.CustomsCodeIntern.ToString();
 
+            var pricesErrors = new StringBuilder();
             foreach (var kvp in errors)
                 {
                 RowColumnsErrors rowColumnError = kvp.Value;
@@ -269,8 +271,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
 
                 if (rowColumnError.ContainsKey(priceColumnName))
                     {
-                    string.Format(@"Ошибка в цене, стр. № {0}.
-Данный формат загрузки запрещает выгрузку с неверной ценой!", rowNumber).ErrorBox();
+                    pricesErrors.AppendLine(string.Format(@"№ {0}", rowNumber));
                     return false;
                     }
 
@@ -280,6 +281,15 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
 Данный формат загрузки запрещает выгрузку с неверным кодом товара!", rowNumber).ErrorBox();
                     return false;
                     }
+                }
+
+            if (pricesErrors.Length > 0)
+                {
+                var message = string.Format(@"Перечень строк с ошибками в поле ""Цена"":
+{0}
+
+Продолжить выгрузку?", pricesErrors);
+                return message.Ask();
                 }
 
             return true;
