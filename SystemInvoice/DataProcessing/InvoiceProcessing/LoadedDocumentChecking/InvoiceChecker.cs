@@ -272,7 +272,6 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.LoadedDocumentChecking
                 if (rowColumnError.ContainsKey(priceColumnName))
                     {
                     pricesErrors.AppendLine(string.Format(@"№ {0}", rowNumber));
-                    return false;
                     }
 
                 if (rowColumnError.ContainsKey(wareCodeColumnName))
