@@ -25,7 +25,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
                 {
                 return string.Empty;
                 }
-            string content = (string)parameters[0];
+            string content = ((string)parameters[0]).Replace(",", ", ");
             string finalContent = "";
             string[] splitted = getContentParts(content);
             for (int i = 0; i < splitted.Length; i += 2)
@@ -106,11 +106,11 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
             {
             content = checkSpaceBars(content);
 
-            content = Regex.Replace(content, @"(\d+[,]\d+)", delegate(Match match)
+            content = Regex.Replace(content, @"(\d+[,]\d+)", delegate (Match match)
             {
                 string val = match.ToString();
                 return val.Replace(',', '.');
-            });
+                });
 
             string[] splitted = content.Split(new string[] { " ", "\r", "\t" }, StringSplitOptions.RemoveEmptyEntries);
             List<string> parts = new List<string>();
