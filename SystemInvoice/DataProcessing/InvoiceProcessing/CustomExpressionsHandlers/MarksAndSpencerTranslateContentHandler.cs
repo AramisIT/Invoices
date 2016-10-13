@@ -25,7 +25,23 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.CustomExpressionsHandle
                 {
                 return string.Empty;
                 }
-            string content = ((string)parameters[0]).Replace(",", ", ");
+
+            string content = (string)parameters[0];
+            var initialData = new StringBuilder();
+            for (int charIndex = 0; charIndex < content.Length; charIndex += 1)
+                {
+                var _char = content[charIndex];
+
+                initialData.Append(_char);
+                if (_char == ','
+                    && ((charIndex != (content.Length - 1) && !char.IsDigit(content[charIndex + 1]))
+                    || (charIndex != 0 && !char.IsDigit(content[charIndex - 1]))))
+                    {
+                    initialData.Append(' ');
+                    }
+                }
+            content = initialData.ToString();
+
             string finalContent = "";
             string[] splitted = getContentParts(content);
             for (int i = 0; i < splitted.Length; i += 2)
