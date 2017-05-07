@@ -16,6 +16,19 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
             {
             this.needGroupping = needGroupping;
             }
+
+        private DataRow createRowCopy(DataRow row)
+            {
+            var table = row.Table;
+            var rowCopy = table.NewRow();
+            foreach (DataColumn column in table.Columns)
+                {
+                rowCopy[column] = row[column];
+                }
+
+            return rowCopy;
+            }
+
         /// <summary>
         /// Выполняет группировку строк в таблице
         /// </summary>
@@ -39,11 +52,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 {
                 if (accRow == null)
                     {
-                    accRow = tableToProcess.NewRow();
-                    foreach (DataColumn column in tableToProcess.Columns)
-                        {
-                        accRow[column] = row[column];
-                        }
+                    accRow = createRowCopy(row);
                     continue;
                     }
                 if (rowComparer.Equals(accRow, row))//проверяем входит ли строка в текущую группу
@@ -53,11 +62,7 @@ namespace SystemInvoice.DataProcessing.InvoiceProcessing.InvoiceTableModificatio
                 else
                     {//добавляем сгруппированную строку в список и начинаем новую группу
                     newRows.Add(accRow);
-                    accRow = tableToProcess.NewRow();
-                    foreach (DataColumn column in tableToProcess.Columns)
-                        {
-                        accRow[column] = row[column];
-                        }
+                    accRow = createRowCopy(row);
                     }
                 }
             if (accRow != null)
