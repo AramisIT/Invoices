@@ -9,12 +9,17 @@ using DevExpress.LookAndFeel;
 using DevExpress.Utils;
 using DevExpress.XtraBars;
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using SystemInvoice.Catalogs.Forms;
 using SystemInvoice.Constants;
 using SystemInvoice.DataProcessing.CatalogsProcessing;
 using SystemInvoice.Documents;
 using SystemInvoice.SystemObjects;
+using Aramis;
 using DevExpress.XtraEditors;
 
 namespace SystemInvoice
@@ -22,15 +27,29 @@ namespace SystemInvoice
     public partial class MainForm : DevExpress.XtraBars.Ribbon.RibbonForm, IMainForm
         {
         public static event Action LoadedForm = null;
-        CatalogsFromExcelConverter excelConverter = new CatalogsFromExcelConverter();
+        private CatalogsFromExcelConverter excelConverter;
         public MainForm()
             {
             InitializeComponent();
             this.Load += MainForm_Load;
+            if (!SystemAramis.DeployMode)
+                {
+                initExcelConverter();
+                }
+            }
+
+        private void initExcelConverter()
+            {
+            excelConverter = new CatalogsFromExcelConverter();
             }
 
         void MainForm_Load(object sender, EventArgs e)
             {
+            if (SystemAramis.DeployMode)
+                {
+                initExcelConverter();
+                }
+
             if (LoadedForm != null)
                 {
                 LoadedForm();
@@ -43,6 +62,198 @@ namespace SystemInvoice
 
                 Ribbon.AddMenuItem("Удалить все данные (номенклатура и разрешительные документы) по Электролюкс", removeElectrolux);
                 }
+
+            Ribbon.AddMenuItem("Upload database from file", () =>
+                {
+                    string filePath;
+                    if (!AramisIO.ChooseFile("Sql script |*.sql", out filePath)) return;
+
+                    new Thread(uploadData).Start(filePath);
+                });
+            }
+
+        private void setMessage(string message)
+            {
+            if (this.InvokeRequired)
+                {
+                this.Invoke(new Action<string>(setMessage), new object[] { message });
+                }
+            else
+                {
+                this.Text = message;
+                }
+            }
+        private void uploadData(object filePathObj)
+            {
+            int lineNumber = 0;
+            string nextLine;
+            long totalLines = 0;
+            string filePath = filePathObj as string;
+            using (StreamReader sr = new StreamReader(filePath))
+                {
+                String line = "";
+                while ((nextLine = sr.ReadLine()) != null)
+                    {
+                    totalLines++;
+                    }
+                }
+
+            int percent = 0;
+            long processedLines = 0, errorsCount = 0;
+            using (StreamReader sr = new StreamReader(filePath))
+                {
+                String line = "";
+                while ((nextLine = sr.ReadLine()) != null)
+                    {
+                    lineNumber++;
+                    nextLine = nextLine.Trim();
+                    processedLines++;
+
+                    if (string.IsNullOrEmpty(nextLine)
+                        || string.Equals("go", nextLine, StringComparison.OrdinalIgnoreCase)
+                        || nextLine.StartsWith("use ", StringComparison.InvariantCultureIgnoreCase)) continue;
+
+                    var success = uploadData(line, nextLine, lineNumber);
+                    if (!success)
+                        {
+                        errorsCount++;
+                        }
+                    int currentPercent = (int)(100.0 * processedLines / totalLines);
+                    if (percent != currentPercent)
+                        {
+                        percent = currentPercent;
+                        setMessage($"Data uploading ... {currentPercent} %");
+                        }
+                    line = nextLine;
+                    }
+
+                uploadData(line, "SET IDENTITY_INSERT [dbo].[NonExistentTable] OFF", lineNumber);
+                }
+
+            setMessage($"Обработано {processedLines} строк, ошибок {errorsCount}!");
+            }
+
+        private string identityInsert = "";
+
+        private bool setIdentityInsert(string str)
+            {
+            return str.StartsWith("SET IDENTITY_INSERT [dbo].[", StringComparison.InvariantCulture);
+            }
+
+        private bool isInsertLine(string str, out string tableName)
+            {
+            var result = str.StartsWith("INSERT ", StringComparison.OrdinalIgnoreCase);
+
+            tableName = "";
+
+            if (result)
+                {
+                tableName = str.Substring(str.IndexOf(".[") + 2);
+                tableName = tableName.Substring(0, tableName.IndexOf("]"));
+                }
+
+            return result;
+            }
+
+        private string lastTruncatedTable = "";
+
+        private bool uploadData(string sql, string nextLine, int lineNumber)
+            {
+            if (string.IsNullOrEmpty(sql)) return true;
+
+            sql = sql.Replace("  ", " ");
+
+            if (setIdentityInsert(sql))
+                {
+                if (sql.EndsWith(" ON", StringComparison.InvariantCulture))
+                    {
+                    identityInsert = sql;
+
+                    var tableToUpdate = sql.Substring(sql.IndexOf(".[") + 2);
+                    tableToUpdate = tableToUpdate.Substring(0, tableToUpdate.IndexOf("]"));
+
+                    insertStarted = false;
+                    sql = $"truncate table {tableToUpdate}";
+                    lastTruncatedTable = tableToUpdate;
+                    }
+                else
+                    {
+                    return true;
+                    }
+                }
+
+            if (insertStarted)
+                {
+                cmdBuilder.Append(sql);
+
+                string t;
+                if (isInsertLine(nextLine, out t) || setIdentityInsert(nextLine))
+                    {
+                    sql = cmdBuilder.ToString();
+                    insertStarted = false;
+                    }
+                else
+                    {
+                    return true;
+                    }
+                }
+
+            string insertToTableName, t2;
+            var currentLineIsInsertCmd = isInsertLine(sql, out insertToTableName);
+            if (currentLineIsInsertCmd)
+                {
+                if (!lastTruncatedTable.Equals(insertToTableName))
+                    {
+                    execute($"truncate table {insertToTableName}", -1);
+                    lastTruncatedTable = insertToTableName;
+                    identityInsert = "";
+                    }
+                }
+
+            if (currentLineIsInsertCmd
+                && !isInsertLine(nextLine, out t2)
+                && !setIdentityInsert(nextLine))
+                {
+                insertStarted = true;
+                cmdBuilder.Clear();
+                cmdBuilder.Append(sql);
+                }
+            else
+                {
+                if (currentLineIsInsertCmd)
+                    {
+                    sql = (!string.IsNullOrEmpty(identityInsert) ? identityInsert + ";   " : "") + sql;
+                    }
+                return execute(sql, lineNumber);
+                }
+
+            return true;
+            }
+
+        private bool insertStarted;
+        private StringBuilder cmdBuilder = new StringBuilder();
+
+        private bool execute(string sqlCommand, int lineNumber)
+            {
+            var q = A.Query(sqlCommand);
+            q.Execute();
+
+            var success = q.ThrowedException == null;
+            if (!success)
+                {
+                var message = q.ThrowedException.Message;
+                if (!message.Contains("'dbo.EnumsInfo'")
+                    && !message.Contains("'dbo.OneOffTickets'")
+                    && !message.Contains("'dbo.QuickStart'"))
+                    {
+                    Debug.WriteLine($"Error line: {lineNumber} - {message}");
+                    }
+                else
+                    {
+                    success = true; // we can ignore such errors
+                    }
+                }
+            return success;
             }
 
         private void removeElectrolux()
@@ -155,7 +366,7 @@ DELETE FROM [Nomenclature]    WHERE Contractor = @Contractor", new { Contractor 
             {
             UserInterface.Current.ShowList(typeof(SystemInvoice.Documents.Approvals));
             }
-        
+
         private void propertyTypesBtn_ItemClick(object sender, ItemClickEventArgs e)
             {
             processFile((fileName) => excelConverter.LoadPropertyTypes(fileName));
