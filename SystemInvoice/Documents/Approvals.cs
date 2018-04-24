@@ -426,7 +426,7 @@ namespace SystemInvoice.Documents
                 });
             }
 
-        public override WritingResult Write()
+        public override WritingResult Write(long usePermissionsOfUser = 0)
             {
             removeSameRows();
             saveDeletedNomenclaturesHistory();

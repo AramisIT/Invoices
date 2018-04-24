@@ -64,7 +64,7 @@ namespace SystemInvoice.Catalogs
         private bool z_IsApprovalsRequired = false;
         #endregion
 
-        public override WritingResult Write()
+        public override WritingResult Write(long usePermissionsOfUser = 0)
             {
             if (string.IsNullOrEmpty(this.Description))
                 {

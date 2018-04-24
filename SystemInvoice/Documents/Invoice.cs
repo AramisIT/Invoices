@@ -20,6 +20,8 @@ using AramisCatalogs = Catalogs;
 
 namespace SystemInvoice.Documents
     {
+    using AramisInfrastructure.UI;
+
     /// <summary>
     /// Документ. Используется для обработки входящих файлов инвойса - их проверки, правки, присоединению информации о разрешительных документах
     /// </summary>
@@ -1433,7 +1435,7 @@ namespace SystemInvoice.Documents
                 }
             }
 
-        protected override void InitItemBeforeShowing()
+        protected override void InitItemBeforeShowing(IItemViewModeParameters viewModeParameters)
             {
             if (Goods.Rows.Count > GoodsPartialTable.Rows.Count)
                 {

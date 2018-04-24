@@ -122,7 +122,7 @@ namespace SystemInvoice.Catalogs
                 }
             }
 
-        public override WritingResult Write()
+        public override WritingResult Write(long usePermissionsOfUser = 0)
             {
             if (checkTablePart())
                 {
